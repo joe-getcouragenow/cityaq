@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package cityaqrpc;
+
+service CityAQ {
+  rpc Cities(CitiesRequest) returns (CitiesResponse) {}
+  rpc CityGeometry(CityGeometryRequest) returns (CityGeometryResponse) {}
+  rpc MapGrid(MapGridRequest) returns (MapGridResponse) {}
+  rpc GriddedMapData(GriddedMapDataRequest) returns (GriddedMapDataResponse) {}
+}
+
+message CitiesRequest {
+}
+
+message CitiesResponse {
+  // The names of the cities
+  repeated string Names = 1;
+  // Paths to the file containing the geometry of each city.
+  repeated string Paths = 2;
+}
+
+message CityGeometryRequest {
+  string Path = 1;
+}
+
+message CityGeometryResponse {
+  repeated Polygon Polygons = 1;
+}
+
+message Polygon {
+  repeated Path Paths = 1;
+}
+
+message Path {
+  repeated Point Points = 1;
+}
+
+message Point {
+  float X = 1;
+  float Y = 2;
+}
+
+message MapGridRequest {
+  string CityName = 1;
+  string Path = 2;
+}
+
+enum MapType {
+  UNKNOWN = 0;
+  EMISSIONS = 1;
+}
+
+message MapGridResponse {
+  repeated Polygon Polygons = 1;
+}
+
+message GriddedMapDataRequest {
+  string CityName = 1;
+  MapType MapType = 2;
+}
+
+message GriddedMapDataResponse {
+  repeated bytes RGB = 1;
+  string Legend = 2;
+}
