@@ -1,14 +1,14 @@
 package cityaq
 
 import (
+	"context"
+	"fmt"
 	"time"
-  "context"
-  "fmt"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
-  "github.com/ctessum/geom"
-	"github.com/ctessum/sparse"
+	"github.com/ctessum/geom"
 	"github.com/ctessum/geom/proj"
+	"github.com/ctessum/sparse"
 	"github.com/ctessum/unit"
 	"github.com/spatialmodel/inmap/emissions/aep"
 )
@@ -57,38 +57,39 @@ func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType string) 
 }
 
 func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequest) (*sparse.SparseArray, error) {
-  g, err := c.geojsonGeometry(req.CityPath)
-  if err != nil {
-    return nil, err
-  }
-  e, begin, end, err := newEmissions(g, req.Emission, req.SourceType)
-  if err != nil {
-    return nil, err
-  }
+	g, err := c.geojsonGeometry(req.CityPath)
+	if err != nil {
+		return nil, err
+	}
+	e, begin, end, err := newEmissions(g, req.Emission, req.SourceType)
+	if err != nil {
+		return nil, err
+	}
 
-  // Make sure we're not making simultaneous changes to the grid.
-  c.gridLock.Lock()
-  defer c.gridLock.Unlock()
+	// Make sure we're not making simultaneous changes to the grid.
+	c.gridLock.Lock()
+	defer c.gridLock.Unlock()
 
-  grid, err := c.emissionsGrid(req.CityPath)
-  if err != nil {
-    return nil, err
-  }
-  c.SpatialConfig.GridCells = grid
-  c.SpatialConfig.GridName = req.CityName
+	grid, err := c.emissionsGrid(req.CityPath)
+	if err != nil {
+		return nil, err
+	}
+	c.SpatialConfig.GridCells = grid
+	c.SpatialConfig.GridName = req.CityName
 
-  sp, err := c.SpatialConfig.SpatialProcessor()
-  if err != nil {
-    return nil, err
-  }
-  r := sp.GridRecord(e)
-  gridEmis, _, err := r.GriddedEmissions(begin, end, 0)
-  if err != nil {
-    return nil, err
-  }
-  polEmis, ok := gridEmis[aep.Pollutant{Name:req.Emission.String()}]
-  if !ok {
-    panic(fmt.Errorf("cityaq: missing gridded pollutant %v", req.Emission))
-  }
-return polEmis, nil
+	sp, err := c.SpatialConfig.SpatialProcessor()
+	if err != nil {
+		return nil, err
+	}
+	rSrg := sp.AddSurrogate(e)
+	r := sp.GridRecord(rSrg)
+	gridEmis, _, err := r.GriddedEmissions(begin, end, 0)
+	if err != nil {
+		return nil, err
+	}
+	polEmis, ok := gridEmis[aep.Pollutant{Name: req.Emission.String()}]
+	if !ok {
+		panic(fmt.Errorf("cityaq: missing gridded pollutant %v", req.Emission))
+	}
+	return polEmis, nil
 }

@@ -3,7 +3,6 @@ package cityaq
 import (
 	"bytes"
 	"encoding/base64"
-	"image/color"
 	"sort"
 
 	"github.com/ctessum/sparse"
@@ -16,24 +15,24 @@ import (
 )
 
 func newColormap(a *sparse.SparseArray) palette.ColorMap {
-	//cm1 := moreland.ExtendedBlackBody()
-	cm2, err := moreland.NewLuminance([]color.Color{
+	cm1 := moreland.ExtendedBlackBody()
+	/*cm2, err := moreland.NewLuminance([]color.Color{
 		color.NRGBA{G: 176, A: 255},
 		color.NRGBA{G: 255, A: 255},
 	})
 	if err != nil {
 		panic(err)
-	}
+	}*/
 	//cm := &plotextra.BrokenColorMap{
 	//	Base:     cm1,
 	//	OverFlow: palette.Reverse(cm2),
 	//}
 	//minMaxCutpt := percentiles(a, 1, 0.99)
 	max := percentiles(a, 1)
-	cm2.SetMin(0)
-	cm2.SetMax(max[0])
+	cm1.SetMin(0)
+	cm1.SetMax(max[0])
 	//cm.SetHighCut(minMaxCutpt[1])
-	return cm2
+	return cm1
 }
 
 // percentiles returns percentiles p (range [0,1]) of the given data.

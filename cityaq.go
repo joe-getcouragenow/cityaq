@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"image/color"
+	"math"
 	"os"
 	"path/filepath"
 	"sync"
@@ -123,7 +124,8 @@ func (c *CityAQ) emissionsGrid(path string) ([]geom.Polygonal, error) {
 	b := cityGeom.Bounds()
 
 	var o []geom.Polygonal
-	const buffer = 0.5
+	const bufferFrac = 0.1
+	buffer := math.Sqrt((b.Max.X-b.Min.X)*(b.Max.Y-b.Min.Y)) * bufferFrac
 	b.Min.X -= buffer
 	b.Min.Y -= buffer
 	b.Max.X += buffer

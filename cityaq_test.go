@@ -3,7 +3,9 @@ package cityaq
 import (
 	"context"
 	"image/color"
+	"io/ioutil"
 	"math"
+	"os"
 	"reflect"
 	"testing"
 
@@ -11,6 +13,7 @@ import (
 	"github.com/ctessum/geom"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 	"gonum.org/v1/plot"
+	"gonum.org/v1/plot/cmpimg"
 	"gonum.org/v1/plot/plotter"
 )
 
@@ -85,16 +88,14 @@ func TestCityAQ_EmissionsGrid(t *testing.T) {
 	}
 	b := polygonBounds(polys.Polygons)
 	want := &geom.Bounds{
-		Min: geom.Point{X: -0.7843137979507446, Y: 5.015096187591553}, // -44.9378704365,
-		Max: geom.Point{X: 0.3856861889362335, Y: 6.165096282958984},
+		Min: geom.Point{X: -0.29919639229774475, Y: 5.500213623046875},
+		Max: geom.Point{X: -0.0991964042186737, Y: 5.680213451385498},
 	}
 	if !reflect.DeepEqual(want, b) {
 		t.Errorf("%v != %v", b, want)
 	}
 }
 
-// openstreetmap data from:
-// https://api.openstreetmap.org/api/0.6/map?bbox=-0.28,5.52,-0.12,5.65
 func TestCityAQ_griddedEmissions(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
@@ -122,7 +123,7 @@ func TestCityAQ_griddedEmissions(t *testing.T) {
 		t.Fatal("nil emis")
 	}
 	sum := emis.Sum()
-	want := 993.4302004987658
+	want := 1000.0
 	if !similar(sum, want, 1e-10) {
 		t.Errorf("have %g, want %g", sum, want)
 	}
@@ -174,7 +175,45 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 		poly.LineStyle.Color = color.Transparent
 		p.Add(poly)
 	}
-	p.Save(1000, 1000, "testdata/emis.png")
+
+	city, err := c.CityGeometry(context.Background(), &rpc.CityGeometryRequest{
+		Path: "testdata/cities/accra_jurisdiction.geojson",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cityXYs, err := plotter.NewPolygon(polygonToXYs(city.Polygons[0])...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cityXYs.Color = color.Transparent
+	cityXYs.LineStyle.Color = color.White
+	p.Add(cityXYs)
+
+	if err := p.Save(200, 200, "testdata/emis.png"); err != nil {
+		t.Fatal(err)
+	}
+
+	i1, err := ioutil.ReadFile("testdata/emis.png")
+	if err != nil {
+		t.Fatal(err)
+	}
+	i2, err := ioutil.ReadFile("testdata/emis_golden.png")
+	if err != nil {
+		t.Fatal(err)
+	}
+	eq, err := cmpimg.Equal("png", i1, i2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !eq {
+		t.Fatal("image doesn't match golden image")
+	} else {
+		if err := os.Remove("testdata/emis.png"); err != nil {
+			t.Fatal(err)
+		}
+	}
 }
 
 func bytesToColor(b []byte) color.Color {
@@ -191,7 +230,7 @@ func polygonToXYs(poly *rpc.Polygon) []plotter.XYer {
 	for _, path := range poly.Paths {
 		xys := make(plotter.XYs, len(path.Points))
 		for i, pt := range path.Points {
-			xy := plotter.XY{float64(pt.X), float64(pt.Y)}
+			xy := plotter.XY{X: float64(pt.X), Y: float64(pt.Y)}
 			xys[i] = xy
 		}
 		o = append(o, xys)
