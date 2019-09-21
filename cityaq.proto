@@ -5,8 +5,8 @@ package cityaqrpc;
 service CityAQ {
   rpc Cities(CitiesRequest) returns (CitiesResponse) {}
   rpc CityGeometry(CityGeometryRequest) returns (CityGeometryResponse) {}
-  rpc MapGrid(MapGridRequest) returns (MapGridResponse) {}
-  rpc GriddedMapData(GriddedMapDataRequest) returns (GriddedMapDataResponse) {}
+  rpc EmissionsGrid(EmissionsGridRequest) returns (EmissionsGridResponse) {}
+  rpc EmissionsMap(EmissionsMapRequest) returns (EmissionsMapResponse) {}
 }
 
 message CitiesRequest {
@@ -40,26 +40,32 @@ message Point {
   float Y = 2;
 }
 
-message MapGridRequest {
+message EmissionsGridRequest {
   string CityName = 1;
   string Path = 2;
 }
 
-enum MapType {
-  UNKNOWN = 0;
-  EMISSIONS = 1;
-}
-
-message MapGridResponse {
+message EmissionsGridResponse {
   repeated Polygon Polygons = 1;
 }
 
-message GriddedMapDataRequest {
+message EmissionsMapRequest {
   string CityName = 1;
-  MapType MapType = 2;
+  string CityPath = 2;
+  Emission Emission = 3;
+  string SourceType = 4;
 }
 
-message GriddedMapDataResponse {
+enum Emission {
+  UNKNOWN_EMISSION = 0;
+  PM2_5 = 1;
+  NH3 = 2;
+  NOx = 3;
+  SOx = 4;
+  VOC = 5;
+}
+
+message EmissionsMapResponse {
   repeated bytes RGB = 1;
   string Legend = 2;
 }
