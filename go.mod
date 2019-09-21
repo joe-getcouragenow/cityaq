@@ -16,3 +16,5 @@ require (
 	gonum.org/v1/plot v0.0.0-20190615073203-9aa86143727f
 	google.golang.org/grpc v1.23.1
 )
+
+replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999
