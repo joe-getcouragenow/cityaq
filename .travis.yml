@@ -20,5 +20,5 @@ install:
 - export PATH=$GOPATH/bin:$PATH
 
 script:
-  - go test -v ./...
+  - go test -v
   - GOOS=js GOARCH=wasm go test -v ./gui
