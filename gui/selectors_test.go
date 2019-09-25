@@ -60,3 +60,31 @@ func TestCitySelector(t *testing.T) {
 		t.Errorf("%v != %v", html, want)
 	}
 }
+
+func TestImpactTypeSelector(t *testing.T) {
+	c := &CityAQ{
+		doc: js.Global().Get("document"),
+	}
+	c.impactTypeSelector = c.doc.Call("createElement", "select")
+
+	c.updateImpactTypeSelector()
+	html := c.impactTypeSelector.Get("innerHTML").String()
+	want := `<option value="Emissions">Emissions</option>`
+	if html != want {
+		t.Errorf("%v != %v", html, want)
+	}
+}
+
+func TestEmissionSelector(t *testing.T) {
+	c := &CityAQ{
+		doc: js.Global().Get("document"),
+	}
+	c.emissionSelector = c.doc.Call("createElement", "select")
+
+	c.updateEmissionSelector()
+	html := c.emissionSelector.Get("innerHTML").String()
+	want := `<option value="1">PM2_5</option><option value="2">NH3</option><option value="3">NOx</option><option value="4">SOx</option><option value="5">VOC</option>`
+	if html != want {
+		t.Errorf("%v != %v", html, want)
+	}
+}

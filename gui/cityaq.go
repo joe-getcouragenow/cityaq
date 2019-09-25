@@ -12,8 +12,10 @@ import (
 
 type CityAQ struct {
 	rpc.CityAQClient
-	doc          js.Value
-	citySelector js.Value
+	doc                js.Value
+	citySelector       js.Value
+	impactTypeSelector js.Value
+	emissionSelector   js.Value
 }
 
 // NewCityAQ returns a CityAQ client. Typically one would
