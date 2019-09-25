@@ -2,6 +2,7 @@ package gui
 
 import (
 	"context"
+	"reflect"
 	"strings"
 	"syscall/js"
 	"testing"
@@ -86,5 +87,44 @@ func TestEmissionSelector(t *testing.T) {
 	want := `<option value="1">PM2_5</option><option value="2">NH3</option><option value="3">NOx</option><option value="4">SOx</option><option value="5">VOC</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
+	}
+}
+
+func changeSelector(selector js.Value, index int) {
+	selector.Set("selectedIndex", index)
+}
+
+func TestSelectors(t *testing.T) {
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+	client := caqmock.NewMockCityAQClient(mockCtrl)
+
+	client.EXPECT().Cities(
+		gomock.Any(), // expect any value for first parameter
+		gomock.Any(), // expect any value for second parameter
+	).Return(&rpc.CitiesResponse{Names: []string{"city1", "city2"}, Paths: []string{"city1path", "city2path"}}, nil)
+
+	c := &CityAQ{
+		CityAQClient: client,
+		doc:          js.Global().Get("document"),
+	}
+	c.citySelector = c.doc.Call("createElement", "select")
+	c.impactTypeSelector = c.doc.Call("createElement", "select")
+	c.emissionSelector = c.doc.Call("createElement", "select")
+
+	c.updateSelectors(context.Background())
+
+	changeSelector(c.citySelector, 0)
+	changeSelector(c.impactTypeSelector, 0)
+	changeSelector(c.emissionSelector, 0)
+
+	sel, err := c.selectorValues()
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := &selections{cityName: "city1path", cityPath: "city1", impactType: "Emissions", emission: 1}
+
+	if !reflect.DeepEqual(want, sel) {
+		t.Errorf("%v != %v", sel, want)
 	}
 }

@@ -3,6 +3,7 @@ package gui
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
@@ -53,4 +54,50 @@ func (c *CityAQ) updateEmissionSelector() {
 		text[i-1] = n
 	}
 	updateSelector(c.doc, c.emissionSelector, values, text)
+}
+
+func (c *CityAQ) updateSelectors(ctx context.Context) {
+	c.updateCitySelector(ctx)
+	c.updateImpactTypeSelector()
+	c.updateEmissionSelector()
+}
+
+func selectorValue(selector js.Value) (value, text string) {
+	options := selector.Get("options")
+	selectedIndex := selector.Get("selectedIndex").Int()
+	selection := options.Index(selectedIndex)
+	value = selection.Get("value").String()
+	text = selection.Get("text").String()
+	return value, text
+}
+
+func (c *CityAQ) citySelectorValue() (value, text string) {
+	return selectorValue(c.citySelector)
+}
+
+func (c *CityAQ) impactTypeSelectorValue() (value, text string) {
+	return selectorValue(c.impactTypeSelector)
+}
+
+func (c *CityAQ) emissionSelectorValue() (value, text string) {
+	return selectorValue(c.emissionSelector)
+}
+
+type selections struct {
+	cityName, cityPath string
+	impactType         string
+	emission           rpc.Emission
+}
+
+func (c *CityAQ) selectorValues() (*selections, error) {
+	s := new(selections)
+	s.cityName, s.cityPath = c.citySelectorValue()
+	s.impactType, _ = c.impactTypeSelectorValue()
+	emissionIntStr, _ := c.emissionSelectorValue()
+	emissionInt, err := strconv.ParseInt(emissionIntStr, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	s.emission = rpc.Emission(emissionInt)
+	return s, nil
 }

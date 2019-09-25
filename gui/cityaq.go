@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"syscall/js"
@@ -21,10 +22,14 @@ type CityAQ struct {
 // NewCityAQ returns a CityAQ client. Typically one would
 // use DefaultConnection() as the input connection.
 func NewCityAQ(conn *grpc.ClientConn) *CityAQ {
-	return &CityAQ{
+	c := &CityAQ{
 		CityAQClient: rpc.NewCityAQClient(conn),
 		doc:          js.Global().Get("document"),
 	}
+	go func() {
+		c.updateSelectors(context.Background())
+	}()
+	return c
 }
 
 // DefaultConnection is the connection the CityAQ client should
