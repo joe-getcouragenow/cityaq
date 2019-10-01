@@ -13,7 +13,7 @@ import (
 )
 
 func (c *CityAQ) loadMap() {
-	if c.mapDiv == js.Null() {
+	if c.mapDiv == js.Undefined() {
 		c.mapDiv = c.doc.Call("getElementById", "mapDiv")
 		c.mapDiv.Get("style").Set("background-color", "black")
 	}
@@ -85,7 +85,7 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 }
 
 func (c *CityAQ) setMapLegend(legend string) {
-	if c.legendDiv == js.Null() {
+	if c.legendDiv == js.Undefined() {
 		c.legendDiv = c.doc.Call("getElementById", "legendDiv")
 	}
 	c.legendDiv.Set("innerHTML", `<img id="legendimg" alt="Embedded Image" src="data:image/png;base64,`+legend+`" />`)
@@ -100,7 +100,7 @@ func (c *CityAQ) setMapLegend(legend string) {
 }
 
 func (c *CityAQ) setLegendWidth() {
-	if c.legendDiv != js.Null() {
+	if c.legendDiv != js.Undefined() {
 		rect := c.legendDiv.Call("getBoundingClientRect")
 		c.doc.Call("getElementById", "legendimg").Set("width", rect.Get("width").Int())
 	}
