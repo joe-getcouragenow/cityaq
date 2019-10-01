@@ -4,9 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"sync"
 	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
+	"github.com/ctessum/go-leaflet"
+	"github.com/ctessum/go-leaflet/plugin/glify"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
 )
@@ -17,6 +20,16 @@ type CityAQ struct {
 	citySelector       js.Value
 	impactTypeSelector js.Value
 	emissionSelector   js.Value
+	sourceTypeSelector js.Value
+	legendDiv          js.Value
+	mapDiv             js.Value
+	leafletMap         *leaflet.Map
+	mapColors          *glify.Shapes
+	grid               struct {
+		geometry js.Value
+		gridCity string
+		gridType impactType
+	}
 }
 
 // NewCityAQ returns a CityAQ client. Typically one would
@@ -26,9 +39,17 @@ func NewCityAQ(conn *grpc.ClientConn) *CityAQ {
 		CityAQClient: rpc.NewCityAQClient(conn),
 		doc:          js.Global().Get("document"),
 	}
+	var wg sync.WaitGroup
+	wg.Add(2)
 	go func() {
 		c.updateSelectors(context.Background())
+		wg.Done()
 	}()
+	go func() {
+		c.loadMap()
+		wg.Done()
+	}()
+	wg.Wait()
 	return c
 }
 

@@ -38,7 +38,7 @@ func (c *CityAQ) updateImpactTypeSelector() {
 	if c.impactTypeSelector == js.Null() {
 		c.impactTypeSelector = c.doc.Call("getElementById", "impactTypeSelector")
 	}
-	updateSelector(c.doc, c.impactTypeSelector, []string{"Emissions"}, []string{"Emissions"})
+	updateSelector(c.doc, c.impactTypeSelector, []string{"1"}, []string{"Emissions"})
 }
 
 // updateEmissionSelector updates the options of emissions available.
@@ -56,10 +56,19 @@ func (c *CityAQ) updateEmissionSelector() {
 	updateSelector(c.doc, c.emissionSelector, values, text)
 }
 
+// updateSourceTypeSelector updates the options of source types available.
+func (c *CityAQ) updateSourceTypeSelector() {
+	if c.sourceTypeSelector == js.Null() {
+		c.sourceTypeSelector = c.doc.Call("getElementById", "sourceTypeSelector")
+	}
+	updateSelector(c.doc, c.sourceTypeSelector, []string{"roads"}, []string{"roads"})
+}
+
 func (c *CityAQ) updateSelectors(ctx context.Context) {
 	c.updateCitySelector(ctx)
 	c.updateImpactTypeSelector()
 	c.updateEmissionSelector()
+	c.updateSourceTypeSelector()
 }
 
 func selectorValue(selector js.Value) (value, text string) {
@@ -83,21 +92,41 @@ func (c *CityAQ) emissionSelectorValue() (value, text string) {
 	return selectorValue(c.emissionSelector)
 }
 
+func (c *CityAQ) sourceTypeSelectorValue() (value, text string) {
+	return selectorValue(c.sourceTypeSelector)
+}
+
+type impactType int
+
+const (
+	emission impactType = iota + 1
+)
+
 type selections struct {
 	cityName, cityPath string
-	impactType         string
+	impactType         impactType
+	sourceType         string
 	emission           rpc.Emission
 }
 
 func (c *CityAQ) selectorValues() (*selections, error) {
 	s := new(selections)
-	s.cityName, s.cityPath = c.citySelectorValue()
-	s.impactType, _ = c.impactTypeSelectorValue()
+	s.cityPath, s.cityName = c.citySelectorValue()
+
 	emissionIntStr, _ := c.emissionSelectorValue()
 	emissionInt, err := strconv.ParseInt(emissionIntStr, 10, 64)
 	if err != nil {
 		return nil, err
 	}
 	s.emission = rpc.Emission(emissionInt)
+
+	impactTypeStr, _ := c.impactTypeSelectorValue()
+	impactTypeInt, err := strconv.ParseInt(impactTypeStr, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	s.impactType = impactType(impactTypeInt)
+
+	s.sourceType, _ = c.sourceTypeSelectorValue()
 	return s, nil
 }

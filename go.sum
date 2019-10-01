@@ -45,7 +45,10 @@ github.com/ctessum/cdf v0.0.0-20181201011353-edced208ea9d h1:mIQwc9ihMh23CRrvN5V
 github.com/ctessum/cdf v0.0.0-20181201011353-edced208ea9d/go.mod h1:E45T61NEPsdFg0n3CqBwcG7jbwHTRdhOufhVTm3/Dtc=
 github.com/ctessum/geom v0.2.3 h1:gGi9+A23AM5hCeQtHj1OA/sD6RUuGqFr5j2W7GgA1GY=
 github.com/ctessum/geom v0.2.3/go.mod h1:8kQmZY0YP29pbx4kqCU9M9mjLLqgR0KGtftnCdAww3w=
+github.com/ctessum/go-leaflet v0.0.0-20170724133759-2f9e4c38fb5e h1:IV59uAui/Q61m9UyCjpOCEl0Bg1g9kwsgxcF5Zt8yTQ=
 github.com/ctessum/go-leaflet v0.0.0-20170724133759-2f9e4c38fb5e/go.mod h1:q862W3zi1fUPpnVc9HFYNESw9P+G52Nkq7r2xy2xWYI=
+github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af h1:hBVuJVfL4gs1fxgolJOuxL/rc01HOJUlYmXHFyDVwm8=
+github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af/go.mod h1:SACViokTQ0I12OkR7wX+uFTNMYdCDauuyunyMXidpVM=
 github.com/ctessum/gobra v0.0.0-20180516235632-ddfa5eeb3017/go.mod h1:Ny68iWp54ir4xyHjzCNgBVvpA6iKScCREYtd6+ZSBwE=
 github.com/ctessum/plotextra v0.0.0-20180623195436-96488e3f1996 h1:kOR5vpmJ6tUaFpxj8Wd9zdoRpCBqhH07j+7DcwFAlV8=
 github.com/ctessum/plotextra v0.0.0-20180623195436-96488e3f1996/go.mod h1:uhWEDow2kQayrGUrnESm3nIsGjq0Oc2unMZCGz21zW0=
@@ -124,6 +127,7 @@ github.com/googleapis/gax-go/v2 v2.0.5 h1:sjZBwGj9Jlw33ImPtvFviGYvseOtDM7hkSKB7+
 github.com/googleapis/gax-go/v2 v2.0.5/go.mod h1:DWXyrwAJ9X0FpwwEdw+IPEYBICEFu5mhpdKc/us6bOk=
 github.com/googleapis/gnostic v0.2.0/go.mod h1:sJBsCZ4ayReDTBIg8b9dl28c5xFWyhBTVRp3pOg5EKY=
 github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
+github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e h1:JKmoR8x90Iww1ks85zJ1lfDGgIiMDuIptTOhJq+zKyg=
 github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
 github.com/gopherjs/vecty v0.0.0-20180525005238-a3bd138280bf/go.mod h1:5YRDuy7i7SgM0kL+0b5oq+jfDTqPyzV3TQbcDkBvcoE=
 github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=
@@ -187,6 +191,8 @@ github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f h1:KUppIJq7/+
 github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/neelance/astrewrite v0.0.0-20160511093645-99348263ae86/go.mod h1:kHJEU3ofeGjhHklVoIGuVj85JJwZ6kWPaJwCIxgnFmo=
 github.com/neelance/sourcemap v0.0.0-20151028013722-8c68805598ab/go.mod h1:Qr6/a/Q4r9LP1IltGz7tA7iOK1WonHEYhu1HRBA7ZiM=
+github.com/norunners/vert v0.0.0-20190616030331-d9c8c2aacdf1 h1:ev7LCUzs++l9etq26bMAMhC4aajo2nO47xHeqlmmgD4=
+github.com/norunners/vert v0.0.0-20190616030331-d9c8c2aacdf1/go.mod h1:gS/a+U2DXScz4n1u8sTB+XpLfDJlr6JHMF7lZWH1pyk=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.7.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/gomega v1.4.3/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=

@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/ctessum/geom v0.2.3
+	github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af
 	github.com/ctessum/sparse v0.0.0-20181201011727-57d6234a2c9d
 	github.com/ctessum/unit v0.0.0-20160621200450-755774ac2fcb
 	github.com/golang/mock v1.3.1
@@ -11,6 +12,7 @@ require (
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/improbable-eng/grpc-web v0.11.0
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
+	github.com/norunners/vert v0.0.0-20190616030331-d9c8c2aacdf1
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/spatialmodel/inmap v1.6.2-0.20190917035719-6005bc6cf282
 	github.com/stretchr/testify v1.4.0 // indirect

@@ -31,8 +31,8 @@ func TestCitySelector(t *testing.T) {
 	client := caqmock.NewMockCityAQClient(mockCtrl)
 
 	client.EXPECT().Cities(
-		gomock.Any(), // expect any value for first parameter
-		gomock.Any(), // expect any value for second parameter
+		gomock.Any(),
+		gomock.AssignableToTypeOf(&rpc.CitiesRequest{}),
 	).Return(&rpc.CitiesResponse{Names: []string{"city1", "city2"}, Paths: []string{"city1path", "city2path"}}, nil)
 
 	c := &CityAQ{
@@ -70,7 +70,21 @@ func TestImpactTypeSelector(t *testing.T) {
 
 	c.updateImpactTypeSelector()
 	html := c.impactTypeSelector.Get("innerHTML").String()
-	want := `<option value="Emissions">Emissions</option>`
+	want := `<option value="1">Emissions</option>`
+	if html != want {
+		t.Errorf("%v != %v", html, want)
+	}
+}
+
+func TestSourceTypeSelector(t *testing.T) {
+	c := &CityAQ{
+		doc: js.Global().Get("document"),
+	}
+	c.sourceTypeSelector = c.doc.Call("createElement", "select")
+
+	c.updateSourceTypeSelector()
+	html := c.sourceTypeSelector.Get("innerHTML").String()
+	want := `<option value="roads">roads</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -111,18 +125,20 @@ func TestSelectors(t *testing.T) {
 	c.citySelector = c.doc.Call("createElement", "select")
 	c.impactTypeSelector = c.doc.Call("createElement", "select")
 	c.emissionSelector = c.doc.Call("createElement", "select")
+	c.sourceTypeSelector = c.doc.Call("createElement", "select")
 
 	c.updateSelectors(context.Background())
 
 	changeSelector(c.citySelector, 0)
 	changeSelector(c.impactTypeSelector, 0)
 	changeSelector(c.emissionSelector, 0)
+	changeSelector(c.sourceTypeSelector, 0)
 
 	sel, err := c.selectorValues()
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := &selections{cityName: "city1path", cityPath: "city1", impactType: "Emissions", emission: 1}
+	want := &selections{cityName: "city1", cityPath: "city1path", impactType: emission, emission: 1, sourceType: "roads"}
 
 	if !reflect.DeepEqual(want, sel) {
 		t.Errorf("%v != %v", sel, want)
