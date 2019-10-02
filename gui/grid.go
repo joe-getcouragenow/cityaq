@@ -4,9 +4,10 @@ package gui
 
 import (
 	"context"
+	"encoding/json"
+	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
-	"github.com/norunners/vert"
 	"google.golang.org/grpc/grpclog"
 )
 
@@ -22,10 +23,17 @@ func (c *CityAQ) loadEmissionsGrid(ctx context.Context, sel *selections) {
 	})
 	if err != nil {
 		grpclog.Println(err)
+		panic(err)
 		return
 	}
 	gj := polygonToGeoJSON(resp.Polygons)
-	c.grid.geometry = vert.ValueOf(gj).JSValue()
+	gjBytes, err := json.Marshal(gj)
+	if err != nil {
+		grpclog.Println(err)
+		panic(err)
+		return
+	}
+	c.grid.geometry = js.Global().Get("JSON").Call("parse", string(gjBytes))
 }
 
 type geojson struct { // Omitting GeoJSON types to save space.

@@ -3,11 +3,14 @@ package gui
 import (
 	"context"
 	"errors"
+	"strconv"
 	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"google.golang.org/grpc/grpclog"
 )
+
+const defaultSelectorText = "-- select an option --"
 
 func updateSelector(doc, selector js.Value, values []interface{}, text []string) {
 	selector.Set("innerHTML", "")
@@ -15,7 +18,7 @@ func updateSelector(doc, selector js.Value, values []interface{}, text []string)
 	option.Set("disabled", true)
 	option.Set("selected", true)
 	option.Set("hidden", true)
-	option.Set("text", "-- select an option --")
+	option.Set("text", defaultSelectorText)
 	selector.Call("appendChild", option)
 	for i, value := range values {
 		option := doc.Call("createElement", "option")
@@ -33,8 +36,8 @@ func (c *CityAQ) updateCitySelector(ctx context.Context) {
 	c.cityNames = make(map[string]string)
 	cities, err := c.Cities(ctx, &rpc.CitiesRequest{})
 	if err != nil {
-		panic(err)
 		grpclog.Println(err)
+		panic(err)
 		return
 	}
 	paths := make([]interface{}, len(cities.Paths))
@@ -83,40 +86,44 @@ func (c *CityAQ) updateSelectors(ctx context.Context) {
 	c.updateSourceTypeSelector()
 }
 
-func selectorValue(selector js.Value) js.Value {
-	return selector.Get("value")
+func selectorValue(selector js.Value) (string, error) {
+	v := selector.Get("value").String()
+	if v == defaultSelectorText {
+		return v, incompleteSelectionError
+	}
+	return v, nil
 }
 
 func (c *CityAQ) citySelectorValue() (string, error) {
-	v := selectorValue(c.citySelector)
-	if v == js.Null() {
-		return "", incompleteSelectionError
-	}
-	return v.String(), nil
+	return selectorValue(c.citySelector)
 }
 
 func (c *CityAQ) impactTypeSelectorValue() (impactType, error) {
-	v := selectorValue(c.impactTypeSelector)
-	if v == js.Null() {
-		return -1, incompleteSelectionError
+	v, err := selectorValue(c.impactTypeSelector)
+	if err != nil {
+		return -1, err
 	}
-	return impactType(v.Int()), nil
+	vInt, err := strconv.ParseInt(v, 10, 64)
+	if err != nil {
+		return -1, err
+	}
+	return impactType(vInt), nil
 }
 
 func (c *CityAQ) emissionSelectorValue() (rpc.Emission, error) {
-	v := selectorValue(c.emissionSelector)
-	if v == js.Null() {
-		return -1, incompleteSelectionError
+	v, err := selectorValue(c.emissionSelector)
+	if err != nil {
+		return -1, err
 	}
-	return rpc.Emission(v.Int()), nil
+	vInt, err := strconv.ParseInt(v, 10, 64)
+	if err != nil {
+		return -1, err
+	}
+	return rpc.Emission(vInt), nil
 }
 
 func (c *CityAQ) sourceTypeSelectorValue() (string, error) {
-	v := selectorValue(c.sourceTypeSelector)
-	if v == js.Null() {
-		return "", incompleteSelectionError
-	}
-	return v.String(), nil
+	return selectorValue(c.sourceTypeSelector)
 }
 
 type impactType int

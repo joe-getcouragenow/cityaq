@@ -6,9 +6,6 @@ func main() {
 	conn := gui.DefaultConnection()
 	c := gui.NewCityAQ(conn)
 	c.Monitor()
-	blockForever()
-}
 
-func blockForever() {
-	select {}
+	select {} // Block
 }

@@ -14,7 +14,6 @@ require (
 	github.com/improbable-eng/grpc-web v0.11.0
 	github.com/johanbrandhorst/grpc-wasm v0.0.0-20180613181153-d79a93c3901e
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
-	github.com/norunners/vert v0.0.0-20190616030331-d9c8c2aacdf1
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spatialmodel/inmap v1.6.2-0.20190917035719-6005bc6cf282

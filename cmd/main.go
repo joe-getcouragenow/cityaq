@@ -28,12 +28,12 @@ func init() {
 
 func main() {
 	c := &cityaq.CityAQ{
-		CityGeomDir: "testdata/cities",
+		CityGeomDir: "../testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:       "testdata/srgspec_osm.json",
+			SrgSpec:       "srgspec_osm.json",
 			SrgSpecType:   "OSM",
 			SCCExactMatch: true,
-			GridRef:       []string{"testdata/gridref_osm.txt"},
+			GridRef:       []string{"../testdata/gridref_osm.txt"},
 			OutputSR:      "+proj=longlat",
 			InputSR:       "+proj=longlat",
 		},

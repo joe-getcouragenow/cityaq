@@ -1,0 +1,11 @@
+[
+  {
+    "region": 7,
+    "name": "roads",
+    "code": "roads",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "highway": ["residential", "tertiary", "secondary", "trunk", "trunk_link"]
+    }
+  }
+]

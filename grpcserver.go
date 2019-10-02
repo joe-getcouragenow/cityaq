@@ -55,6 +55,7 @@ func (s *GRPCServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				"addr": r.RemoteAddr,
 			}).Info("cityaq grpc request")
 		}
+		r.URL.Path = strings.Replace(r.URL.Path, "//cityaqrpc", "/cityaqrpc", 1) // TODO: Figure out why this is necessary
 		s.grpcServer.ServeHTTP(w, r)
 		return
 	} else {

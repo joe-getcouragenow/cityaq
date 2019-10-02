@@ -25,6 +25,7 @@ type CityAQ struct {
 	mapDiv             js.Value
 	leafletMap         *leaflet.Map
 	mapColors          *glify.Shapes
+	baseMapLayer       *leaflet.TileLayer
 	grid               struct {
 		geometry js.Value
 		gridCity string
@@ -75,15 +76,18 @@ func DefaultConnection() *grpcwasm.ClientConn {
 // Monitor updates the map whenever a selector changes.
 func (c *CityAQ) Monitor() {
 	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		sel, err := c.selectorValues()
-		if err != nil {
-			if err == incompleteSelectionError {
-				return nil
+		go func() {
+			sel, err := c.selectorValues()
+			if err != nil {
+				if err == incompleteSelectionError {
+					return
+				}
+				grpclog.Println(err)
+				panic(err)
+				return
 			}
-			grpclog.Println(err)
-			return nil
-		}
-		c.updateMap(context.TODO(), sel)
+			c.updateMap(context.TODO(), sel)
+		}()
 		return nil
 	})
 	for _, s := range []js.Value{c.citySelector, c.impactTypeSelector, c.emissionSelector, c.sourceTypeSelector} {

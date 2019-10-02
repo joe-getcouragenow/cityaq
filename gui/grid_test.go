@@ -2,14 +2,12 @@ package gui
 
 import (
 	"context"
-	"reflect"
 	"syscall/js"
 	"testing"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	caqmock "github.com/ctessum/cityaq/cityaqrpc/mock_cityaqrpc"
 	"github.com/golang/mock/gomock"
-	"github.com/norunners/vert"
 )
 
 func TestLoadEmissionsGrid(t *testing.T) {
@@ -43,19 +41,15 @@ func TestLoadEmissionsGrid(t *testing.T) {
 
 	c.loadEmissionsGrid(context.Background(), &selections{})
 
-	var g geojson
-	vert.Value{c.grid.geometry}.AssignTo(&g)
-
-	want := geojson{
-		Features: []geojsonGeom{
-			geojsonGeom{Geometry: struct {
-				Coordinates [][][]float32 "json:\"coordinates\",js:\"coordinates\""
-			}{
-				Coordinates: [][][]float32{[][]float32{[]float32{0, 0}, []float32{1, 0}, []float32{1, 1}}}},
-			},
-		},
+	nFeatures := c.grid.geometry.Get("features").Length()
+	wantFeatures := 1
+	if nFeatures != wantFeatures {
+		t.Errorf("wrong number of features: %d != %d", nFeatures, wantFeatures)
 	}
-	if !reflect.DeepEqual(g, want) {
-		t.Errorf("%v != %v", g, want)
+	points := c.grid.geometry.Get("features").Index(0).Get("geometry").Get("coordinates")
+	pointsStr := js.Global().Get("JSON").Call("stringify", points).String()
+	wantPointsStr := "[[[0,0],[1,0],[1,1]]]"
+	if pointsStr != wantPointsStr {
+		t.Errorf("wrong points: %s != %s", pointsStr, wantPointsStr)
 	}
 }
