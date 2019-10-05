@@ -34,10 +34,14 @@ func (c *CityAQ) Cities(ctx context.Context, _ *rpc.CitiesRequest) (*rpc.CitiesR
 		if err != nil {
 			return err
 		}
-		if info.IsDir() {
+		if info.IsDir() || filepath.Ext(path) != ".geojson" {
 			return nil
 		}
-		r.Names = append(r.Names, path)
+		name, err := c.geojsonName(path, "en")
+		if err != nil {
+			return err
+		}
+		r.Names = append(r.Names, name)
 		r.Paths = append(r.Paths, path)
 		return nil
 	})
@@ -99,11 +103,56 @@ func (c *CityAQ) geojsonGeometry(path string) (geom.Polygon, error) {
 		if err != nil {
 			return nil, err
 		}
-		if poly, ok := g.(geom.Polygon); ok {
-			polys = append(polys, poly...)
+		switch g.(type) {
+		case geom.Polygon:
+			polys = append(polys, g.(geom.Polygon)...)
+		case geom.MultiPolygon:
+			for _, poly := range g.(geom.MultiPolygon) {
+				polys = append(polys, poly...)
+			}
 		}
 	}
 	return polys, nil
+}
+
+// geojsonName returns a city name (in the requested language)
+// from a GeoJSON file.
+func (c *CityAQ) geojsonName(path, language string) (string, error) {
+	type gj interface{}
+
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	dec := json.NewDecoder(f)
+	var data gj
+	if err := dec.Decode(&data); err != nil {
+		return "", fmt.Errorf("file %s: %v", path, err)
+	}
+	features := data.(map[string]interface{})["features"].([]interface{})
+	for _, feat := range features {
+		featmap, ok := feat.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		props, ok := featmap["properties"]
+		if !ok {
+			continue
+		}
+		propmap, ok := props.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		name, ok := propmap["name:"+language]
+		if !ok {
+			name, ok = propmap["name"]
+			if !ok {
+				return "", fmt.Errorf("file %s, missing name in language `%s`", path, language)
+			}
+		}
+		return name.(string), nil
+	}
+	return "", fmt.Errorf("couldn't find name in %v", data)
 }
 
 // EmissionsGrid returns the grid to be used for mapping gridded information about the requested city.
