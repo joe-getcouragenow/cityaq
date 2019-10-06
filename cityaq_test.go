@@ -28,8 +28,8 @@ func TestCityAQ_Cities(t *testing.T) {
 	}
 	want := &rpc.CitiesResponse{
 		Names: []string{
-			"testdata/cities/accra_jurisdiction.geojson",
-			"testdata/cities/karachi_jurisdiction.geojson",
+			"Accra Metropolitan",
+			"Karachi",
 		},
 		Paths: []string{
 			"testdata/cities/accra_jurisdiction.geojson",
