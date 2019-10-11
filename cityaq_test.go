@@ -108,24 +108,29 @@ func TestCityAQ_griddedEmissions(t *testing.T) {
 			InputSR:       "+proj=longlat",
 		},
 	}
-	req := &rpc.EmissionsMapRequest{
-		CityPath:   "testdata/cities/accra_jurisdiction.geojson",
-		CityName:   "accra",
-		Emission:   rpc.Emission_PM2_5,
-		SourceType: "roads",
-	}
 
-	emis, err := c.griddedEmissions(context.Background(), req)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if emis == nil {
-		t.Fatal("nil emis")
-	}
-	sum := emis.Sum()
-	want := 1000.0
-	if !similar(sum, want, 1e-10) {
-		t.Errorf("have %g, want %g", sum, want)
+	for _, st := range []string{"roadways", "airports"} {
+		t.Run(st, func(t *testing.T) {
+			req := &rpc.EmissionsMapRequest{
+				CityPath:   "testdata/cities/accra_jurisdiction.geojson",
+				CityName:   "accra",
+				Emission:   rpc.Emission_PM2_5,
+				SourceType: st,
+			}
+
+			emis, err := c.griddedEmissions(context.Background(), req)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if emis == nil {
+				t.Fatal("nil emis")
+			}
+			sum := emis.Sum()
+			want := 1000.0
+			if !similar(sum, want, 1e-10) {
+				t.Errorf("have %g, want %g", sum, want)
+			}
+		})
 	}
 }
 
@@ -152,7 +157,7 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 		CityPath:   "testdata/cities/accra_jurisdiction.geojson",
 		CityName:   "accra",
 		Emission:   rpc.Emission_PM2_5,
-		SourceType: "roads",
+		SourceType: "roadways",
 	}
 	emis, err := c.EmissionsMap(context.Background(), req)
 	if err != nil {

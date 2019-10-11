@@ -1,11 +1,146 @@
 [
   {
     "region": 7,
-    "name": "roads",
-    "code": "roads",
+    "name": "electric_gen",
+    "code": "electric_gen",
     "osm_file": "../testdata/ghana-latest.osm.pbf",
     "tags": {
-      "highway": ["residential", "tertiary", "secondary", "trunk", "trunk_link"]
+      "power": ["generator"],
+      "generator:output:electricity": ["yes"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "residential",
+    "code": "residential",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "building": ["house", "residential", "apartments"],
+      "landuse": ["residential"],
+      "construction": ["residential"],
+      "building:type": ["residential"],
+      "building:use": ["residential"],
+      "residential": []
+    }
+  },
+  {
+    "region": 7,
+    "name": "commercial",
+    "code": "commercial",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "building": ["commercial", "retail", "office", "church", "greenhouse", "hotel", "mosque", "temple"],
+      "amenity": ["restaurant", "cafe", "bank", "fast_food", "pharmacy", "fuel",
+        "bar", "pub", "post_office", "marketplace", "dentist", "doctors", "library",
+        "internet_cafe", "theatre", "car_wash", "cinema", "ice_cream", "fire_station",
+        "veterinary", "nightclub", "car_rental", "food_court", "childcare"],
+      "shop": [],
+      "tourism": ["hotel", "hostel", "guest_house", "museum", "motel"],
+      "landuse": ["commercial", "retail", "religious"],
+      "atm": ["yes"],
+      "cuisine": [],
+      "office": ["telecommunication", "estate_agent", "insurance", "administrative","association"],
+      "religion": ["buddhist", "christian", "muslim", "hindu"],
+      "healthcare": ["hospital", "doctor", "dentist"],
+      "craft": ["carpenter"],
+      "site": ["mall"],
+      "brand": ["Starbucks", "McDonald's"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "industrial",
+    "code": "industrial",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "building": ["industrial"],
+      "landuse": ["industrial", "quarry"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "builtup",
+    "code": "builtup",
+    "merge_names": ["commercial", "industrial", "residential"],
+    "merge_multipliers": [1.0, 1.0, 1.0]
+  },
+  {
+    "region": 7,
+    "name": "roadways",
+    "code": "roadways",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "highway": [],
+      "bridge": ["yes"],
+      "motorroad": ["yes"],
+      "route": ["road"],
+      "construction": ["motorway", "motorway_link"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "railways",
+    "code": "railways",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "railway": [],
+      "railway:traffic_mode": [],
+      "electrified": ["rail"],
+      "train": ["yes"],
+      "trolley_wire": ["yes"],
+      "tram": ["yes"],
+      "light_rail": ["yes"],
+      "trolleybus": ["yes"],
+      "landuse": ["railway"],
+      "station": ["light_rail"],
+      "route": ["train"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "waterways",
+    "code": "waterways",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "waterway": ["river", "riverbank"],
+      "man_made": ["pier"],
+      "water": ["river"],
+      "amenity": ["ferry_terminal"],
+      "route": ["ferry"],
+      "boat": ["yes"],
+      "seamark:type": ["mooring"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "busways",
+    "code": "busways",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "bus": ["yes", "designated"],
+      "route": ["bus"],
+      "busway:left": ["lane"]
+    },
+    "backup_surrogate_names": ["roadways"]
+  },
+  {
+    "region": 7,
+    "name": "airports",
+    "code": "airports",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "aeroway": [],
+      "building": ["hangar"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "agricultural",
+    "code": "agricultural",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "landuse": ["farmland", "farmyard", "vineyard"],
+      "building": ["farm_auxiliary"]
     }
   }
 ]

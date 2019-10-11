@@ -3,6 +3,7 @@ package gui
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"sync"
 	"syscall/js"
@@ -11,7 +12,6 @@ import (
 	"github.com/ctessum/go-leaflet"
 	"github.com/ctessum/go-leaflet/plugin/glify"
 	grpcwasm "github.com/johanbrandhorst/grpc-wasm"
-	"google.golang.org/grpc/grpclog"
 )
 
 type CityAQ struct {
@@ -61,14 +61,11 @@ func DefaultConnection() *grpcwasm.ClientConn {
 	doc := js.Global().Get("document")
 	url, err := url.Parse(doc.Get("baseURI").String())
 	if err != nil {
-		grpclog.Println(err)
 		panic(err)
 	}
 	cc, err := grpcwasm.Dial(url.Scheme + "://" + url.Host)
 	if err != nil {
-		grpclog.Println(err)
 		panic(err)
-		return nil
 	}
 	return cc
 }
@@ -77,13 +74,13 @@ func DefaultConnection() *grpcwasm.ClientConn {
 func (c *CityAQ) Monitor() {
 	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		go func() {
+			c.doc.Call("getElementById", "error").Set("innerHTML", "")
 			sel, err := c.selectorValues()
 			if err != nil {
 				if err == incompleteSelectionError {
 					return
 				}
-				grpclog.Println(err)
-				panic(err)
+				c.logError(err)
 				return
 			}
 			c.updateMap(context.TODO(), sel)
@@ -93,4 +90,30 @@ func (c *CityAQ) Monitor() {
 	for _, s := range []js.Value{c.citySelector, c.impactTypeSelector, c.emissionSelector, c.sourceTypeSelector} {
 		s.Call("addEventListener", "change", cb)
 	}
+}
+
+func (c *CityAQ) startLoading() {
+	go func() {
+		for _, id := range []string{"loading", "loading_text", "loading_icon"} {
+			c.doc.Call("getElementById", id).Set("hidden", false)
+		}
+		for _, s := range []js.Value{c.citySelector, c.impactTypeSelector, c.emissionSelector, c.sourceTypeSelector} {
+			s.Set("disabled", true)
+		}
+	}()
+}
+func (c *CityAQ) stopLoading() {
+	go func() {
+		for _, id := range []string{"loading", "loading_text", "loading_icon"} {
+			c.doc.Call("getElementById", id).Set("hidden", true)
+		}
+		for _, s := range []js.Value{c.citySelector, c.impactTypeSelector, c.emissionSelector, c.sourceTypeSelector} {
+			s.Set("disabled", false)
+		}
+	}()
+}
+
+func (c *CityAQ) logError(err error) {
+	s := fmt.Sprintf("<p class=\"text-danger\">%s</p>", err.Error())
+	c.doc.Call("getElementById", "error").Set("innerHTML", s)
 }

@@ -7,7 +7,6 @@ import (
 	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
-	"google.golang.org/grpc/grpclog"
 )
 
 const defaultSelectorText = "-- select an option --"
@@ -36,8 +35,7 @@ func (c *CityAQ) updateCitySelector(ctx context.Context) {
 	c.cityNames = make(map[string]string)
 	cities, err := c.Cities(ctx, &rpc.CitiesRequest{})
 	if err != nil {
-		grpclog.Println(err)
-		panic(err)
+		c.logError(err)
 		return
 	}
 	paths := make([]interface{}, len(cities.Paths))
@@ -76,7 +74,9 @@ func (c *CityAQ) updateSourceTypeSelector() {
 	if c.sourceTypeSelector == js.Undefined() {
 		c.sourceTypeSelector = c.doc.Call("getElementById", "sourceTypeSelector")
 	}
-	updateSelector(c.doc, c.sourceTypeSelector, []interface{}{"roads"}, []string{"roads"})
+	updateSelector(c.doc, c.sourceTypeSelector,
+		[]interface{}{"electric_gen", "residential", "commercial", "industrial", "builtup", "roadways", "railways", "waterways", "busways", "airports", "agricultural"},
+		[]string{"electric_gen", "residential", "commercial", "industrial", "builtup", "roadways", "railways", "waterways", "busways", "airports", "agricultural"})
 }
 
 func (c *CityAQ) updateSelectors(ctx context.Context) {

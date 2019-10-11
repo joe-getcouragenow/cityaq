@@ -1,4 +1,14 @@
 # Created by C. Allen (CSC), 1 Jul 2013, for 2011eb.
 #EXPORT_DATE=Mon Jan 05 14:10:11 EST 2015
 #EXPORT_VERSION_NAME=add afdust SCC
-700000;roads;roads
+700000;0000electric_gen;electric_gen
+700000;0000residential;residential
+700000;0000commercial;commercial
+700000;0000industrial;industrial
+700000;0000builtup;builtup
+700000;0000roadways;roadways
+700000;0000railways;railways
+700000;0000waterways;waterways
+700000;0000busways;busways
+700000;0000airports;airports
+700000;0000agricultural;agricultural

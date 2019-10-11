@@ -7,6 +7,8 @@ import (
 	"github.com/ctessum/cityaq/cityaqrpc"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+
+	//"github.com/lpar/gzipped"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -26,6 +28,7 @@ func NewGRPCServer(c *CityAQ, prefix string) *GRPCServer {
 	cityaqrpc.RegisterCityAQServer(gs, c)
 	s := new(GRPCServer)
 	s.grpcServer = grpcweb.WrapServer(gs)
+	//	s.staticServer = wasmContentTypeSetter(gzipped.FileServer(
 	s.staticServer = wasmContentTypeSetter(http.FileServer(
 		&assetfs.AssetFS{
 			Asset:     Asset,

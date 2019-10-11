@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"syscall/js"
 
+	"github.com/ctessum/geom"
 	"github.com/ctessum/go-leaflet"
 	"github.com/ctessum/go-leaflet/plugin/glify"
-	"google.golang.org/grpc/grpclog"
 )
 
 func (c *CityAQ) loadMap() {
@@ -21,7 +21,7 @@ func (c *CityAQ) loadMap() {
 
 	// Create map.
 	c.leafletMap = leaflet.NewMap(c.mapDiv, map[string]interface{}{"preferCanvas": true})
-	c.leafletMap.SetView(leaflet.NewLatLng(39.8282, -98.5795), 4)
+	c.leafletMap.SetView(leaflet.NewLatLng(0, 0), 2)
 
 	// Add listener to resize map when window resizes.
 	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
@@ -45,21 +45,28 @@ func (c *CityAQ) setMapHeight() {
 }
 
 func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
+	c.startLoading()
+	defer c.stopLoading()
+	if c.mapColors != nil {
+		c.mapColors.Remove()
+	}
+
 	var colors [][]byte
 	var legend string
 	var err error
 	switch sel.impactType {
 	case emission:
-		c.loadEmissionsGrid(ctx, sel)
+		err = c.loadEmissionsGrid(ctx, sel)
+		if err != nil {
+			c.logError(err)
+			return
+		}
 		colors, legend, err = c.loadEmissionColors(ctx, sel)
 	default:
-		grpclog.Printf("invalid impact type %v", sel.impactType)
-		panic(err)
-		return
+		err = fmt.Errorf("invalid impact type %v", sel.impactType)
 	}
 	if err != nil {
-		grpclog.Println(err)
-		panic(err)
+		c.logError(err)
 		return
 	}
 
@@ -73,10 +80,6 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 		g = float64(uint8(bt[1])) / 255
 		b = float64(uint8(bt[2])) / 255
 		return
-	}
-
-	if c.mapColors != nil {
-		c.mapColors.Remove()
 	}
 
 	opacity := 0.5
@@ -103,4 +106,12 @@ func (c *CityAQ) setLegendWidth() {
 		rect := c.legendDiv.Call("getBoundingClientRect")
 		c.doc.Call("getElementById", "legendimg").Set("width", rect.Get("width").Int())
 	}
+}
+
+// Move the map window to a new location.
+func (c *CityAQ) MoveMap(b *geom.Bounds) {
+	ll := leaflet.NewLatLng(b.Min.Y, b.Min.X)
+	ur := leaflet.NewLatLng(b.Max.Y, b.Max.X)
+	bnds := leaflet.L.Call("latLngBounds", ll.Value, ur.Value)
+	c.leafletMap.Value.Call("flyToBounds", bnds)
 }

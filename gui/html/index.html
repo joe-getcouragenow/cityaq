@@ -12,16 +12,38 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-2">
+			<div class="col-md-3 col-lg-2">
+				<h1>City AQ</h1>
+				<div id="error"></div>
+				<div id="loading" class="d-flex align-items-center" hidden>
+					<strong id="loading_text" hidden>Loading...</strong>
+					<div  id="loading_icon" hidden class="spinner-border text-primary  spinner-border-sm ml-auto" role="status" aria-hidden="true"></div>
+				</div>
 				<form>
-					<select id="citySelector"></select>
-					<select id="impactTypeSelector"></select>
-					<select id="emissionSelector"></select>
-					<select id="sourceTypeSelector"></select>
+					<div class="form-group">
+						<label for="citySelector">City name</label>
+						<select class="form-control" id="citySelector" aria-describedby="citySelectorHelp"></select>
+						<small id="citySelectorHelp" class="form-text text-muted">Choose a city to explore.</small>
+					</div>
+					<div class="form-group">
+						<label for="impactTypeSelector">Impact type</label>
+						<select class="form-control" id="impactTypeSelector" aria-describedby="impactTypeSelectorHelp"></select>
+						<small id="impactTypeSelectorHelp" class="form-text text-muted">Choose a type of environmental impact.</small>
+					</div>
+					<div class="form-group">
+						<label for="emissionSelector">Emitted pollutant</label>
+						<select class="form-control" id="emissionSelector" aria-describedby="emissionSelectorHelp"></select>
+						<small id="emissionSelectorHelp" class="form-text text-muted">Choose the type of emitted pollutant.</small>
+					</div>
+					<div class="form-group">
+						<label for="sourceTypeSelector">Source type</label>
+						<select class="form-control" id="sourceTypeSelector" aria-describedby="sourceTypeSelectorHelp"></select>
+						<small id="sourceTypeSelectorHelp" class="form-text text-muted">Choose an emissions source type.</small>
+					</div>
 				</form>
 				<div id="legendDiv"></div>
 			</div>
-			<div class="col-10">
+			<div class="col-md-9 col-lg-10">
 				<div id="mapDiv"></div>
 			</div>
 		</div>

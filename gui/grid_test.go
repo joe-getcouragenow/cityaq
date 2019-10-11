@@ -39,7 +39,10 @@ func TestLoadEmissionsGrid(t *testing.T) {
 		doc:          js.Global().Get("document"),
 	}
 
-	c.loadEmissionsGrid(context.Background(), &selections{})
+	err := c.loadEmissionsGrid(context.Background(), &selections{})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	nFeatures := c.grid.geometry.Get("features").Length()
 	wantFeatures := 1

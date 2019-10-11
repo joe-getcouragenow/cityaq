@@ -50,7 +50,7 @@ func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType string) 
 		SourceData: aep.SourceData{
 			FIPS:    "00000",
 			Country: aep.Global,
-			SCC:     sourceType,
+			SCC:     "0000" + sourceType,
 		},
 	}
 	return emis, begin, end, nil
@@ -86,6 +86,9 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 	gridEmis, _, err := r.GriddedEmissions(begin, end, 0)
 	if err != nil {
 		return nil, err
+	}
+	if len(gridEmis) == 0 {
+		return nil, fmt.Errorf("cityaq: no emissions for city %s, source %s", req.CityName, req.SourceType)
 	}
 	polEmis, ok := gridEmis[aep.Pollutant{Name: req.Emission.String()}]
 	if !ok {

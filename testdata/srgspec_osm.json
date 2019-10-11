@@ -1,8 +1,8 @@
 [
   {
     "region": 7,
-    "name": "roads",
-    "code": "roads",
+    "name": "roadways",
+    "code": "roadways",
     "osm_file": "testdata/ghana-latest.osm.pbf",
     "tags": {
       "highway": ["residential", "tertiary", "secondary", "trunk", "trunk_link"]
@@ -10,20 +10,12 @@
   },
   {
     "region": 7,
-    "name": "building_residential",
-    "code": "002",
-    "osm_file": "${INMAP_ROOT_DIR}/emissions/aep/testdata/honolulu_hawaii.osm.pbf",
+    "name": "airports",
+    "code": "airports",
+    "osm_file": "testdata/ghana-latest.osm.pbf",
     "tags": {
-      "building": ["residential"]
-    }
-  },
-  {
-    "region": 7,
-    "name": "natural_tree",
-    "code": "003",
-    "osm_file": "${INMAP_ROOT_DIR}/emissions/aep/testdata/honolulu_hawaii.osm.pbf",
-    "tags": {
-      "natural": ["tree"]
+      "aeroway": [],
+      "building": ["hangar"]
     }
   }
 ]
