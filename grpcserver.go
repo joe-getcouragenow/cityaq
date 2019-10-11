@@ -8,7 +8,7 @@ import (
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
-	//"github.com/lpar/gzipped"
+	"github.com/lpar/gzipped"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -28,15 +28,14 @@ func NewGRPCServer(c *CityAQ, prefix string) *GRPCServer {
 	cityaqrpc.RegisterCityAQServer(gs, c)
 	s := new(GRPCServer)
 	s.grpcServer = grpcweb.WrapServer(gs)
-	//	s.staticServer = wasmContentTypeSetter(gzipped.FileServer(
-	s.staticServer = wasmContentTypeSetter(http.FileServer(
+	s.staticServer = withIndexHTML(wasmContentTypeSetter(gzipped.FileServer(
 		&assetfs.AssetFS{
 			Asset:     Asset,
 			AssetDir:  AssetDir,
 			AssetInfo: AssetInfo,
 			Prefix:    "gui/html",
 		},
-	))
+	)))
 	return s
 }
 
@@ -47,6 +46,15 @@ func wasmContentTypeSetter(fn http.Handler) http.HandlerFunc {
 		}
 		fn.ServeHTTP(w, req)
 	}
+}
+
+func withIndexHTML(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			r.URL.Path = "/index.html"
+		}
+		h.ServeHTTP(w, r)
+	})
 }
 
 func (s *GRPCServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {

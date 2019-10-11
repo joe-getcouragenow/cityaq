@@ -3,16 +3,19 @@ module github.com/ctessum/cityaq
 go 1.13
 
 require (
+	github.com/andybalholm/brotli v0.0.0-20190821151343-b60f0d972eeb
 	github.com/ctessum/geom v0.2.5
 	github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af
 	github.com/ctessum/sparse v0.0.0-20181201011727-57d6234a2c9d
 	github.com/ctessum/unit v0.0.0-20160621200450-755774ac2fcb
 	github.com/elazarl/go-bindata-assetfs v1.0.0
+	github.com/golang/gddo v0.0.0-20190904175337-72a348e765d2 // indirect
 	github.com/golang/mock v1.3.1
 	github.com/golang/protobuf v1.3.2
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/improbable-eng/grpc-web v0.11.0
 	github.com/johanbrandhorst/grpc-wasm v0.0.0-20180613181153-d79a93c3901e
+	github.com/lpar/gzipped v1.1.0
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/sirupsen/logrus v1.4.2

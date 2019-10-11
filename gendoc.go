@@ -24,6 +24,10 @@ package cityaq
 // Build the GUI with Go WASM
 //go:generate bash -c "GOOS=js GOARCH=wasm go build -o ./gui/html/cityaq.wasm ./gui/cmd/main.go"
 
+// Compress the GUI.
+//go:generate go run internal/compress/main.go
+//go:generate rm ./gui/html/cityaq.wasm
+
 // Running next line will overwrite changes to index.html:
 // //go:generate bash -c "cp $DOLLAR(go env GOROOT)/misc/wasm/wasm_exec.html ./gui/html/index.html"
 
