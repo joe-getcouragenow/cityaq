@@ -23,7 +23,7 @@ type GRPCServer struct {
 }
 
 // NewGRPCServer creates a new GRPC server for c.
-func NewGRPCServer(c *CityAQ, prefix string) *GRPCServer {
+func NewGRPCServer(c *CityAQ) *GRPCServer {
 	gs := grpc.NewServer()
 	cityaqrpc.RegisterCityAQServer(gs, c)
 	s := new(GRPCServer)

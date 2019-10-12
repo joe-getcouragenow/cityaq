@@ -39,7 +39,7 @@ func main() {
 		},
 	}
 
-	srv := cityaq.NewGRPCServer(c, "")
+	srv := cityaq.NewGRPCServer(c)
 	srv.Log = logger
 
 	addr := "localhost:10000"
