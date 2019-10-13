@@ -274,6 +274,8 @@ github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d/go.mod h1:Udh
 github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e/go.mod h1:HuIsMU8RRBOtsCgI77wP899iHVBQpCmg4ErYMZB+2IA=
 github.com/spatialmodel/inmap v1.6.2-0.20191011084527-bb8fc8d893ea h1:oz7/o8KXSaY54V+GjR6jgqM0wyzVBpKfi+gQXXEX6js=
 github.com/spatialmodel/inmap v1.6.2-0.20191011084527-bb8fc8d893ea/go.mod h1:VHNCkD9bgNrfiwqbhALYbwGzZdWwdEmBIq3Kun3/6eo=
+github.com/spatialmodel/inmap v1.6.2-0.20191013063552-cc56c8bc0573 h1:6WWkjKjVtdeU4ul1wO7CIT78V9EIj/tViVX+aVhemP0=
+github.com/spatialmodel/inmap v1.6.2-0.20191013063552-cc56c8bc0573/go.mod h1:VHNCkD9bgNrfiwqbhALYbwGzZdWwdEmBIq3Kun3/6eo=
 github.com/spf13/afero v1.0.0/go.mod h1:j4pytiNVoe2o6bmDsKpLACNPDBIoEAkihy7loJ1B0CQ=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.0-20180531180338-1e58aa3361fd/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
