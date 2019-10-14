@@ -47,8 +47,8 @@ github.com/ctessum/cdf v0.0.0-20181201011353-edced208ea9d h1:mIQwc9ihMh23CRrvN5V
 github.com/ctessum/cdf v0.0.0-20181201011353-edced208ea9d/go.mod h1:E45T61NEPsdFg0n3CqBwcG7jbwHTRdhOufhVTm3/Dtc=
 github.com/ctessum/geom v0.2.3 h1:gGi9+A23AM5hCeQtHj1OA/sD6RUuGqFr5j2W7GgA1GY=
 github.com/ctessum/geom v0.2.3/go.mod h1:8kQmZY0YP29pbx4kqCU9M9mjLLqgR0KGtftnCdAww3w=
-github.com/ctessum/geom v0.2.7 h1:LlbobNP39hlEaU+cLe0CK0+ZN8Z20P8xls1UvvyGCLI=
-github.com/ctessum/geom v0.2.7/go.mod h1:CdcpDcEdImJy9b20i+xEcYZZt9rl2oT3kCCGe0OVE3Q=
+github.com/ctessum/geom v0.2.8-0.20191014172347-e8e4c95f5afc h1:GJVxPJode2OIMXLUowhZ2ja3j0Hj8OM2Q50KVnHPJfQ=
+github.com/ctessum/geom v0.2.8-0.20191014172347-e8e4c95f5afc/go.mod h1:CdcpDcEdImJy9b20i+xEcYZZt9rl2oT3kCCGe0OVE3Q=
 github.com/ctessum/go-leaflet v0.0.0-20170724133759-2f9e4c38fb5e h1:IV59uAui/Q61m9UyCjpOCEl0Bg1g9kwsgxcF5Zt8yTQ=
 github.com/ctessum/go-leaflet v0.0.0-20170724133759-2f9e4c38fb5e/go.mod h1:q862W3zi1fUPpnVc9HFYNESw9P+G52Nkq7r2xy2xWYI=
 github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af h1:hBVuJVfL4gs1fxgolJOuxL/rc01HOJUlYmXHFyDVwm8=
@@ -272,8 +272,8 @@ github.com/smartystreets/goconvey v0.0.0-20180222194500-ef6db91d284a/go.mod h1:X
 github.com/soheilhy/cmux v0.1.4/go.mod h1:IM3LyeVVIOuxMH7sFAkER9+bJ4dT7Ms6E4xg4kGIyLM=
 github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d/go.mod h1:UdhH50NIW0fCiwBSr0co2m7BnFLdv4fQTgdqdJTHFeE=
 github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e/go.mod h1:HuIsMU8RRBOtsCgI77wP899iHVBQpCmg4ErYMZB+2IA=
-github.com/spatialmodel/inmap v1.6.2-0.20191014091653-aa9203f7bf77 h1:skMb/nWiWDI1nCXfG1MWhDlw+M+Ml/kGesr3JLfdRZU=
-github.com/spatialmodel/inmap v1.6.2-0.20191014091653-aa9203f7bf77/go.mod h1:dq7vz0XnmAbTKqNoJiaaubzOasEftdGjL8L/HwBOw10=
+github.com/spatialmodel/inmap v1.6.2-0.20191014172738-4db3686bbdd0 h1:v67Ctld9IFUpo6Gn2tk7y+OVjJV++nykVRzMRa59xYg=
+github.com/spatialmodel/inmap v1.6.2-0.20191014172738-4db3686bbdd0/go.mod h1:o06S4LgvN1hDGfKcuySXNXDaGdLUiHR5YmtJT0jAhw0=
 github.com/spf13/afero v1.0.0/go.mod h1:j4pytiNVoe2o6bmDsKpLACNPDBIoEAkihy7loJ1B0CQ=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.0-20180531180338-1e58aa3361fd/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=

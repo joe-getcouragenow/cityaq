@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"image/color"
+	"log"
 	"math"
 	"os"
 	"path/filepath"
@@ -69,7 +70,6 @@ func polygonsToRPC(polys []geom.Polygonal) []*rpc.Polygon {
 			o[i].Paths[j] = new(rpc.Path)
 			o[i].Paths[j].Points = make([]*rpc.Point, len(path))
 			for k, pt := range path {
-				o[i].Paths[j].Points[k] = new(rpc.Point)
 				o[i].Paths[j].Points[k] = &rpc.Point{X: float32(pt.X), Y: float32(pt.Y)}
 			}
 		}
@@ -157,11 +157,16 @@ func (c *CityAQ) geojsonName(path, language string) (string, error) {
 
 // EmissionsGrid returns the grid to be used for mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridRequest) (*rpc.EmissionsGridResponse, error) {
+	log.Printf("got EmissionsGrid request for %s", req.CityName)
 	o, err := c.emissionsGrid(req.Path)
 	if err != nil {
+		log.Println("got error: ", err)
 		return nil, err
 	}
-	return &rpc.EmissionsGridResponse{Polygons: polygonsToRPC(o)}, nil
+	log.Printf("created %d polygons, first polygon is %+v", len(o), o[0])
+	rpcPolys := polygonsToRPC(o)
+	log.Printf("created %d rpc polygons, first point is %+v", len(rpcPolys), rpcPolys[0].Paths[0].Points[0])
+	return &rpc.EmissionsGridResponse{Polygons: rpcPolys}, nil
 }
 
 // emissionsGrid returns the grid to be used for mapping gridded information about the requested city.
@@ -179,6 +184,7 @@ func (c *CityAQ) emissionsGrid(path string) ([]geom.Polygonal, error) {
 	b.Min.Y -= buffer
 	b.Max.X += buffer
 	b.Max.Y += buffer
+	//const dx = 0.002
 	const dx = 0.01
 	for y := b.Min.Y; y < b.Max.Y+dx; y += dx {
 		for x := b.Min.X; x < b.Max.X+dx; x += dx {

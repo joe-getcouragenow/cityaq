@@ -35,6 +35,8 @@ func (c *CityAQ) loadMap() {
 	options["Attribution"] = `Map data &copy; <a href=\"http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>`
 	c.baseMapLayer = leaflet.NewTileLayer("https://api.mapbox.com/styles/v1/ctessum/cixuwgf55003e2roe7z5ouk2w/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY3Rlc3N1bSIsImEiOiJjaXh1dnZxYjAwMDRjMzNxcWczZ3JqZDd4In0.972k4y-Xc-PpYTdeUTbufA", options)
 	c.baseMapLayer.AddTo(c.leafletMap)
+
+	leaflet.L.Get("control").Call("scale").Call("addTo", c.leafletMap.Value)
 }
 
 // setMapHeight sets the height of the map to the height of the window.

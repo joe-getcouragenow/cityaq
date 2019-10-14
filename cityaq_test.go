@@ -89,7 +89,7 @@ func TestCityAQ_EmissionsGrid(t *testing.T) {
 	b := polygonBounds(polys.Polygons)
 	want := &geom.Bounds{
 		Min: geom.Point{X: -0.29919639229774475, Y: 5.500213623046875},
-		Max: geom.Point{X: -0.0991964042186737, Y: 5.680213451385498},
+		Max: geom.Point{X: -0.10719640552997589, Y: 5.672213554382324},
 	}
 	if !reflect.DeepEqual(want, b) {
 		t.Errorf("%v != %v", b, want)
