@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/andybalholm/brotli v0.0.0-20190821151343-b60f0d972eeb
-	github.com/ctessum/geom v0.2.5
+	github.com/ctessum/geom v0.2.7
 	github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af
 	github.com/ctessum/sparse v0.0.0-20181201011727-57d6234a2c9d
 	github.com/ctessum/unit v0.0.0-20160621200450-755774ac2fcb
@@ -19,7 +19,7 @@ require (
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
-	github.com/spatialmodel/inmap v1.6.2-0.20191013063552-cc56c8bc0573
+	github.com/spatialmodel/inmap v1.6.2-0.20191014073450-5ffcf3da337d
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/net v0.0.0-20190620200207-3b0461eec859
 	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect

@@ -5,6 +5,7 @@ package gui
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
@@ -22,7 +23,7 @@ func (c *CityAQ) loadEmissionsGrid(ctx context.Context, sel *selections) error {
 		Path:     sel.cityPath,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("gui: loading emissions grid for %s: %v", sel.cityName, err)
 	}
 	gj, bnds := polygonToGeoJSON(resp.Polygons)
 	gjBytes, err := json.Marshal(gj)

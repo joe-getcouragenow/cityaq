@@ -38,6 +38,8 @@ func TestLoadEmissionsGrid(t *testing.T) {
 		CityAQClient: client,
 		doc:          js.Global().Get("document"),
 	}
+	c.mapDiv = c.doc.Call("createElement", "div")
+	c.loadMap()
 
 	err := c.loadEmissionsGrid(context.Background(), &selections{})
 	if err != nil {

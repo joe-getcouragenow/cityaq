@@ -39,11 +39,13 @@ func TestCitySelector(t *testing.T) {
 		CityAQClient: client,
 		doc:          js.Global().Get("document"),
 	}
+	c.mapDiv = c.doc.Call("createElement", "div")
+	c.loadMap()
 	c.citySelector = c.doc.Call("createElement", "select")
 
 	c.updateCitySelector(context.Background())
 	html := c.citySelector.Get("innerHTML").String()
-	want := `<option value="city1path">city1</option><option value="city2path">city2</option>`
+	want := `<option disabled="" hidden="">-- select an option --</option><option value="city1path">city1</option><option value="city2path">city2</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -56,7 +58,7 @@ func TestCitySelector(t *testing.T) {
 
 	c.updateCitySelector(context.Background())
 	html = c.citySelector.Get("innerHTML").String()
-	want = `<option value="city3path">city3</option><option value="city4path">city4</option>`
+	want = `<option disabled="" hidden="">-- select an option --</option><option value="city3path">city3</option><option value="city4path">city4</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -70,7 +72,7 @@ func TestImpactTypeSelector(t *testing.T) {
 
 	c.updateImpactTypeSelector()
 	html := c.impactTypeSelector.Get("innerHTML").String()
-	want := `<option value="1">Emissions</option>`
+	want := `<option disabled="" hidden="">-- select an option --</option><option value="1">Emissions</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -84,7 +86,7 @@ func TestSourceTypeSelector(t *testing.T) {
 
 	c.updateSourceTypeSelector()
 	html := c.sourceTypeSelector.Get("innerHTML").String()
-	want := `<option value="roads">roads</option>`
+	want := `<option disabled="" hidden="">-- select an option --</option><option value="electric_gen">electric_gen</option><option value="residential">residential</option><option value="commercial">commercial</option><option value="industrial">industrial</option><option value="builtup">builtup</option><option value="roadways">roadways</option><option value="railways">railways</option><option value="waterways">waterways</option><option value="busways">busways</option><option value="airports">airports</option><option value="agricultural">agricultural</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -98,7 +100,7 @@ func TestEmissionSelector(t *testing.T) {
 
 	c.updateEmissionSelector()
 	html := c.emissionSelector.Get("innerHTML").String()
-	want := `<option value="1">PM2_5</option><option value="2">NH3</option><option value="3">NOx</option><option value="4">SOx</option><option value="5">VOC</option>`
+	want := `<option disabled="" hidden="">-- select an option --</option><option value="1">PM2_5</option><option value="2">NH3</option><option value="3">NOx</option><option value="4">SOx</option><option value="5">VOC</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -122,6 +124,8 @@ func TestSelectors(t *testing.T) {
 		CityAQClient: client,
 		doc:          js.Global().Get("document"),
 	}
+	c.mapDiv = c.doc.Call("createElement", "div")
+	c.loadMap()
 	c.citySelector = c.doc.Call("createElement", "select")
 	c.impactTypeSelector = c.doc.Call("createElement", "select")
 	c.emissionSelector = c.doc.Call("createElement", "select")
@@ -129,16 +133,17 @@ func TestSelectors(t *testing.T) {
 
 	c.updateSelectors(context.Background())
 
-	changeSelector(c.citySelector, 0)
-	changeSelector(c.impactTypeSelector, 0)
-	changeSelector(c.emissionSelector, 0)
-	changeSelector(c.sourceTypeSelector, 0)
+	changeSelector(c.citySelector, 1)
+	changeSelector(c.impactTypeSelector, 1)
+	changeSelector(c.emissionSelector, 1)
+	changeSelector(c.sourceTypeSelector, 1)
+	changeSelector(c.sourceTypeSelector, 1)
 
 	sel, err := c.selectorValues()
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := &selections{cityName: "city1", cityPath: "city1path", impactType: emission, emission: 1, sourceType: "roads"}
+	want := &selections{cityName: "city1", cityPath: "city1path", impactType: emission, emission: 1, sourceType: "electric_gen"}
 
 	if !reflect.DeepEqual(want, sel) {
 		t.Errorf("%v != %v", sel, want)
