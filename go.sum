@@ -272,8 +272,8 @@ github.com/smartystreets/goconvey v0.0.0-20180222194500-ef6db91d284a/go.mod h1:X
 github.com/soheilhy/cmux v0.1.4/go.mod h1:IM3LyeVVIOuxMH7sFAkER9+bJ4dT7Ms6E4xg4kGIyLM=
 github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d/go.mod h1:UdhH50NIW0fCiwBSr0co2m7BnFLdv4fQTgdqdJTHFeE=
 github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e/go.mod h1:HuIsMU8RRBOtsCgI77wP899iHVBQpCmg4ErYMZB+2IA=
-github.com/spatialmodel/inmap v1.6.2-0.20191014073450-5ffcf3da337d h1:43SR/+zVwJIgwSYvzG/TLr5HzuB58sm5xML/aJE3qPk=
-github.com/spatialmodel/inmap v1.6.2-0.20191014073450-5ffcf3da337d/go.mod h1:dq7vz0XnmAbTKqNoJiaaubzOasEftdGjL8L/HwBOw10=
+github.com/spatialmodel/inmap v1.6.2-0.20191014091653-aa9203f7bf77 h1:skMb/nWiWDI1nCXfG1MWhDlw+M+Ml/kGesr3JLfdRZU=
+github.com/spatialmodel/inmap v1.6.2-0.20191014091653-aa9203f7bf77/go.mod h1:dq7vz0XnmAbTKqNoJiaaubzOasEftdGjL8L/HwBOw10=
 github.com/spf13/afero v1.0.0/go.mod h1:j4pytiNVoe2o6bmDsKpLACNPDBIoEAkihy7loJ1B0CQ=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.0-20180531180338-1e58aa3361fd/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
