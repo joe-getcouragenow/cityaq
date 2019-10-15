@@ -184,8 +184,8 @@ func (c *CityAQ) emissionsGrid(path string) ([]geom.Polygonal, error) {
 	b.Min.Y -= buffer
 	b.Max.X += buffer
 	b.Max.Y += buffer
-	//const dx = 0.002
-	const dx = 0.01
+	const dx = 0.002
+	//const dx = 0.01
 	for y := b.Min.Y; y < b.Max.Y+dx; y += dx {
 		for x := b.Min.X; x < b.Max.X+dx; x += dx {
 			o = append(o, geom.Polygon{
