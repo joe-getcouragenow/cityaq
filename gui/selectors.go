@@ -32,18 +32,16 @@ func (c *CityAQ) updateCitySelector(ctx context.Context) {
 	if c.citySelector == js.Undefined() {
 		c.citySelector = c.doc.Call("getElementById", "citySelector")
 	}
-	c.cityNames = make(map[string]string)
 	cities, err := c.Cities(ctx, &rpc.CitiesRequest{})
 	if err != nil {
 		c.logError(err)
 		return
 	}
-	paths := make([]interface{}, len(cities.Paths))
-	for i, p := range cities.Paths {
-		c.cityNames[p] = cities.Names[i]
-		paths[i] = p
+	names := make([]interface{}, len(cities.Names))
+	for i, n := range cities.Names {
+		names[i] = n
 	}
-	updateSelector(c.doc, c.citySelector, paths, cities.Names)
+	updateSelector(c.doc, c.citySelector, names, cities.Names)
 }
 
 // updateImpactTypeSelector updates the options of impacts.
@@ -127,7 +125,6 @@ func (c *CityAQ) sourceTypeSelectorValue() (string, error) {
 }
 
 type selections struct {
-	cityPath   string
 	cityName   string
 	impactType rpc.ImpactType
 	sourceType string
@@ -138,11 +135,10 @@ var incompleteSelectionError = errors.New("incomplete selection")
 
 func (c *CityAQ) selectorValues() (s *selections, err error) {
 	s = new(selections)
-	s.cityPath, err = c.citySelectorValue()
+	s.cityName, err = c.citySelectorValue()
 	if err != nil {
 		return
 	}
-	s.cityName = c.cityNames[s.cityPath]
 
 	s.emission, err = c.emissionSelectorValue()
 	if err != nil {

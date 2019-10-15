@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/ctessum/cityaq/cityaqrpc"
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"github.com/ctessum/geom"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
@@ -31,10 +32,6 @@ func TestCityAQ_Cities(t *testing.T) {
 			"Accra Metropolitan",
 			"Karachi",
 		},
-		Paths: []string{
-			"testdata/cities/accra_jurisdiction.geojson",
-			"testdata/cities/karachi_jurisdiction.geojson",
-		},
 	}
 	if !reflect.DeepEqual(want, cities) {
 		t.Errorf("%v != %v", cities, want)
@@ -43,7 +40,7 @@ func TestCityAQ_Cities(t *testing.T) {
 
 func TestCityAQ_CityGeometry(t *testing.T) {
 	r := &rpc.CityGeometryRequest{
-		Path: "testdata/cities/accra_jurisdiction.geojson",
+		CityName: "Accra Metropolitan",
 	}
 
 	c := &CityAQ{
@@ -77,7 +74,7 @@ func polygonBounds(polys []*rpc.Polygon) *geom.Bounds {
 
 func TestCityAQ_EmissionsGrid(t *testing.T) {
 	r := &rpc.EmissionsGridRequest{
-		Path: "testdata/cities/accra_jurisdiction.geojson",
+		CityName: "Accra Metropolitan",
 	}
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
@@ -93,6 +90,26 @@ func TestCityAQ_EmissionsGrid(t *testing.T) {
 	}
 	if !reflect.DeepEqual(want, b) {
 		t.Errorf("%v != %v", b, want)
+	}
+}
+
+func TestCityAQ_EmissionsGridBounds(t *testing.T) {
+	r := &rpc.EmissionsGridBoundsRequest{
+		CityName: "Accra Metropolitan",
+	}
+	c := &CityAQ{
+		CityGeomDir: "testdata/cities",
+	}
+	bounds, err := c.EmissionsGridBounds(context.Background(), r)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := &rpc.EmissionsGridBoundsResponse{
+		Min: &rpc.Point{X: -0.29919639229774475, Y: 5.500213623046875},
+		Max: &rpc.Point{X: -0.10719640552997589, Y: 5.672213554382324},
+	}
+	if !reflect.DeepEqual(want, bounds) {
+		t.Errorf("%v != %v", bounds, want)
 	}
 }
 
@@ -112,8 +129,7 @@ func TestCityAQ_griddedEmissions(t *testing.T) {
 	for _, st := range []string{"roadways", "airports"} {
 		t.Run(st, func(t *testing.T) {
 			req := &rpc.EmissionsMapRequest{
-				CityPath:   "testdata/cities/accra_jurisdiction.geojson",
-				CityName:   "accra",
+				CityName:   "Accra Metropolitan",
 				Emission:   rpc.Emission_PM2_5,
 				SourceType: st,
 			}
@@ -154,8 +170,7 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 		},
 	}
 	req := &rpc.EmissionsMapRequest{
-		CityPath:   "testdata/cities/accra_jurisdiction.geojson",
-		CityName:   "accra",
+		CityName:   "Accra Metropolitan",
 		Emission:   rpc.Emission_PM2_5,
 		SourceType: "roadways",
 	}
@@ -164,7 +179,7 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 		t.Fatal(err)
 	}
 	grid, err := c.EmissionsGrid(context.Background(), &rpc.EmissionsGridRequest{
-		Path: "testdata/cities/accra_jurisdiction.geojson",
+		CityName: "Accra Metropolitan",
 	})
 	p, err := plot.New()
 	if err != nil {
@@ -182,7 +197,7 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 	}
 
 	city, err := c.CityGeometry(context.Background(), &rpc.CityGeometryRequest{
-		Path: "testdata/cities/accra_jurisdiction.geojson",
+		CityName: "Accra Metropolitan",
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -241,4 +256,32 @@ func polygonToXYs(poly *rpc.Polygon) []plotter.XYer {
 		o = append(o, xys)
 	}
 	return o
+}
+
+func TestCityAQ_MapScale(t *testing.T) {
+	c := &CityAQ{
+		CityGeomDir: "testdata/cities",
+		SpatialConfig: aeputil.SpatialConfig{
+			SrgSpec:       "testdata/srgspec_osm.json",
+			SrgSpecType:   "OSM",
+			SCCExactMatch: true,
+			GridRef:       []string{"testdata/gridref_osm.txt"},
+			OutputSR:      "+proj=longlat",
+			InputSR:       "+proj=longlat",
+		},
+	}
+	req := &rpc.MapScaleRequest{
+		CityName:   "Accra Metropolitan",
+		Emission:   rpc.Emission_PM2_5,
+		SourceType: "roadways",
+		ImpactType: rpc.ImpactType_Emissions,
+	}
+	scale, err := c.MapScale(context.Background(), req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	wantScale := &cityaqrpc.MapScaleResponse{Min: 2.3738443e-05, Max: 1.5333514}
+	if !reflect.DeepEqual(scale, wantScale) {
+		t.Errorf("scale %+v != %+v", scale, wantScale)
+	}
 }

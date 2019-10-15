@@ -121,9 +121,7 @@ var xxx_messageInfo_CitiesRequest proto.InternalMessageInfo
 
 type CitiesResponse struct {
 	// The names of the cities
-	Names []string `protobuf:"bytes,1,rep,name=Names,proto3" json:"Names,omitempty"`
-	// Paths to the file containing the geometry of each city.
-	Paths                []string `protobuf:"bytes,2,rep,name=Paths,proto3" json:"Paths,omitempty"`
+	Names                []string `protobuf:"bytes,1,rep,name=Names,proto3" json:"Names,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -161,15 +159,8 @@ func (m *CitiesResponse) GetNames() []string {
 	return nil
 }
 
-func (m *CitiesResponse) GetPaths() []string {
-	if m != nil {
-		return m.Paths
-	}
-	return nil
-}
-
 type CityGeometryRequest struct {
-	Path                 string   `protobuf:"bytes,1,opt,name=Path,proto3" json:"Path,omitempty"`
+	CityName             string   `protobuf:"bytes,1,opt,name=CityName,proto3" json:"CityName,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -200,9 +191,9 @@ func (m *CityGeometryRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CityGeometryRequest proto.InternalMessageInfo
 
-func (m *CityGeometryRequest) GetPath() string {
+func (m *CityGeometryRequest) GetCityName() string {
 	if m != nil {
-		return m.Path
+		return m.CityName
 	}
 	return ""
 }
@@ -373,7 +364,6 @@ func (m *Point) GetY() float32 {
 
 type EmissionsGridRequest struct {
 	CityName             string   `protobuf:"bytes,1,opt,name=CityName,proto3" json:"CityName,omitempty"`
-	Path                 string   `protobuf:"bytes,2,opt,name=Path,proto3" json:"Path,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -407,13 +397,6 @@ var xxx_messageInfo_EmissionsGridRequest proto.InternalMessageInfo
 func (m *EmissionsGridRequest) GetCityName() string {
 	if m != nil {
 		return m.CityName
-	}
-	return ""
-}
-
-func (m *EmissionsGridRequest) GetPath() string {
-	if m != nil {
-		return m.Path
 	}
 	return ""
 }
@@ -457,9 +440,94 @@ func (m *EmissionsGridResponse) GetPolygons() []*Polygon {
 	return nil
 }
 
+type EmissionsGridBoundsRequest struct {
+	CityName             string   `protobuf:"bytes,1,opt,name=CityName,proto3" json:"CityName,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *EmissionsGridBoundsRequest) Reset()         { *m = EmissionsGridBoundsRequest{} }
+func (m *EmissionsGridBoundsRequest) String() string { return proto.CompactTextString(m) }
+func (*EmissionsGridBoundsRequest) ProtoMessage()    {}
+func (*EmissionsGridBoundsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7cccf5bb3409f35d, []int{9}
+}
+
+func (m *EmissionsGridBoundsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EmissionsGridBoundsRequest.Unmarshal(m, b)
+}
+func (m *EmissionsGridBoundsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EmissionsGridBoundsRequest.Marshal(b, m, deterministic)
+}
+func (m *EmissionsGridBoundsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EmissionsGridBoundsRequest.Merge(m, src)
+}
+func (m *EmissionsGridBoundsRequest) XXX_Size() int {
+	return xxx_messageInfo_EmissionsGridBoundsRequest.Size(m)
+}
+func (m *EmissionsGridBoundsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_EmissionsGridBoundsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EmissionsGridBoundsRequest proto.InternalMessageInfo
+
+func (m *EmissionsGridBoundsRequest) GetCityName() string {
+	if m != nil {
+		return m.CityName
+	}
+	return ""
+}
+
+type EmissionsGridBoundsResponse struct {
+	Min                  *Point   `protobuf:"bytes,1,opt,name=Min,proto3" json:"Min,omitempty"`
+	Max                  *Point   `protobuf:"bytes,2,opt,name=Max,proto3" json:"Max,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *EmissionsGridBoundsResponse) Reset()         { *m = EmissionsGridBoundsResponse{} }
+func (m *EmissionsGridBoundsResponse) String() string { return proto.CompactTextString(m) }
+func (*EmissionsGridBoundsResponse) ProtoMessage()    {}
+func (*EmissionsGridBoundsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7cccf5bb3409f35d, []int{10}
+}
+
+func (m *EmissionsGridBoundsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EmissionsGridBoundsResponse.Unmarshal(m, b)
+}
+func (m *EmissionsGridBoundsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EmissionsGridBoundsResponse.Marshal(b, m, deterministic)
+}
+func (m *EmissionsGridBoundsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EmissionsGridBoundsResponse.Merge(m, src)
+}
+func (m *EmissionsGridBoundsResponse) XXX_Size() int {
+	return xxx_messageInfo_EmissionsGridBoundsResponse.Size(m)
+}
+func (m *EmissionsGridBoundsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_EmissionsGridBoundsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EmissionsGridBoundsResponse proto.InternalMessageInfo
+
+func (m *EmissionsGridBoundsResponse) GetMin() *Point {
+	if m != nil {
+		return m.Min
+	}
+	return nil
+}
+
+func (m *EmissionsGridBoundsResponse) GetMax() *Point {
+	if m != nil {
+		return m.Max
+	}
+	return nil
+}
+
 type EmissionsMapRequest struct {
 	CityName             string   `protobuf:"bytes,1,opt,name=CityName,proto3" json:"CityName,omitempty"`
-	CityPath             string   `protobuf:"bytes,2,opt,name=CityPath,proto3" json:"CityPath,omitempty"`
 	Emission             Emission `protobuf:"varint,3,opt,name=Emission,proto3,enum=cityaqrpc.Emission" json:"Emission,omitempty"`
 	SourceType           string   `protobuf:"bytes,4,opt,name=SourceType,proto3" json:"SourceType,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -471,7 +539,7 @@ func (m *EmissionsMapRequest) Reset()         { *m = EmissionsMapRequest{} }
 func (m *EmissionsMapRequest) String() string { return proto.CompactTextString(m) }
 func (*EmissionsMapRequest) ProtoMessage()    {}
 func (*EmissionsMapRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7cccf5bb3409f35d, []int{9}
+	return fileDescriptor_7cccf5bb3409f35d, []int{11}
 }
 
 func (m *EmissionsMapRequest) XXX_Unmarshal(b []byte) error {
@@ -495,13 +563,6 @@ var xxx_messageInfo_EmissionsMapRequest proto.InternalMessageInfo
 func (m *EmissionsMapRequest) GetCityName() string {
 	if m != nil {
 		return m.CityName
-	}
-	return ""
-}
-
-func (m *EmissionsMapRequest) GetCityPath() string {
-	if m != nil {
-		return m.CityPath
 	}
 	return ""
 }
@@ -532,7 +593,7 @@ func (m *EmissionsMapResponse) Reset()         { *m = EmissionsMapResponse{} }
 func (m *EmissionsMapResponse) String() string { return proto.CompactTextString(m) }
 func (*EmissionsMapResponse) ProtoMessage()    {}
 func (*EmissionsMapResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7cccf5bb3409f35d, []int{10}
+	return fileDescriptor_7cccf5bb3409f35d, []int{12}
 }
 
 func (m *EmissionsMapResponse) XXX_Unmarshal(b []byte) error {
@@ -567,6 +628,124 @@ func (m *EmissionsMapResponse) GetLegend() string {
 	return ""
 }
 
+type MapScaleRequest struct {
+	CityName             string     `protobuf:"bytes,1,opt,name=CityName,proto3" json:"CityName,omitempty"`
+	ImpactType           ImpactType `protobuf:"varint,2,opt,name=ImpactType,proto3,enum=cityaqrpc.ImpactType" json:"ImpactType,omitempty"`
+	Emission             Emission   `protobuf:"varint,3,opt,name=Emission,proto3,enum=cityaqrpc.Emission" json:"Emission,omitempty"`
+	SourceType           string     `protobuf:"bytes,4,opt,name=SourceType,proto3" json:"SourceType,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *MapScaleRequest) Reset()         { *m = MapScaleRequest{} }
+func (m *MapScaleRequest) String() string { return proto.CompactTextString(m) }
+func (*MapScaleRequest) ProtoMessage()    {}
+func (*MapScaleRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7cccf5bb3409f35d, []int{13}
+}
+
+func (m *MapScaleRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MapScaleRequest.Unmarshal(m, b)
+}
+func (m *MapScaleRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MapScaleRequest.Marshal(b, m, deterministic)
+}
+func (m *MapScaleRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MapScaleRequest.Merge(m, src)
+}
+func (m *MapScaleRequest) XXX_Size() int {
+	return xxx_messageInfo_MapScaleRequest.Size(m)
+}
+func (m *MapScaleRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MapScaleRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MapScaleRequest proto.InternalMessageInfo
+
+func (m *MapScaleRequest) GetCityName() string {
+	if m != nil {
+		return m.CityName
+	}
+	return ""
+}
+
+func (m *MapScaleRequest) GetImpactType() ImpactType {
+	if m != nil {
+		return m.ImpactType
+	}
+	return ImpactType_UNKNOWN_IMPACTTYPE
+}
+
+func (m *MapScaleRequest) GetEmission() Emission {
+	if m != nil {
+		return m.Emission
+	}
+	return Emission_UNKNOWN_EMISSION
+}
+
+func (m *MapScaleRequest) GetSourceType() string {
+	if m != nil {
+		return m.SourceType
+	}
+	return ""
+}
+
+type MapScaleResponse struct {
+	Min                  float32  `protobuf:"fixed32,1,opt,name=Min,proto3" json:"Min,omitempty"`
+	Max                  float32  `protobuf:"fixed32,2,opt,name=Max,proto3" json:"Max,omitempty"`
+	CutPt                float32  `protobuf:"fixed32,3,opt,name=CutPt,proto3" json:"CutPt,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MapScaleResponse) Reset()         { *m = MapScaleResponse{} }
+func (m *MapScaleResponse) String() string { return proto.CompactTextString(m) }
+func (*MapScaleResponse) ProtoMessage()    {}
+func (*MapScaleResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7cccf5bb3409f35d, []int{14}
+}
+
+func (m *MapScaleResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MapScaleResponse.Unmarshal(m, b)
+}
+func (m *MapScaleResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MapScaleResponse.Marshal(b, m, deterministic)
+}
+func (m *MapScaleResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MapScaleResponse.Merge(m, src)
+}
+func (m *MapScaleResponse) XXX_Size() int {
+	return xxx_messageInfo_MapScaleResponse.Size(m)
+}
+func (m *MapScaleResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MapScaleResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MapScaleResponse proto.InternalMessageInfo
+
+func (m *MapScaleResponse) GetMin() float32 {
+	if m != nil {
+		return m.Min
+	}
+	return 0
+}
+
+func (m *MapScaleResponse) GetMax() float32 {
+	if m != nil {
+		return m.Max
+	}
+	return 0
+}
+
+func (m *MapScaleResponse) GetCutPt() float32 {
+	if m != nil {
+		return m.CutPt
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterEnum("cityaqrpc.Emission", Emission_name, Emission_value)
 	proto.RegisterEnum("cityaqrpc.ImpactType", ImpactType_name, ImpactType_value)
@@ -579,48 +758,59 @@ func init() {
 	proto.RegisterType((*Point)(nil), "cityaqrpc.Point")
 	proto.RegisterType((*EmissionsGridRequest)(nil), "cityaqrpc.EmissionsGridRequest")
 	proto.RegisterType((*EmissionsGridResponse)(nil), "cityaqrpc.EmissionsGridResponse")
+	proto.RegisterType((*EmissionsGridBoundsRequest)(nil), "cityaqrpc.EmissionsGridBoundsRequest")
+	proto.RegisterType((*EmissionsGridBoundsResponse)(nil), "cityaqrpc.EmissionsGridBoundsResponse")
 	proto.RegisterType((*EmissionsMapRequest)(nil), "cityaqrpc.EmissionsMapRequest")
 	proto.RegisterType((*EmissionsMapResponse)(nil), "cityaqrpc.EmissionsMapResponse")
+	proto.RegisterType((*MapScaleRequest)(nil), "cityaqrpc.MapScaleRequest")
+	proto.RegisterType((*MapScaleResponse)(nil), "cityaqrpc.MapScaleResponse")
 }
 
 func init() { proto.RegisterFile("cityaq.proto", fileDescriptor_7cccf5bb3409f35d) }
 
 var fileDescriptor_7cccf5bb3409f35d = []byte{
-	// 535 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x5d, 0x6f, 0xda, 0x30,
-	0x14, 0x25, 0xe1, 0xa3, 0x70, 0x07, 0xad, 0x75, 0x61, 0x55, 0xc6, 0x43, 0x41, 0x99, 0x26, 0xb1,
-	0x3e, 0xb0, 0x0a, 0xb4, 0xb7, 0x49, 0x5b, 0x87, 0x18, 0x43, 0x1b, 0x49, 0x1a, 0xd8, 0x56, 0x9e,
-	0xaa, 0x8c, 0x5a, 0x6d, 0xa4, 0x91, 0xa4, 0xc4, 0x95, 0xca, 0x9f, 0xd9, 0xbf, 0xd9, 0xff, 0x9a,
-	0xec, 0x38, 0x99, 0x53, 0x81, 0x34, 0xf5, 0xed, 0x1e, 0x9f, 0x9b, 0xe3, 0x73, 0x8f, 0xed, 0x40,
-	0x7d, 0xe5, 0xb3, 0xad, 0x77, 0xd7, 0x8f, 0x36, 0x21, 0x0b, 0xb1, 0x96, 0xa0, 0x4d, 0xb4, 0x32,
-	0x8f, 0xa0, 0x31, 0xf2, 0x99, 0x4f, 0x63, 0x97, 0xde, 0xdd, 0xd3, 0x98, 0x99, 0xef, 0xe0, 0x30,
-	0x5d, 0x88, 0xa3, 0x30, 0x88, 0x29, 0xb6, 0xa0, 0x6c, 0x79, 0x6b, 0x1a, 0x1b, 0x5a, 0xb7, 0xd8,
-	0xab, 0xb9, 0x09, 0xe0, 0xab, 0x8e, 0xc7, 0x6e, 0x63, 0x43, 0x4f, 0x56, 0x05, 0x30, 0x5f, 0x43,
-	0x73, 0xe4, 0xb3, 0xed, 0x84, 0x86, 0x6b, 0xca, 0x36, 0x5b, 0x29, 0x8a, 0x08, 0x25, 0xce, 0x1b,
-	0x5a, 0x57, 0xeb, 0xd5, 0x5c, 0x51, 0x9b, 0x9f, 0xa0, 0x95, 0x6f, 0x95, 0xdb, 0xf5, 0xa1, 0xea,
-	0x84, 0xbf, 0xb6, 0x37, 0x61, 0x90, 0xec, 0xf8, 0x6c, 0x80, 0xfd, 0xcc, 0x6f, 0x5f, 0x52, 0x6e,
-	0xd6, 0x63, 0x9e, 0xc1, 0x81, 0xac, 0xf1, 0x55, 0xea, 0x29, 0xf9, 0xee, 0x48, 0xfd, 0xce, 0x63,
-	0xb7, 0xa9, 0xc9, 0xb3, 0xc4, 0x0d, 0xf6, 0xa0, 0xe2, 0x84, 0x7e, 0xc0, 0xd2, 0x7e, 0x92, 0xdb,
-	0xc7, 0x0f, 0x98, 0x2b, 0x79, 0xf3, 0x25, 0x94, 0x45, 0x85, 0x75, 0xd0, 0x2e, 0xc5, 0x14, 0xba,
-	0xab, 0x5d, 0x72, 0xb4, 0x34, 0xf4, 0x04, 0x2d, 0xf9, 0x40, 0xe3, 0xb5, 0x1f, 0xc7, 0x7e, 0x18,
-	0xc4, 0x93, 0x8d, 0x7f, 0x9d, 0x0e, 0xdf, 0x86, 0x2a, 0x1f, 0x94, 0xc7, 0x26, 0x03, 0xc8, 0x70,
-	0x16, 0x8c, 0xae, 0x04, 0x33, 0x81, 0xe7, 0x8f, 0x74, 0x9e, 0x98, 0xcc, 0x6f, 0x0d, 0x9a, 0x99,
-	0xd2, 0xcc, 0x8b, 0xfe, 0xc7, 0x90, 0xe4, 0x14, 0x53, 0x19, 0xc6, 0x37, 0x50, 0x4d, 0xe5, 0x8c,
-	0x62, 0x57, 0xeb, 0x1d, 0x0e, 0x9a, 0xca, 0xfe, 0x29, 0xe5, 0x66, 0x4d, 0x78, 0x02, 0x30, 0x0f,
-	0xef, 0x37, 0x2b, 0xba, 0xd8, 0x46, 0xd4, 0x28, 0x09, 0x39, 0x65, 0xc5, 0xfc, 0xa0, 0x24, 0x26,
-	0xfc, 0xc9, 0x41, 0x09, 0x14, 0xdd, 0xc9, 0x47, 0x31, 0x63, 0xdd, 0xe5, 0x25, 0x1e, 0x43, 0xe5,
-	0x2b, 0xbd, 0xa1, 0xc1, 0xb5, 0x34, 0x25, 0xd1, 0xa9, 0xfd, 0xcf, 0x12, 0xb6, 0x80, 0x7c, 0xb3,
-	0xbe, 0x58, 0xf6, 0x0f, 0xeb, 0x6a, 0x3c, 0x9b, 0xce, 0xe7, 0x53, 0xdb, 0x22, 0x05, 0xac, 0x41,
-	0xd9, 0x99, 0x0d, 0xae, 0xde, 0x12, 0x0d, 0x0f, 0xa0, 0x68, 0x7d, 0x1e, 0x12, 0x5d, 0x14, 0xf6,
-	0x03, 0x29, 0xf2, 0x62, 0x6e, 0x3f, 0x90, 0x12, 0x2f, 0xbe, 0xdb, 0x23, 0x52, 0x3e, 0x1d, 0x02,
-	0x4c, 0xd7, 0x91, 0xb7, 0x62, 0xdc, 0x20, 0x1e, 0x03, 0xa6, 0x92, 0xd3, 0x99, 0x73, 0x3e, 0x5a,
-	0x2c, 0x96, 0xce, 0x98, 0x14, 0xb0, 0x01, 0xb5, 0xcc, 0x38, 0xd1, 0x06, 0x7f, 0x74, 0xa8, 0xf0,
-	0x94, 0xce, 0x2f, 0xf0, 0xbd, 0xa8, 0x7c, 0x1a, 0xa3, 0xa1, 0x64, 0x93, 0x7b, 0x62, 0xed, 0x17,
-	0x3b, 0x98, 0x64, 0x72, 0xb3, 0x80, 0x17, 0x50, 0x57, 0x9f, 0x05, 0x9e, 0xe4, 0x9b, 0x1f, 0x3f,
-	0xad, 0x76, 0x67, 0x2f, 0x9f, 0x49, 0x2e, 0xa0, 0x91, 0xbb, 0x50, 0xd8, 0xd9, 0x71, 0x6c, 0xea,
-	0x95, 0x6d, 0x77, 0xf7, 0x37, 0xa8, 0x46, 0xd5, 0xc3, 0xcb, 0x19, 0xdd, 0x71, 0xeb, 0xda, 0x9d,
-	0xbd, 0x7c, 0x2a, 0xf9, 0xb3, 0x22, 0x7e, 0x4f, 0xc3, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x16,
-	0x2c, 0x54, 0x04, 0xae, 0x04, 0x00, 0x00,
+	// 650 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0xdd, 0x4e, 0xdb, 0x4c,
+	0x10, 0xc5, 0x36, 0x09, 0xc9, 0x7c, 0x01, 0x56, 0x4b, 0x40, 0xf9, 0x8c, 0x04, 0xd1, 0x56, 0xa0,
+	0x88, 0x8b, 0x94, 0x06, 0x21, 0xf5, 0xae, 0x85, 0x28, 0x4d, 0xa3, 0x92, 0xd8, 0x6c, 0xd2, 0x16,
+	0xae, 0x90, 0x1b, 0xb6, 0x60, 0x89, 0xd8, 0x26, 0xde, 0x48, 0xc9, 0x6d, 0xdf, 0xa9, 0x6f, 0xd6,
+	0x07, 0xa8, 0xbc, 0xfe, 0x5b, 0x23, 0x47, 0x8d, 0xaa, 0xde, 0xcd, 0xec, 0x39, 0x33, 0x7b, 0x66,
+	0xc6, 0x3b, 0x86, 0xca, 0xd8, 0xe6, 0x0b, 0xeb, 0xb9, 0xe9, 0x4d, 0x5d, 0xee, 0xe2, 0x72, 0xe8,
+	0x4d, 0xbd, 0x31, 0xd9, 0x86, 0xcd, 0xb6, 0xcd, 0x6d, 0xe6, 0x53, 0xf6, 0x3c, 0x63, 0x3e, 0x27,
+	0xc7, 0xb0, 0x15, 0x1f, 0xf8, 0x9e, 0xeb, 0xf8, 0x0c, 0x57, 0xa1, 0x30, 0xb0, 0x26, 0xcc, 0xaf,
+	0x29, 0x75, 0xad, 0x51, 0xa6, 0xa1, 0x43, 0xde, 0xc0, 0x4e, 0xdb, 0xe6, 0x8b, 0x2e, 0x73, 0x27,
+	0x8c, 0x4f, 0x17, 0x51, 0x38, 0xd6, 0xa1, 0x14, 0x1c, 0x07, 0x9c, 0x9a, 0x52, 0x57, 0x1a, 0x65,
+	0x9a, 0xf8, 0xe4, 0x03, 0x54, 0xb3, 0x21, 0xd1, 0x05, 0x4d, 0x28, 0x99, 0xee, 0xd3, 0xe2, 0xc1,
+	0x75, 0xc2, 0x3b, 0xfe, 0x6b, 0xe1, 0x66, 0xa2, 0xb0, 0x19, 0x41, 0x34, 0xe1, 0x90, 0x53, 0xd8,
+	0x88, 0x6c, 0x7c, 0x04, 0x05, 0xd3, 0xe2, 0x8f, 0x71, 0xdc, 0xb6, 0x1c, 0x67, 0xf1, 0x47, 0x1a,
+	0xa2, 0xe4, 0x14, 0xd6, 0x03, 0x03, 0x37, 0xa0, 0x68, 0xba, 0xb6, 0xc3, 0x63, 0x3e, 0xca, 0xdc,
+	0x63, 0x3b, 0x9c, 0x46, 0x38, 0x79, 0x05, 0x05, 0x61, 0xe1, 0x0a, 0x28, 0x37, 0xa2, 0x12, 0x95,
+	0x2a, 0x37, 0x81, 0x77, 0x5b, 0x53, 0x43, 0xef, 0x96, 0xb4, 0xa0, 0xda, 0x99, 0xd8, 0xbe, 0x6f,
+	0xbb, 0x8e, 0xdf, 0x9d, 0xda, 0xf7, 0xab, 0x34, 0xa1, 0x0b, 0xbb, 0x2f, 0x62, 0xfe, 0xb2, 0x0b,
+	0x6f, 0x41, 0xcf, 0x24, 0xba, 0x74, 0x67, 0xce, 0xbd, 0xbf, 0x8a, 0x04, 0x06, 0xfb, 0xb9, 0x91,
+	0x91, 0x10, 0x02, 0x5a, 0xdf, 0x76, 0x44, 0x54, 0x5e, 0x87, 0x02, 0x50, 0x70, 0xac, 0xb9, 0xe8,
+	0x44, 0x3e, 0xc7, 0x9a, 0x93, 0x1f, 0x0a, 0xec, 0x24, 0xf7, 0xf4, 0x2d, 0x6f, 0x05, 0x69, 0xf8,
+	0x35, 0x94, 0xe2, 0x90, 0x9a, 0x56, 0x57, 0x1a, 0x5b, 0xad, 0x1d, 0x29, 0x79, 0x0c, 0xd1, 0x84,
+	0x84, 0x0f, 0x00, 0x86, 0xee, 0x6c, 0x3a, 0x66, 0xa3, 0x85, 0xc7, 0x6a, 0xeb, 0x22, 0x9d, 0x74,
+	0x42, 0xde, 0x4b, 0x23, 0x12, 0x1a, 0xa2, 0x22, 0x11, 0x68, 0xb4, 0x7b, 0x29, 0x1a, 0x5d, 0xa1,
+	0x81, 0x89, 0xf7, 0xa0, 0x78, 0xc5, 0x1e, 0x98, 0x73, 0x2f, 0xaa, 0x2a, 0xd3, 0xc8, 0x23, 0x3f,
+	0x15, 0xd8, 0xee, 0x5b, 0xde, 0x70, 0x6c, 0x3d, 0xb1, 0x55, 0x4a, 0x38, 0x07, 0xe8, 0x4d, 0x3c,
+	0x6b, 0xcc, 0x85, 0x22, 0x55, 0x14, 0xb1, 0x2b, 0x15, 0x91, 0x82, 0x54, 0x22, 0xfe, 0xfb, 0xca,
+	0xaf, 0x00, 0xa5, 0xb2, 0xd3, 0xaa, 0xe3, 0xd1, 0xaa, 0xe1, 0x20, 0x51, 0x3a, 0x48, 0x55, 0x8c,
+	0x2d, 0x78, 0xee, 0xed, 0x19, 0x37, 0xb9, 0x50, 0xa1, 0xd2, 0xd0, 0x39, 0x31, 0x52, 0x79, 0xb8,
+	0x0a, 0xe8, 0xf3, 0xe0, 0xd3, 0xc0, 0xf8, 0x3a, 0xb8, 0xeb, 0xf4, 0x7b, 0xc3, 0x61, 0xcf, 0x18,
+	0xa0, 0x35, 0x5c, 0x86, 0x82, 0xd9, 0x6f, 0xdd, 0x9d, 0x23, 0x05, 0x6f, 0x80, 0x36, 0xf8, 0x78,
+	0x86, 0x54, 0x61, 0x18, 0x73, 0xa4, 0x05, 0xc6, 0xd0, 0x98, 0xa3, 0xf5, 0xc0, 0xf8, 0x62, 0xb4,
+	0x51, 0xe1, 0xe4, 0x4c, 0x6e, 0x13, 0xde, 0x03, 0x1c, 0xa7, 0xec, 0xf5, 0xcd, 0x8b, 0xf6, 0x68,
+	0x74, 0x6b, 0x76, 0xd0, 0x1a, 0xde, 0x84, 0x72, 0x32, 0x3e, 0xa4, 0xb4, 0x7e, 0x69, 0x50, 0x0c,
+	0x1a, 0x7d, 0x71, 0x8d, 0xdf, 0x09, 0xcb, 0x66, 0x3e, 0xae, 0x49, 0x7d, 0xca, 0xec, 0x32, 0xfd,
+	0xff, 0x1c, 0x24, 0xec, 0x04, 0x59, 0xc3, 0xd7, 0x50, 0x91, 0xb7, 0x11, 0x3e, 0xc8, 0x92, 0x5f,
+	0x6e, 0x36, 0xfd, 0x70, 0x29, 0x9e, 0xa4, 0x1c, 0xc1, 0x66, 0xe6, 0x61, 0xe1, 0xc3, 0x9c, 0x11,
+	0xca, 0x9b, 0x42, 0xaf, 0x2f, 0x27, 0xc8, 0x42, 0xe5, 0x4f, 0x38, 0x23, 0x34, 0xe7, 0x7d, 0xe9,
+	0x87, 0x4b, 0xf1, 0x24, 0xe5, 0x77, 0xe9, 0x65, 0xa6, 0x1b, 0x00, 0x1f, 0x2d, 0x53, 0x93, 0xd9,
+	0x2d, 0xfa, 0xf1, 0x9f, 0x68, 0xc9, 0x3d, 0x1d, 0x28, 0xc5, 0xdf, 0x20, 0xd6, 0xa5, 0xa8, 0x17,
+	0xef, 0x49, 0xdf, 0xcf, 0xc5, 0xe2, 0x34, 0xdf, 0x8a, 0xe2, 0xb7, 0x75, 0xf6, 0x3b, 0x00, 0x00,
+	0xff, 0xff, 0x77, 0xed, 0x20, 0x2c, 0xc6, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -639,6 +829,8 @@ type CityAQClient interface {
 	CityGeometry(ctx context.Context, in *CityGeometryRequest, opts ...grpc.CallOption) (*CityGeometryResponse, error)
 	EmissionsGrid(ctx context.Context, in *EmissionsGridRequest, opts ...grpc.CallOption) (*EmissionsGridResponse, error)
 	EmissionsMap(ctx context.Context, in *EmissionsMapRequest, opts ...grpc.CallOption) (*EmissionsMapResponse, error)
+	EmissionsGridBounds(ctx context.Context, in *EmissionsGridBoundsRequest, opts ...grpc.CallOption) (*EmissionsGridBoundsResponse, error)
+	MapScale(ctx context.Context, in *MapScaleRequest, opts ...grpc.CallOption) (*MapScaleResponse, error)
 }
 
 type cityAQClient struct {
@@ -685,12 +877,32 @@ func (c *cityAQClient) EmissionsMap(ctx context.Context, in *EmissionsMapRequest
 	return out, nil
 }
 
+func (c *cityAQClient) EmissionsGridBounds(ctx context.Context, in *EmissionsGridBoundsRequest, opts ...grpc.CallOption) (*EmissionsGridBoundsResponse, error) {
+	out := new(EmissionsGridBoundsResponse)
+	err := c.cc.Invoke(ctx, "/cityaqrpc.CityAQ/EmissionsGridBounds", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cityAQClient) MapScale(ctx context.Context, in *MapScaleRequest, opts ...grpc.CallOption) (*MapScaleResponse, error) {
+	out := new(MapScaleResponse)
+	err := c.cc.Invoke(ctx, "/cityaqrpc.CityAQ/MapScale", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CityAQServer is the server API for CityAQ service.
 type CityAQServer interface {
 	Cities(context.Context, *CitiesRequest) (*CitiesResponse, error)
 	CityGeometry(context.Context, *CityGeometryRequest) (*CityGeometryResponse, error)
 	EmissionsGrid(context.Context, *EmissionsGridRequest) (*EmissionsGridResponse, error)
 	EmissionsMap(context.Context, *EmissionsMapRequest) (*EmissionsMapResponse, error)
+	EmissionsGridBounds(context.Context, *EmissionsGridBoundsRequest) (*EmissionsGridBoundsResponse, error)
+	MapScale(context.Context, *MapScaleRequest) (*MapScaleResponse, error)
 }
 
 // UnimplementedCityAQServer can be embedded to have forward compatible implementations.
@@ -708,6 +920,12 @@ func (*UnimplementedCityAQServer) EmissionsGrid(ctx context.Context, req *Emissi
 }
 func (*UnimplementedCityAQServer) EmissionsMap(ctx context.Context, req *EmissionsMapRequest) (*EmissionsMapResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EmissionsMap not implemented")
+}
+func (*UnimplementedCityAQServer) EmissionsGridBounds(ctx context.Context, req *EmissionsGridBoundsRequest) (*EmissionsGridBoundsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EmissionsGridBounds not implemented")
+}
+func (*UnimplementedCityAQServer) MapScale(ctx context.Context, req *MapScaleRequest) (*MapScaleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MapScale not implemented")
 }
 
 func RegisterCityAQServer(s *grpc.Server, srv CityAQServer) {
@@ -786,6 +1004,42 @@ func _CityAQ_EmissionsMap_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CityAQ_EmissionsGridBounds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmissionsGridBoundsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CityAQServer).EmissionsGridBounds(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cityaqrpc.CityAQ/EmissionsGridBounds",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CityAQServer).EmissionsGridBounds(ctx, req.(*EmissionsGridBoundsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CityAQ_MapScale_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MapScaleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CityAQServer).MapScale(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cityaqrpc.CityAQ/MapScale",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CityAQServer).MapScale(ctx, req.(*MapScaleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CityAQ_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "cityaqrpc.CityAQ",
 	HandlerType: (*CityAQServer)(nil),
@@ -805,6 +1059,14 @@ var _CityAQ_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EmissionsMap",
 			Handler:    _CityAQ_EmissionsMap_Handler,
+		},
+		{
+			MethodName: "EmissionsGridBounds",
+			Handler:    _CityAQ_EmissionsGridBounds_Handler,
+		},
+		{
+			MethodName: "MapScale",
+			Handler:    _CityAQ_MapScale_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

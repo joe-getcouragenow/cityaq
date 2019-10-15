@@ -7,6 +7,8 @@ service CityAQ {
   rpc CityGeometry(CityGeometryRequest) returns (CityGeometryResponse) {}
   rpc EmissionsGrid(EmissionsGridRequest) returns (EmissionsGridResponse) {}
   rpc EmissionsMap(EmissionsMapRequest) returns (EmissionsMapResponse) {}
+  rpc EmissionsGridBounds(EmissionsGridBoundsRequest) returns (EmissionsGridBoundsResponse) {}
+  rpc MapScale(MapScaleRequest) returns (MapScaleResponse) {}
 }
 
 message CitiesRequest {
@@ -15,12 +17,10 @@ message CitiesRequest {
 message CitiesResponse {
   // The names of the cities
   repeated string Names = 1;
-  // Paths to the file containing the geometry of each city.
-  repeated string Paths = 2;
 }
 
 message CityGeometryRequest {
-  string Path = 1;
+  string CityName = 1;
 }
 
 message CityGeometryResponse {
@@ -42,16 +42,23 @@ message Point {
 
 message EmissionsGridRequest {
   string CityName = 1;
-  string Path = 2;
 }
 
 message EmissionsGridResponse {
   repeated Polygon Polygons = 1;
 }
 
+message EmissionsGridBoundsRequest {
+  string CityName = 1;
+}
+
+message EmissionsGridBoundsResponse {
+  Point Min = 1;
+  Point Max = 2;
+}
+
 message EmissionsMapRequest {
   string CityName = 1;
-  string CityPath = 2;
   Emission Emission = 3;
   string SourceType = 4;
 }
@@ -73,4 +80,17 @@ enum ImpactType {
 message EmissionsMapResponse {
   repeated bytes RGB = 1;
   string Legend = 2;
+}
+
+message MapScaleRequest {
+  string CityName = 1;
+  ImpactType ImpactType = 2;
+  Emission Emission = 3;
+  string SourceType = 4;
+}
+
+message MapScaleResponse {
+  float Min = 1;
+  float Max = 2;
+  float CutPt = 3;
 }

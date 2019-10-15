@@ -9,29 +9,27 @@ import (
 	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
-	"github.com/ctessum/go-leaflet"
 	"github.com/ctessum/go-leaflet/plugin/glify"
 	grpcwasm "github.com/johanbrandhorst/grpc-wasm"
 )
 
 type CityAQ struct {
 	rpc.CityAQClient
-	doc                js.Value
-	citySelector       js.Value
-	impactTypeSelector js.Value
-	emissionSelector   js.Value
-	sourceTypeSelector js.Value
-	legendDiv          js.Value
-	mapDiv             js.Value
-	leafletMap         *leaflet.Map
-	mapColors          *glify.Shapes
-	baseMapLayer       *leaflet.TileLayer
-	grid               struct {
+	doc                  js.Value
+	citySelector         js.Value
+	impactTypeSelector   js.Value
+	emissionSelector     js.Value
+	sourceTypeSelector   js.Value
+	legendDiv            js.Value
+	mapDiv               js.Value
+	mapboxMap            js.Value
+	cityLayer, dataLayer js.Value
+	mapColors            *glify.Shapes
+	grid                 struct {
 		geometry js.Value
 		gridCity string
-		gridType impactType
+		gridType rpc.ImpactType
 	}
-	cityNames map[string]string
 }
 
 // NewCityAQ returns a CityAQ client. Typically one would
@@ -90,6 +88,17 @@ func (c *CityAQ) Monitor() {
 	for _, s := range []js.Value{c.citySelector, c.impactTypeSelector, c.emissionSelector, c.sourceTypeSelector} {
 		s.Call("addEventListener", "change", cb)
 	}
+	c.citySelector.Call("addEventListener", "change", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		go func() {
+			cityName, err := c.citySelectorValue()
+			if err != nil {
+				c.logError(err)
+				return
+			}
+			c.MoveMap(context.TODO(), cityName)
+		}()
+		return nil
+	}))
 }
 
 func (c *CityAQ) startLoading() {

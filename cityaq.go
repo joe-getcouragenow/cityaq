@@ -13,6 +13,7 @@ import (
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"github.com/ctessum/geom"
 	"github.com/ctessum/geom/encoding/geojson"
+	"github.com/ctessum/sparse"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 )
 
@@ -48,7 +49,6 @@ func (c *CityAQ) Cities(ctx context.Context, _ *rpc.CitiesRequest) (*rpc.CitiesR
 			return err
 		}
 		r.Names = append(r.Names, name)
-		r.Paths = append(r.Paths, path)
 		c.cityPaths[name] = path
 		return nil
 	})
@@ -68,7 +68,7 @@ func (c *CityAQ) loadCityPaths() {
 
 // CityGeometry returns the geometry of the requested city.
 func (c *CityAQ) CityGeometry(ctx context.Context, req *rpc.CityGeometryRequest) (*rpc.CityGeometryResponse, error) {
-	polys, err := c.geojsonGeometry(req.Path)
+	polys, err := c.geojsonGeometry(req.CityName)
 	if err != nil {
 		return nil, err
 	}
@@ -95,13 +95,19 @@ func polygonsToRPC(polys []geom.Polygonal) []*rpc.Polygon {
 }
 
 // geojsonGeometry returns the geometry of the requested geojson file.
-func (c *CityAQ) geojsonGeometry(path string) (geom.Polygon, error) {
+func (c *CityAQ) geojsonGeometry(cityName string) (geom.Polygon, error) {
 	type gj struct {
 		Type     string `json:"type"`
 		Features []struct {
 			Type     string           `json:"type"`
 			Geometry geojson.Geometry `json:"geometry"`
 		} `json:"features"`
+	}
+
+	c.loadCityPaths()
+	path, ok := c.cityPaths[cityName]
+	if !ok {
+		return nil, fmt.Errorf("invalid city name %s", cityName)
 	}
 
 	f, err := os.Open(path)
@@ -174,7 +180,7 @@ func (c *CityAQ) geojsonName(path, language string) (string, error) {
 
 // EmissionsGrid returns the grid to be used for mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridRequest) (*rpc.EmissionsGridResponse, error) {
-	o, err := c.emissionsGrid(req.Path)
+	o, err := c.emissionsGrid(req.CityName)
 	if err != nil {
 		return nil, err
 	}
@@ -182,8 +188,8 @@ func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridReques
 }
 
 // emissionsGrid returns the grid to be used for mapping gridded information about the requested city.
-func (c *CityAQ) emissionsGrid(path string) ([]geom.Polygonal, error) {
-	cityGeom, err := c.geojsonGeometry(path)
+func (c *CityAQ) emissionsGrid(cityName string) ([]geom.Polygonal, error) {
+	cityGeom, err := c.geojsonGeometry(cityName)
 	if err != nil {
 		return nil, err
 	}
@@ -238,4 +244,53 @@ func (c *CityAQ) EmissionsMap(ctx context.Context, req *rpc.EmissionsMapRequest)
 	}
 	out.Legend = legend(cm)
 	return out, nil
+}
+
+// EmissionsGridBounds returns the bounds of the grid to be used for
+// mapping gridded information about the requested city.
+func (c *CityAQ) EmissionsGridBounds(ctx context.Context, req *rpc.EmissionsGridBoundsRequest) (*rpc.EmissionsGridBoundsResponse, error) {
+	o, err := c.emissionsGrid(req.CityName)
+	if err != nil {
+		return nil, err
+	}
+	b := geom.NewBounds()
+	for _, g := range o {
+		b.Extend(g.Bounds())
+	}
+	return &rpc.EmissionsGridBoundsResponse{
+		Min: &rpc.Point{X: float32(b.Min.X), Y: float32(b.Min.Y)},
+		Max: &rpc.Point{X: float32(b.Max.X), Y: float32(b.Max.Y)},
+	}, nil
+}
+
+// MapScale returns statistics about map data.
+func (c *CityAQ) MapScale(ctx context.Context, req *rpc.MapScaleRequest) (*rpc.MapScaleResponse, error) {
+	var data *sparse.SparseArray
+	var err error
+	switch req.ImpactType {
+	case rpc.ImpactType_Emissions:
+		data, err = c.griddedEmissions(ctx, &rpc.EmissionsMapRequest{
+			CityName:   req.CityName,
+			Emission:   req.Emission,
+			SourceType: req.SourceType,
+		})
+	default:
+		return nil, fmt.Errorf("invalid impact type %s", req.ImpactType.String())
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	min, max := math.Inf(1), math.Inf(-1)
+	for _, e := range data.Elements {
+		if e < min {
+			min = e
+		}
+		if e > max {
+			max = e
+		}
+	}
+	max += max * 0.0001
+	min -= min * 0.0001
+	return &rpc.MapScaleResponse{Min: float32(min), Max: float32(max)}, nil
 }

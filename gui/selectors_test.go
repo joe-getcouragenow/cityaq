@@ -33,7 +33,7 @@ func TestCitySelector(t *testing.T) {
 	client.EXPECT().Cities(
 		gomock.Any(),
 		gomock.AssignableToTypeOf(&rpc.CitiesRequest{}),
-	).Return(&rpc.CitiesResponse{Names: []string{"city1", "city2"}, Paths: []string{"city1path", "city2path"}}, nil)
+	).Return(&rpc.CitiesResponse{Names: []string{"city1", "city2"}}, nil)
 
 	c := &CityAQ{
 		CityAQClient: client,
@@ -45,7 +45,7 @@ func TestCitySelector(t *testing.T) {
 
 	c.updateCitySelector(context.Background())
 	html := c.citySelector.Get("innerHTML").String()
-	want := `<option disabled="" hidden="">-- select an option --</option><option value="city1path">city1</option><option value="city2path">city2</option>`
+	want := `<option disabled="" hidden="">-- select an option --</option><option value="city1">city1</option><option value="city2">city2</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -54,11 +54,11 @@ func TestCitySelector(t *testing.T) {
 	client.EXPECT().Cities(
 		gomock.Any(), // expect any value for first parameter
 		gomock.Any(), // expect any value for second parameter
-	).Return(&rpc.CitiesResponse{Names: []string{"city3", "city4"}, Paths: []string{"city3path", "city4path"}}, nil)
+	).Return(&rpc.CitiesResponse{Names: []string{"city3", "city4"}}, nil)
 
 	c.updateCitySelector(context.Background())
 	html = c.citySelector.Get("innerHTML").String()
-	want = `<option disabled="" hidden="">-- select an option --</option><option value="city3path">city3</option><option value="city4path">city4</option>`
+	want = `<option disabled="" hidden="">-- select an option --</option><option value="city3">city3</option><option value="city4">city4</option>`
 	if html != want {
 		t.Errorf("%v != %v", html, want)
 	}
@@ -118,7 +118,7 @@ func TestSelectors(t *testing.T) {
 	client.EXPECT().Cities(
 		gomock.Any(), // expect any value for first parameter
 		gomock.Any(), // expect any value for second parameter
-	).Return(&rpc.CitiesResponse{Names: []string{"city1", "city2"}, Paths: []string{"city1path", "city2path"}}, nil)
+	).Return(&rpc.CitiesResponse{Names: []string{"city1", "city2"}}, nil)
 
 	c := &CityAQ{
 		CityAQClient: client,
@@ -143,7 +143,7 @@ func TestSelectors(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := &selections{cityName: "city1", cityPath: "city1path", impactType: emission, emission: 1, sourceType: "electric_gen"}
+	want := &selections{cityName: "city1", impactType: rpc.ImpactType_Emissions, emission: 1, sourceType: "electric_gen"}
 
 	if !reflect.DeepEqual(want, sel) {
 		t.Errorf("%v != %v", sel, want)

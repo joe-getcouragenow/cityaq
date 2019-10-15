@@ -64,7 +64,7 @@ func emissionsMapName(r *rpc.EmissionsMapRequest) string {
 }
 
 func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequest) (*sparse.SparseArray, error) {
-	g, err := c.geojsonGeometry(req.CityPath)
+	g, err := c.geojsonGeometry(req.CityName)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 	c.gridLock.Lock()
 	defer c.gridLock.Unlock()
 
-	grid, err := c.emissionsGrid(req.CityPath)
+	grid, err := c.emissionsGrid(req.CityName)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 }
 
 func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.EmissionsMapRequest) (*mvt.Layer, error) {
-	grid, err := c.emissionsGrid(req.CityPath)
+	grid, err := c.emissionsGrid(req.CityName)
 	if err != nil {
 		return nil, err
 	}
@@ -117,9 +117,13 @@ func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.EmissionsMapRequ
 
 	layerData := geojson.NewFeatureCollection()
 	for i, cell := range grid {
+		v := emis.Elements[i]
+		if v == 0 {
+			continue
+		}
 		feature := geojson.NewFeature(geomToOrb(cell))
 		feature.ID = uint64(i)
-		feature.Properties["v"] = emis.Elements[i]
+		feature.Properties["v"] = v
 		layerData = layerData.Append(feature)
 	}
 	layer := mvt.NewLayer(emissionsMapName(req), layerData)

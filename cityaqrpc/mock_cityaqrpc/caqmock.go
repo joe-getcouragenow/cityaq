@@ -115,6 +115,46 @@ func (mr *MockCityAQClientMockRecorder) EmissionsMap(ctx, in interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsMap", reflect.TypeOf((*MockCityAQClient)(nil).EmissionsMap), varargs...)
 }
 
+// EmissionsGridBounds mocks base method
+func (m *MockCityAQClient) EmissionsGridBounds(ctx context.Context, in *cityaqrpc.EmissionsGridBoundsRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.EmissionsGridBoundsResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "EmissionsGridBounds", varargs...)
+	ret0, _ := ret[0].(*cityaqrpc.EmissionsGridBoundsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EmissionsGridBounds indicates an expected call of EmissionsGridBounds
+func (mr *MockCityAQClientMockRecorder) EmissionsGridBounds(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsGridBounds", reflect.TypeOf((*MockCityAQClient)(nil).EmissionsGridBounds), varargs...)
+}
+
+// MapScale mocks base method
+func (m *MockCityAQClient) MapScale(ctx context.Context, in *cityaqrpc.MapScaleRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.MapScaleResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "MapScale", varargs...)
+	ret0, _ := ret[0].(*cityaqrpc.MapScaleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// MapScale indicates an expected call of MapScale
+func (mr *MockCityAQClientMockRecorder) MapScale(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MapScale", reflect.TypeOf((*MockCityAQClient)(nil).MapScale), varargs...)
+}
+
 // MockCityAQServer is a mock of CityAQServer interface
 type MockCityAQServer struct {
 	ctrl     *gomock.Controller
@@ -196,4 +236,34 @@ func (m *MockCityAQServer) EmissionsMap(arg0 context.Context, arg1 *cityaqrpc.Em
 func (mr *MockCityAQServerMockRecorder) EmissionsMap(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsMap", reflect.TypeOf((*MockCityAQServer)(nil).EmissionsMap), arg0, arg1)
+}
+
+// EmissionsGridBounds mocks base method
+func (m *MockCityAQServer) EmissionsGridBounds(arg0 context.Context, arg1 *cityaqrpc.EmissionsGridBoundsRequest) (*cityaqrpc.EmissionsGridBoundsResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "EmissionsGridBounds", arg0, arg1)
+	ret0, _ := ret[0].(*cityaqrpc.EmissionsGridBoundsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EmissionsGridBounds indicates an expected call of EmissionsGridBounds
+func (mr *MockCityAQServerMockRecorder) EmissionsGridBounds(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsGridBounds", reflect.TypeOf((*MockCityAQServer)(nil).EmissionsGridBounds), arg0, arg1)
+}
+
+// MapScale mocks base method
+func (m *MockCityAQServer) MapScale(arg0 context.Context, arg1 *cityaqrpc.MapScaleRequest) (*cityaqrpc.MapScaleResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MapScale", arg0, arg1)
+	ret0, _ := ret[0].(*cityaqrpc.MapScaleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// MapScale indicates an expected call of MapScale
+func (mr *MockCityAQServerMockRecorder) MapScale(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MapScale", reflect.TypeOf((*MockCityAQServer)(nil).MapScale), arg0, arg1)
 }

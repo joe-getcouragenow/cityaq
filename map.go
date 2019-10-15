@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
+	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/encoding/mvt"
 	"github.com/paulmach/orb/geojson"
 	"github.com/paulmach/orb/maptile"
@@ -144,22 +145,17 @@ func (s *MapTileServer) Layers(ctx context.Context, ms *MapSpecification) (mvt.L
 	if err != nil {
 		return nil, err
 	}
-	return resultI.(mvt.Layers), nil
+	layers := resultI.(mvt.Layers)
+	return cloneLayers(layers), nil
 }
 
 func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{}, error) {
 	ms := r.(*MapSpecification)
-	s.c.loadCityPaths()
-	cityPath, ok := s.c.cityPaths[ms.CityName]
-	if !ok {
-		panic(fmt.Errorf("no path for city '%s'", ms.CityName))
-	}
 	var dataLayer *mvt.Layer
 	switch ms.ImpactType {
 	case rpc.ImpactType_Emissions:
 		req := &rpc.EmissionsMapRequest{
 			CityName:   ms.CityName,
-			CityPath:   cityPath,
 			Emission:   ms.Emission,
 			SourceType: ms.SourceType,
 		}
@@ -172,7 +168,7 @@ func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{},
 		return nil, fmt.Errorf("invalid impact type %s", ms.ImpactType.String())
 	}
 
-	cityGeom, err := s.c.geojsonGeometry(cityPath)
+	cityGeom, err := s.c.geojsonGeometry(ms.CityName)
 	if err != nil {
 		return nil, err
 	}
@@ -183,4 +179,32 @@ func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{},
 	cityLayer := mvt.NewLayer(ms.CityName, cityLayerData)
 
 	return mvt.Layers{dataLayer, cityLayer}, nil
+}
+
+func cloneLayers(layers mvt.Layers) mvt.Layers {
+	o := make(mvt.Layers, len(layers))
+	for i, layer := range layers {
+		o[i] = cloneLayer(layer)
+	}
+	return o
+}
+
+func cloneLayer(l *mvt.Layer) *mvt.Layer {
+	o := &mvt.Layer{
+		Name:     l.Name,
+		Version:  l.Version,
+		Extent:   l.Extent,
+		Features: make([]*geojson.Feature, len(l.Features)),
+	}
+	for i, f := range l.Features {
+		of := &geojson.Feature{
+			ID:         f.ID,
+			Type:       f.Type,
+			BBox:       f.BBox,
+			Geometry:   orb.Clone(f.Geometry),
+			Properties: f.Properties,
+		}
+		o.Features[i] = of
+	}
+	return o
 }

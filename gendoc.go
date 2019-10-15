@@ -2,7 +2,7 @@ package cityaq
 
 // Install the code generation dependencies.
 //go:generate bash -c "rm ~/go/bin/protoc-gen-go"
-//go:generate go get github.com/golang/protobuf/protoc-gen-go
+//go:generate go get -u github.com/golang/protobuf/protoc-gen-go
 
 // Generate the gRPC client/server code. (Information at https://grpc.io/docs/quickstart/go.html)
 //go:generate protoc cityaq.proto --go_out=plugins=grpc:cityaqrpc
