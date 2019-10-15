@@ -65,6 +65,11 @@ enum Emission {
   VOC = 5;
 }
 
+enum ImpactType {
+  UNKNOWN_IMPACTTYPE = 0;
+  Emissions = 1;
+}
+
 message EmissionsMapResponse {
   repeated bytes RGB = 1;
   string Legend = 2;

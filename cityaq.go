@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"image/color"
-	"log"
 	"math"
 	"os"
 	"path/filepath"
@@ -26,10 +25,16 @@ type CityAQ struct {
 	aeputil.SpatialConfig
 
 	gridLock sync.Mutex
+
+	// cityPaths holds the locations of the files containing the
+	// boundaries of each city.
+	cityPaths         map[string]string
+	loadCityPathsOnce sync.Once
 }
 
 // Cities returns the files in the CityGeomDir directory field of the receiver.
 func (c *CityAQ) Cities(ctx context.Context, _ *rpc.CitiesRequest) (*rpc.CitiesResponse, error) {
+	c.cityPaths = make(map[string]string)
 	r := new(rpc.CitiesResponse)
 	err := filepath.Walk(os.ExpandEnv(c.CityGeomDir), func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -44,9 +49,21 @@ func (c *CityAQ) Cities(ctx context.Context, _ *rpc.CitiesRequest) (*rpc.CitiesR
 		}
 		r.Names = append(r.Names, name)
 		r.Paths = append(r.Paths, path)
+		c.cityPaths[name] = path
 		return nil
 	})
 	return r, err
+}
+
+func (c *CityAQ) loadCityPaths() {
+	c.loadCityPathsOnce.Do(func() {
+		if c.cityPaths == nil {
+			_, err := c.Cities(context.Background(), nil)
+			if err != nil {
+				panic(err)
+			}
+		}
+	})
 }
 
 // CityGeometry returns the geometry of the requested city.
@@ -89,7 +106,7 @@ func (c *CityAQ) geojsonGeometry(path string) (geom.Polygon, error) {
 
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("opening city geojson file: %v", err)
 	}
 	dec := json.NewDecoder(f)
 	var data gj
@@ -157,16 +174,11 @@ func (c *CityAQ) geojsonName(path, language string) (string, error) {
 
 // EmissionsGrid returns the grid to be used for mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridRequest) (*rpc.EmissionsGridResponse, error) {
-	log.Printf("got EmissionsGrid request for %s", req.CityName)
 	o, err := c.emissionsGrid(req.Path)
 	if err != nil {
-		log.Println("got error: ", err)
 		return nil, err
 	}
-	log.Printf("created %d polygons, first polygon is %+v", len(o), o[0])
-	rpcPolys := polygonsToRPC(o)
-	log.Printf("created %d rpc polygons, first point is %+v", len(rpcPolys), rpcPolys[0].Paths[0].Points[0])
-	return &rpc.EmissionsGridResponse{Polygons: rpcPolys}, nil
+	return &rpc.EmissionsGridResponse{Polygons: polygonsToRPC(o)}, nil
 }
 
 // emissionsGrid returns the grid to be used for mapping gridded information about the requested city.
@@ -185,7 +197,6 @@ func (c *CityAQ) emissionsGrid(path string) ([]geom.Polygonal, error) {
 	b.Max.X += buffer
 	b.Max.Y += buffer
 	const dx = 0.002
-	//const dx = 0.01
 	for y := b.Min.Y; y < b.Max.Y+dx; y += dx {
 		for x := b.Min.X; x < b.Max.X+dx; x += dx {
 			o = append(o, geom.Polygon{

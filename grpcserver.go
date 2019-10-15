@@ -18,6 +18,7 @@ type GRPCServer struct {
 	CityAQ
 	grpcServer   *grpcweb.WrappedGrpcServer
 	staticServer http.Handler
+	mapServer    *MapTileServer
 
 	Log logrus.FieldLogger
 }
@@ -36,6 +37,7 @@ func NewGRPCServer(c *CityAQ) *GRPCServer {
 			Prefix:    "gui/html",
 		},
 	)))
+	s.mapServer = NewMapTileServer(c, 50)
 	return s
 }
 
@@ -69,6 +71,14 @@ func (s *GRPCServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		r.URL.Path = strings.Replace(r.URL.Path, "//cityaqrpc", "/cityaqrpc", 1) // TODO: Figure out why this is necessary
 		s.grpcServer.ServeHTTP(w, r)
 		return
+	} else if strings.HasPrefix(r.URL.Path, "/maptile") {
+		if s.Log != nil {
+			s.Log.WithFields(logrus.Fields{
+				"url":  r.URL.String(),
+				"addr": r.RemoteAddr,
+			}).Info("cityaq map tile request")
+		}
+		s.mapServer.ServeHTTP(w, r)
 	} else {
 		if s.Log != nil {
 			s.Log.WithFields(logrus.Fields{

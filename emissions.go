@@ -10,6 +10,9 @@ import (
 	"github.com/ctessum/geom/proj"
 	"github.com/ctessum/sparse"
 	"github.com/ctessum/unit"
+	"github.com/paulmach/orb"
+	"github.com/paulmach/orb/encoding/mvt"
+	"github.com/paulmach/orb/geojson"
 	"github.com/spatialmodel/inmap/emissions/aep"
 )
 
@@ -56,6 +59,10 @@ func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType string) 
 	return emis, begin, end, nil
 }
 
+func emissionsMapName(r *rpc.EmissionsMapRequest) string {
+	return fmt.Sprintf("%s_%d_%d_%s", r.CityName, rpc.ImpactType_Emissions, r.Emission, r.SourceType)
+}
+
 func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequest) (*sparse.SparseArray, error) {
 	g, err := c.geojsonGeometry(req.CityPath)
 	if err != nil {
@@ -95,4 +102,38 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 		panic(fmt.Errorf("cityaq: missing gridded pollutant %v", req.Emission))
 	}
 	return polEmis, nil
+}
+
+func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.EmissionsMapRequest) (*mvt.Layer, error) {
+	grid, err := c.emissionsGrid(req.CityPath)
+	if err != nil {
+		return nil, err
+	}
+
+	emis, err := c.griddedEmissions(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	layerData := geojson.NewFeatureCollection()
+	for i, cell := range grid {
+		feature := geojson.NewFeature(geomToOrb(cell))
+		feature.ID = uint64(i)
+		feature.Properties["v"] = emis.Elements[i]
+		layerData = layerData.Append(feature)
+	}
+	layer := mvt.NewLayer(emissionsMapName(req), layerData)
+	return layer, nil
+}
+
+func geomToOrb(g geom.Polygonal) orb.Polygon {
+	p := g.(geom.Polygon)
+	o := make(orb.Polygon, len(p))
+	for i, path := range p {
+		o[i] = make(orb.Ring, len(path))
+		for j, point := range path {
+			o[i][j] = orb.Point{point.X, point.Y}
+		}
+	}
+	return o
 }

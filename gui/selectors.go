@@ -98,7 +98,7 @@ func (c *CityAQ) citySelectorValue() (string, error) {
 	return selectorValue(c.citySelector)
 }
 
-func (c *CityAQ) impactTypeSelectorValue() (impactType, error) {
+func (c *CityAQ) impactTypeSelectorValue() (rpc.ImpactType, error) {
 	v, err := selectorValue(c.impactTypeSelector)
 	if err != nil {
 		return -1, err
@@ -107,7 +107,7 @@ func (c *CityAQ) impactTypeSelectorValue() (impactType, error) {
 	if err != nil {
 		return -1, err
 	}
-	return impactType(vInt), nil
+	return rpc.ImpactType(vInt), nil
 }
 
 func (c *CityAQ) emissionSelectorValue() (rpc.Emission, error) {
@@ -126,16 +126,10 @@ func (c *CityAQ) sourceTypeSelectorValue() (string, error) {
 	return selectorValue(c.sourceTypeSelector)
 }
 
-type impactType int
-
-const (
-	emission impactType = iota + 1
-)
-
 type selections struct {
 	cityPath   string
 	cityName   string
-	impactType impactType
+	impactType rpc.ImpactType
 	sourceType string
 	emission   rpc.Emission
 }

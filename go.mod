@@ -6,6 +6,7 @@ require (
 	github.com/andybalholm/brotli v0.0.0-20190821151343-b60f0d972eeb
 	github.com/ctessum/geom v0.2.8-0.20191014172347-e8e4c95f5afc
 	github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af
+	github.com/ctessum/requestcache v1.0.0
 	github.com/ctessum/sparse v0.0.0-20181201011727-57d6234a2c9d
 	github.com/ctessum/unit v0.0.0-20160621200450-755774ac2fcb
 	github.com/elazarl/go-bindata-assetfs v1.0.0
@@ -17,6 +18,7 @@ require (
 	github.com/johanbrandhorst/grpc-wasm v0.0.0-20180613181153-d79a93c3901e
 	github.com/lpar/gzipped v1.1.0
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
+	github.com/paulmach/orb v0.1.5
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spatialmodel/inmap v1.6.2-0.20191014172738-4db3686bbdd0
