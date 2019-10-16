@@ -87,6 +87,8 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 		c.mapboxMap.Call("removeLayer", "city")
 		c.mapboxMap.Call("removeSource", "data")
 		c.mapboxMap.Call("removeSource", "city")
+		c.dataLayer = js.Undefined()
+		c.cityLayer = js.Undefined()
 	}
 
 	b, err := c.EmissionsGridBounds(ctx, &rpc.EmissionsGridBoundsRequest{
