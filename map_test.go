@@ -12,7 +12,6 @@ import (
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"github.com/paulmach/orb/encoding/mvt"
-	"github.com/paulmach/orb/geojson"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 )
 
@@ -101,9 +100,13 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 			t.Errorf("wrong layer name %s", layers[0].Name)
 		}
 
-		wantProps := geojson.Properties{"v": float64(0)}
-		if !reflect.DeepEqual(layers[0].Features[0].Properties, wantProps) {
-			t.Errorf("wrong properties %+v != %+v", layers[0].Features[0].Properties, wantProps)
+		var vSum float64
+		for _, f := range layers[0].Features {
+			vSum += f.Properties["v"].(float64)
+		}
+		wantVSum := 431.19357947392984
+		if !similar(vSum, wantVSum, 1.0e-10) {
+			t.Errorf("value sum %g != %g", vSum, wantVSum)
 		}
 
 		if layers[1].Name != "Accra Metropolitan" {
@@ -147,9 +150,13 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 			t.Errorf("wrong layer name %s", layers[0].Name)
 		}
 
-		wantProps := geojson.Properties{"v": float64(0)}
-		if !reflect.DeepEqual(layers[0].Features[0].Properties, wantProps) {
-			t.Errorf("wrong properties %+v != %+v", layers[0].Features[0].Properties, wantProps)
+		var vSum float64
+		for _, f := range layers[0].Features {
+			vSum += f.Properties["v"].(float64)
+		}
+		wantVSum := 431.19357947392984
+		if !similar(vSum, wantVSum, 1.0e-10) {
+			t.Errorf("value sum %g != %g", vSum, wantVSum)
 		}
 
 		if layers[1].Name != "Accra Metropolitan" {

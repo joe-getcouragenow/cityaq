@@ -25,8 +25,6 @@ type CityAQ struct {
 
 	aeputil.SpatialConfig
 
-	gridLock sync.Mutex
-
 	// cityPaths holds the locations of the files containing the
 	// boundaries of each city.
 	cityPaths         map[string]string

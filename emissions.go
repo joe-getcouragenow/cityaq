@@ -14,6 +14,7 @@ import (
 	"github.com/paulmach/orb/encoding/mvt"
 	"github.com/paulmach/orb/geojson"
 	"github.com/spatialmodel/inmap/emissions/aep"
+	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 )
 
 type emissions struct {
@@ -73,18 +74,29 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 		return nil, err
 	}
 
-	// Make sure we're not making simultaneous changes to the grid.
-	c.gridLock.Lock()
-	defer c.gridLock.Unlock()
-
 	grid, err := c.emissionsGrid(req.CityName)
 	if err != nil {
 		return nil, err
 	}
-	c.SpatialConfig.GridCells = grid
-	c.SpatialConfig.GridName = req.CityName
 
-	sp, err := c.SpatialConfig.SpatialProcessor()
+	// Make a copy of the spatial configuration to allow the
+	// use of multiple grids.
+	spatialConfig := aeputil.SpatialConfig{
+		SrgSpec:               c.SpatialConfig.SrgSpec,
+		SrgSpecType:           c.SpatialConfig.SrgSpecType,
+		SrgShapefileDirectory: c.SpatialConfig.SrgShapefileDirectory,
+		SCCExactMatch:         c.SpatialConfig.SCCExactMatch,
+		GridRef:               c.SpatialConfig.GridRef,
+		OutputSR:              c.SpatialConfig.OutputSR,
+		InputSR:               c.SpatialConfig.InputSR,
+		SimplifyTolerance:     c.SpatialConfig.SimplifyTolerance,
+		SpatialCache:          c.SpatialConfig.SpatialCache,
+		MaxCacheEntries:       c.SpatialConfig.MaxCacheEntries,
+		GridCells:             grid,
+		GridName:              req.CityName,
+	}
+
+	sp, err := spatialConfig.SpatialProcessor()
 	if err != nil {
 		return nil, err
 	}
