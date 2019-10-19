@@ -149,6 +149,13 @@ func (s *MapTileServer) Layers(ctx context.Context, ms *MapSpecification) (mvt.L
 	return cloneLayers(layers), nil
 }
 
+func mapResolution(sourceType string) float64 {
+	if nationalEmissions(sourceType) {
+		return 0.01
+	}
+	return 0.002
+}
+
 func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{}, error) {
 	ms := r.(*MapSpecification)
 	var dataLayer *mvt.Layer
@@ -158,6 +165,7 @@ func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{},
 			CityName:   ms.CityName,
 			Emission:   ms.Emission,
 			SourceType: ms.SourceType,
+			Dx:         float32(mapResolution(ms.SourceType)),
 		}
 		var err error
 		dataLayer, err = s.c.emissionsMapData(ctx, req)

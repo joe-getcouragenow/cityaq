@@ -30,13 +30,15 @@ func main() {
 	c := &cityaq.CityAQ{
 		CityGeomDir: "../testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:       "srgspec_osm.json",
-			SrgSpecType:   "OSM",
-			SCCExactMatch: true,
-			GridRef:       []string{"../testdata/gridref_osm.txt"},
-			OutputSR:      "+proj=longlat",
-			InputSR:       "+proj=longlat",
+			SrgSpec:               "srgspec_osm.json",
+			SrgSpecType:           "OSM",
+			SrgShapefileDirectory: "../../../data/shapefiles",
+			SCCExactMatch:         true,
+			GridRef:               []string{"../testdata/gridref.txt"},
+			OutputSR:              "+proj=longlat",
+			InputSR:               "+proj=longlat",
 		},
+		SMOKESrgSpecs: "srgspec_smoke.csv",
 	}
 
 	srv := cityaq.NewGRPCServer(c)

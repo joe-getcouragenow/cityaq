@@ -88,17 +88,22 @@ func (c *CityAQ) Monitor() {
 	for _, s := range []js.Value{c.citySelector, c.impactTypeSelector, c.emissionSelector, c.sourceTypeSelector} {
 		s.Call("addEventListener", "change", cb)
 	}
-	c.citySelector.Call("addEventListener", "change", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		go func() {
-			cityName, err := c.citySelectorValue()
-			if err != nil {
-				c.logError(err)
-				return
-			}
-			c.MoveMap(context.TODO(), cityName)
-		}()
-		return nil
-	}))
+	for _, s := range []js.Value{c.citySelector, c.sourceTypeSelector} {
+		s.Call("addEventListener", "change", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+			go func() {
+				cityName, err := c.citySelectorValue()
+				if err != nil {
+					return
+				}
+				sourceType, err := c.sourceTypeSelectorValue()
+				if err != nil {
+					sourceType = "roadways"
+				}
+				c.MoveMap(context.TODO(), cityName, sourceType)
+			}()
+			return nil
+		}))
+	}
 }
 
 func (c *CityAQ) startLoading() {

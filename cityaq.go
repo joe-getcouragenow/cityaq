@@ -13,6 +13,7 @@ import (
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"github.com/ctessum/geom"
 	"github.com/ctessum/geom/encoding/geojson"
+	"github.com/ctessum/geom/index/rtree"
 	"github.com/ctessum/sparse"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 )
@@ -25,10 +26,17 @@ type CityAQ struct {
 
 	aeputil.SpatialConfig
 
+	// SMOKESrgSpecs specifies the location of a file with additional
+	// SMOKE-formatted surrogate specifications.
+	SMOKESrgSpecs string
+
 	// cityPaths holds the locations of the files containing the
 	// boundaries of each city.
 	cityPaths         map[string]string
 	loadCityPathsOnce sync.Once
+
+	countries         *rtree.Rtree
+	loadCountriesOnce sync.Once
 }
 
 // Cities returns the files in the CityGeomDir directory field of the receiver.
@@ -178,7 +186,7 @@ func (c *CityAQ) geojsonName(path, language string) (string, error) {
 
 // EmissionsGrid returns the grid to be used for mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridRequest) (*rpc.EmissionsGridResponse, error) {
-	o, err := c.emissionsGrid(req.CityName)
+	o, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
 	if err != nil {
 		return nil, err
 	}
@@ -186,12 +194,24 @@ func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridReques
 }
 
 // emissionsGrid returns the grid to be used for mapping gridded information about the requested city.
-func (c *CityAQ) emissionsGrid(cityName string) ([]geom.Polygonal, error) {
-	cityGeom, err := c.geojsonGeometry(cityName)
+// dx is grid cell edge length in degrees.
+func (c *CityAQ) emissionsGrid(cityName, sourceType string, dx float64) ([]geom.Polygonal, error) {
+	if dx <= 0 {
+		return nil, fmt.Errorf("cityaq: emissions grid dx must be >0 but is %g", dx)
+	}
+	polygon, err := c.geojsonGeometry(cityName)
 	if err != nil {
 		return nil, err
 	}
-	b := cityGeom.Bounds()
+	if nationalEmissions(sourceType) {
+		// Use country geometry instead of city.
+		country, err := c.cityCountry(cityName)
+		if err != nil {
+			return nil, err
+		}
+		polygon = country.Polygon
+	}
+	b := polygon.Bounds()
 
 	var o []geom.Polygonal
 	const bufferFrac = 0.1
@@ -200,7 +220,6 @@ func (c *CityAQ) emissionsGrid(cityName string) ([]geom.Polygonal, error) {
 	b.Min.Y -= buffer
 	b.Max.X += buffer
 	b.Max.Y += buffer
-	const dx = 0.002
 	for y := b.Min.Y; y < b.Max.Y+dx; y += dx {
 		for x := b.Min.X; x < b.Max.X+dx; x += dx {
 			o = append(o, geom.Polygon{
@@ -247,7 +266,7 @@ func (c *CityAQ) EmissionsMap(ctx context.Context, req *rpc.EmissionsMapRequest)
 // EmissionsGridBounds returns the bounds of the grid to be used for
 // mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGridBounds(ctx context.Context, req *rpc.EmissionsGridBoundsRequest) (*rpc.EmissionsGridBoundsResponse, error) {
-	o, err := c.emissionsGrid(req.CityName)
+	o, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
 	if err != nil {
 		return nil, err
 	}
@@ -271,6 +290,7 @@ func (c *CityAQ) MapScale(ctx context.Context, req *rpc.MapScaleRequest) (*rpc.M
 			CityName:   req.CityName,
 			Emission:   req.Emission,
 			SourceType: req.SourceType,
+			Dx:         float32(mapResolution(req.SourceType)),
 		})
 	default:
 		return nil, fmt.Errorf("invalid impact type %s", req.ImpactType.String())

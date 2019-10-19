@@ -3,6 +3,7 @@ package cityaq
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
@@ -64,17 +65,29 @@ func emissionsMapName(r *rpc.EmissionsMapRequest) string {
 	return fmt.Sprintf("%s_%d_%d_%s", r.CityName, rpc.ImpactType_Emissions, r.Emission, r.SourceType)
 }
 
+// griddedEmissions returns gridded emissions for the request.
+// If req.SourceType has the suffix "_national", emissions will be allocated
+// to the country that the city is in, otherwise they will be allocated within
+// the city itself.
 func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequest) (*sparse.SparseArray, error) {
 	g, err := c.geojsonGeometry(req.CityName)
 	if err != nil {
 		return nil, err
+	}
+	if nationalEmissions(req.SourceType) {
+		// Use country geometry instead of city.
+		country, err := c.cityCountry(req.CityName)
+		if err != nil {
+			return nil, err
+		}
+		g = country.Polygon
 	}
 	e, begin, end, err := newEmissions(g, req.Emission, req.SourceType)
 	if err != nil {
 		return nil, err
 	}
 
-	grid, err := c.emissionsGrid(req.CityName)
+	grid, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +113,11 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 	if err != nil {
 		return nil, err
 	}
+
+	if err := c.loadSMOKESrgSpecs(sp); err != nil {
+		return nil, err
+	}
+
 	rSrg := sp.AddSurrogate(e)
 	r := sp.GridRecord(rSrg)
 	gridEmis, _, err := r.GriddedEmissions(begin, end, 0)
@@ -116,8 +134,33 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 	return polEmis, nil
 }
 
+// loadSMOKESrgSpecs adds supplemental SMOKE-formatted surrogate
+// specifications to the given SpatialProcessor.
+func (c *CityAQ) loadSMOKESrgSpecs(sp *aep.SpatialProcessor) error {
+	if c.SMOKESrgSpecs == "" {
+		return nil
+	}
+	f, err := os.Open(c.SMOKESrgSpecs)
+	if err != nil {
+		return fmt.Errorf("cityaq: opening SMOKESrgSpecs: %w", err)
+	}
+	srgSpecs, err := aep.ReadSrgSpecSMOKE(f, c.SpatialConfig.SrgShapefileDirectory, true)
+	if err != nil {
+		return fmt.Errorf("cityaq: reading SMOKESrgSpecs: %w", err)
+	}
+	f.Close()
+	for _, s := range srgSpecs.Status() {
+		srgSpec, err := srgSpecs.GetByName(aep.Global, s.Name)
+		if err != nil {
+			panic(err)
+		}
+		sp.SrgSpecs.Add(srgSpec)
+	}
+	return nil
+}
+
 func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.EmissionsMapRequest) (*mvt.Layer, error) {
-	grid, err := c.emissionsGrid(req.CityName)
+	grid, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
 	if err != nil {
 		return nil, err
 	}

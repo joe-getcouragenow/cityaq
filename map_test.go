@@ -51,7 +51,7 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 			SrgSpec:       "testdata/srgspec_osm.json",
 			SrgSpecType:   "OSM",
 			SCCExactMatch: true,
-			GridRef:       []string{"testdata/gridref_osm.txt"},
+			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",
 			InputSR:       "+proj=longlat",
 		},
@@ -104,7 +104,7 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 		for _, f := range layers[0].Features {
 			vSum += f.Properties["v"].(float64)
 		}
-		wantVSum := 431.19357947392984
+		wantVSum := 431.1935730389704
 		if !similar(vSum, wantVSum, 1.0e-10) {
 			t.Errorf("value sum %g != %g", vSum, wantVSum)
 		}
@@ -129,7 +129,7 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 			t.Fatal(err)
 		}
 		if resp.StatusCode != http.StatusOK {
-			t.Errorf("status %d; message: %s", resp.StatusCode, string(body))
+			t.Fatalf("status %d; message: %s", resp.StatusCode, string(body))
 		}
 		ct := resp.Header.Get("Content-Type")
 		ctWant := "application/x-gzip"
@@ -154,7 +154,7 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 		for _, f := range layers[0].Features {
 			vSum += f.Properties["v"].(float64)
 		}
-		wantVSum := 431.19357947392984
+		wantVSum := 431.1935730389704
 		if !similar(vSum, wantVSum, 1.0e-10) {
 			t.Errorf("value sum %g != %g", vSum, wantVSum)
 		}

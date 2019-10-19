@@ -1,26 +1,11 @@
 [
   {
     "region": 7,
-    "name": "electric_gen",
-    "code": "electric_gen",
-    "osm_file": "../testdata/ghana-latest.osm.pbf",
-    "tags": {
-      "power": ["generator"],
-      "generator:output:electricity": ["yes"]
-    }
-  },
-  {
-    "region": 7,
     "name": "residential",
     "code": "residential",
     "osm_file": "../testdata/ghana-latest.osm.pbf",
     "tags": {
-      "building": ["house", "residential", "apartments"],
-      "landuse": ["residential"],
-      "construction": ["residential"],
-      "building:type": ["residential"],
-      "building:use": ["residential"],
-      "residential": []
+      "highway": ["residential", "unclassified"]
     }
   },
   {
@@ -37,7 +22,6 @@
       "shop": [],
       "tourism": ["hotel", "hostel", "guest_house", "museum", "motel"],
       "landuse": ["commercial", "retail", "religious"],
-      "atm": ["yes"],
       "cuisine": [],
       "office": ["telecommunication", "estate_agent", "insurance", "administrative","association"],
       "religion": ["buddhist", "christian", "muslim", "hindu"],
@@ -61,8 +45,10 @@
     "region": 7,
     "name": "builtup",
     "code": "builtup",
-    "merge_names": ["commercial", "industrial", "residential"],
-    "merge_multipliers": [1.0, 1.0, 1.0]
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "building": []
+    }
   },
   {
     "region": 7,
@@ -85,14 +71,8 @@
     "tags": {
       "railway": [],
       "railway:traffic_mode": [],
-      "electrified": ["rail"],
       "train": ["yes"],
-      "trolley_wire": ["yes"],
-      "tram": ["yes"],
-      "light_rail": ["yes"],
-      "trolleybus": ["yes"],
       "landuse": ["railway"],
-      "station": ["light_rail"],
       "route": ["train"]
     }
   },
@@ -108,20 +88,18 @@
       "amenity": ["ferry_terminal"],
       "route": ["ferry"],
       "boat": ["yes"],
-      "seamark:type": ["mooring"]
+      "seamark:type": ["mooring"],
+      "route": ["ferry"]
     }
   },
   {
     "region": 7,
-    "name": "busways",
-    "code": "busways",
+    "name": "bus_routes",
+    "code": "bus_routes",
     "osm_file": "../testdata/ghana-latest.osm.pbf",
     "tags": {
-      "bus": ["yes", "designated"],
-      "route": ["bus"],
-      "busway:left": ["lane"]
-    },
-    "backup_surrogate_names": ["roadways"]
+      "route": ["bus"]
+    }
   },
   {
     "region": 7,
@@ -140,7 +118,7 @@
     "osm_file": "../testdata/ghana-latest.osm.pbf",
     "tags": {
       "landuse": ["farmland", "farmyard", "vineyard"],
-      "building": ["farm_auxiliary"]
+      "building": ["farm_auxiliary", "farm"]
     }
   }
 ]

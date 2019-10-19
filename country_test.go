@@ -1,0 +1,67 @@
+package cityaq
+
+import (
+	"context"
+	"reflect"
+	"testing"
+
+	rpc "github.com/ctessum/cityaq/cityaqrpc"
+
+	"github.com/ctessum/geom"
+	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
+)
+
+func TestCityAQ_national(t *testing.T) {
+	c := &CityAQ{
+		CityGeomDir: "testdata/cities",
+		SpatialConfig: aeputil.SpatialConfig{
+			SrgSpec:               "testdata/srgspec_osm.json",
+			SrgShapefileDirectory: "testdata",
+			SrgSpecType:           "OSM",
+			SCCExactMatch:         true,
+			GridRef:               []string{"testdata/gridref.txt"},
+			OutputSR:              "+proj=longlat",
+			InputSR:               "+proj=longlat",
+		},
+		SMOKESrgSpecs: "testdata/srgspec_smoke.csv",
+	}
+	t.Run("cityCountry", func(t *testing.T) {
+		country, err := c.cityCountry("Accra Metropolitan")
+		if err != nil {
+			t.Fatal(err)
+		}
+		wantName := "Ghana"
+		wantBounds := &geom.Bounds{
+			Min: geom.Point{X: -3.24888920783991, Y: 4.72708272933966},
+			Max: geom.Point{X: 1.20277762413031, Y: 11.1556930541993},
+		}
+		if country.Name != wantName {
+			t.Errorf("name: %s != %s", country.Name, wantName)
+		}
+		if !reflect.DeepEqual(country.Bounds(), wantBounds) {
+			t.Errorf("name: %+v != %+v", country.Bounds(), wantBounds)
+		}
+	})
+
+	t.Run("electric_gen_national", func(t *testing.T) {
+		req := &rpc.EmissionsMapRequest{
+			CityName:   "Accra Metropolitan",
+			Emission:   rpc.Emission_PM2_5,
+			SourceType: "electric_gen_national",
+			Dx:         0.05,
+		}
+
+		emis, err := c.griddedEmissions(context.Background(), req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if emis == nil {
+			t.Fatal("nil emis")
+		}
+		sum := emis.Sum()
+		want := 1000.0
+		if !similar(sum, want, 1e-10) {
+			t.Errorf("have %g, want %g", sum, want)
+		}
+	})
+}

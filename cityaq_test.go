@@ -75,6 +75,7 @@ func polygonBounds(polys []*rpc.Polygon) *geom.Bounds {
 func TestCityAQ_EmissionsGrid(t *testing.T) {
 	r := &rpc.EmissionsGridRequest{
 		CityName: "Accra Metropolitan",
+		Dx:       0.01,
 	}
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
@@ -86,7 +87,7 @@ func TestCityAQ_EmissionsGrid(t *testing.T) {
 	b := polygonBounds(polys.Polygons)
 	want := &geom.Bounds{
 		Min: geom.Point{X: -0.29919639229774475, Y: 5.500213623046875},
-		Max: geom.Point{X: -0.10719640552997589, Y: 5.672213554382324},
+		Max: geom.Point{X: -0.0991964116692543, Y: 5.680213451385498},
 	}
 	if !reflect.DeepEqual(want, b) {
 		t.Errorf("%v != %v", b, want)
@@ -96,6 +97,7 @@ func TestCityAQ_EmissionsGrid(t *testing.T) {
 func TestCityAQ_EmissionsGridBounds(t *testing.T) {
 	r := &rpc.EmissionsGridBoundsRequest{
 		CityName: "Accra Metropolitan",
+		Dx:       0.01,
 	}
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
@@ -106,7 +108,7 @@ func TestCityAQ_EmissionsGridBounds(t *testing.T) {
 	}
 	want := &rpc.EmissionsGridBoundsResponse{
 		Min: &rpc.Point{X: -0.29919639229774475, Y: 5.500213623046875},
-		Max: &rpc.Point{X: -0.10719640552997589, Y: 5.672213554382324},
+		Max: &rpc.Point{X: -0.0991964116692543, Y: 5.680213451385498},
 	}
 	if !reflect.DeepEqual(want, bounds) {
 		t.Errorf("%v != %v", bounds, want)
@@ -120,7 +122,7 @@ func TestCityAQ_griddedEmissions(t *testing.T) {
 			SrgSpec:       "testdata/srgspec_osm.json",
 			SrgSpecType:   "OSM",
 			SCCExactMatch: true,
-			GridRef:       []string{"testdata/gridref_osm.txt"},
+			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",
 			InputSR:       "+proj=longlat",
 		},
@@ -132,6 +134,7 @@ func TestCityAQ_griddedEmissions(t *testing.T) {
 				CityName:   "Accra Metropolitan",
 				Emission:   rpc.Emission_PM2_5,
 				SourceType: st,
+				Dx:         0.01,
 			}
 
 			emis, err := c.griddedEmissions(context.Background(), req)
@@ -164,7 +167,7 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 			SrgSpec:       "testdata/srgspec_osm.json",
 			SrgSpecType:   "OSM",
 			SCCExactMatch: true,
-			GridRef:       []string{"testdata/gridref_osm.txt"},
+			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",
 			InputSR:       "+proj=longlat",
 		},
@@ -173,6 +176,7 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 		CityName:   "Accra Metropolitan",
 		Emission:   rpc.Emission_PM2_5,
 		SourceType: "roadways",
+		Dx:         0.002,
 	}
 	emis, err := c.EmissionsMap(context.Background(), req)
 	if err != nil {
@@ -180,7 +184,11 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 	}
 	grid, err := c.EmissionsGrid(context.Background(), &rpc.EmissionsGridRequest{
 		CityName: "Accra Metropolitan",
+		Dx:       0.002,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	p, err := plot.New()
 	if err != nil {
 		t.Fatal(err)
@@ -265,7 +273,7 @@ func TestCityAQ_MapScale(t *testing.T) {
 			SrgSpec:       "testdata/srgspec_osm.json",
 			SrgSpecType:   "OSM",
 			SCCExactMatch: true,
-			GridRef:       []string{"testdata/gridref_osm.txt"},
+			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",
 			InputSR:       "+proj=longlat",
 		},
@@ -280,7 +288,7 @@ func TestCityAQ_MapScale(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantScale := &cityaqrpc.MapScaleResponse{Min: 2.3738443e-05, Max: 1.5333514}
+	wantScale := &cityaqrpc.MapScaleResponse{Min: 2.3219854e-05, Max: 1.5333531}
 	if !reflect.DeepEqual(scale, wantScale) {
 		t.Errorf("scale %+v != %+v", scale, wantScale)
 	}

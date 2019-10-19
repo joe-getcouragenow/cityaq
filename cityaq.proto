@@ -42,6 +42,8 @@ message Point {
 
 message EmissionsGridRequest {
   string CityName = 1;
+  string SourceType = 2;
+  float Dx = 3;
 }
 
 message EmissionsGridResponse {
@@ -50,6 +52,8 @@ message EmissionsGridResponse {
 
 message EmissionsGridBoundsRequest {
   string CityName = 1;
+  string SourceType = 2;
+  float Dx = 3;
 }
 
 message EmissionsGridBoundsResponse {
@@ -61,6 +65,7 @@ message EmissionsMapRequest {
   string CityName = 1;
   Emission Emission = 3;
   string SourceType = 4;
+  float Dx = 5;
 }
 
 enum Emission {
