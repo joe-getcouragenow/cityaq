@@ -5,7 +5,7 @@
     "code": "residential",
     "osm_file": "../testdata/ghana-latest.osm.pbf",
     "tags": {
-      "highway": ["residential", "unclassified"]
+      "highway": ["residential", "unclassified", "service"]
     }
   },
   {
@@ -54,13 +54,53 @@
     "region": 7,
     "name": "roadways",
     "code": "roadways",
+    "merge_names": ["roadways_motorway", "roadways_trunk", "roadways_primary",
+      "roadways_secondary", "roadways_tertiary", "residential"],
+    "merge_multipliers": [0.364117691,0.214681528,0.182650568,0.092000867,0.007574395,0.138974952]
+  },
+  {
+    "region": 7,
+    "name": "roadways_motorway",
+    "code": "roadways_motorway",
     "osm_file": "../testdata/ghana-latest.osm.pbf",
     "tags": {
-      "highway": [],
-      "bridge": ["yes"],
-      "motorroad": ["yes"],
-      "route": ["road"],
-      "construction": ["motorway", "motorway_link"]
+      "highway": ["motorway"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "roadways_trunk",
+    "code": "roadways_trunk",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "highway": ["trunk"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "roadways_primary",
+    "code": "roadways_primary",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "highway": ["primary"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "roadways_secondary",
+    "code": "roadways_secondary",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "highway": ["secondary"]
+    }
+  },
+  {
+    "region": 7,
+    "name": "roadways_tertiary",
+    "code": "roadways_tertiary",
+    "osm_file": "../testdata/ghana-latest.osm.pbf",
+    "tags": {
+      "highway": ["tertiary"]
     }
   },
   {
