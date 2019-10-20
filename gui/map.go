@@ -8,7 +8,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"html"
-	"strings"
 	"sync"
 	"syscall/js"
 
@@ -95,7 +94,6 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 	b, err := c.EmissionsGridBounds(ctx, &rpc.EmissionsGridBoundsRequest{
 		CityName:   sel.cityName,
 		SourceType: sel.sourceType,
-		Dx:         float32(mapResolution(sel.sourceType)),
 	})
 	if err != nil {
 		c.logError(err)
@@ -240,25 +238,11 @@ func (c *CityAQ) setLegendWidth() {
 	}
 }
 
-// nationalEmissions returns whether the given sourceType should
-// be allocated to the a country rather than a city.
-func nationalEmissions(sourceType string) bool {
-	return strings.HasSuffix(sourceType, "_national")
-}
-
-func mapResolution(sourceType string) float64 {
-	if nationalEmissions(sourceType) {
-		return 0.01
-	}
-	return 0.002
-}
-
 // Move the map window to a new location.
 func (c *CityAQ) MoveMap(ctx context.Context, cityName, sourceType string) {
 	b, err := c.EmissionsGridBounds(ctx, &rpc.EmissionsGridBoundsRequest{
 		CityName:   cityName,
 		SourceType: sourceType,
-		Dx:         float32(mapResolution(sourceType)),
 	})
 	if err != nil {
 		c.logError(err)

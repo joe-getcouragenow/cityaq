@@ -186,7 +186,7 @@ func (c *CityAQ) geojsonName(path, language string) (string, error) {
 
 // EmissionsGrid returns the grid to be used for mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridRequest) (*rpc.EmissionsGridResponse, error) {
-	o, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
+	o, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType))
 	if err != nil {
 		return nil, err
 	}
@@ -266,7 +266,7 @@ func (c *CityAQ) EmissionsMap(ctx context.Context, req *rpc.EmissionsMapRequest)
 // EmissionsGridBounds returns the bounds of the grid to be used for
 // mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGridBounds(ctx context.Context, req *rpc.EmissionsGridBoundsRequest) (*rpc.EmissionsGridBoundsResponse, error) {
-	o, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
+	o, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType))
 	if err != nil {
 		return nil, err
 	}
@@ -290,7 +290,6 @@ func (c *CityAQ) MapScale(ctx context.Context, req *rpc.MapScaleRequest) (*rpc.M
 			CityName:   req.CityName,
 			Emission:   req.Emission,
 			SourceType: req.SourceType,
-			Dx:         float32(mapResolution(req.SourceType)),
 		})
 	default:
 		return nil, fmt.Errorf("invalid impact type %s", req.ImpactType.String())

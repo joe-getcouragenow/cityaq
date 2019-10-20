@@ -87,7 +87,7 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 		return nil, err
 	}
 
-	grid, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
+	grid, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType))
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +160,7 @@ func (c *CityAQ) loadSMOKESrgSpecs(sp *aep.SpatialProcessor) error {
 }
 
 func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.EmissionsMapRequest) (*mvt.Layer, error) {
-	grid, err := c.emissionsGrid(req.CityName, req.SourceType, float64(req.Dx))
+	grid, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType))
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/andybalholm/brotli v0.0.0-20190821151343-b60f0d972eeb
+	github.com/cenkalti/backoff v2.0.0+incompatible
 	github.com/ctessum/geom v0.2.8-0.20191014172347-e8e4c95f5afc
 	github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af
 	github.com/ctessum/requestcache v1.0.0

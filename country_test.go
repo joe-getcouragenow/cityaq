@@ -48,7 +48,6 @@ func TestCityAQ_national(t *testing.T) {
 			CityName:   "Accra Metropolitan",
 			Emission:   rpc.Emission_PM2_5,
 			SourceType: "electric_gen_national",
-			Dx:         0.05,
 		}
 
 		emis, err := c.griddedEmissions(context.Background(), req)
