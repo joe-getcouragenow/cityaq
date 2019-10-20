@@ -178,13 +178,20 @@ func (c *CityAQ) legend(sel *selections) ([]interface{}, error) {
 	}()
 
 	cutpts := make([]float64, 10)
+	r := float64(scale.Max) - float64(scale.Min)
 	floats.Span(cutpts, float64(scale.Min), float64(scale.Max))
 	colors := make([]interface{}, len(cutpts)*2)
 	for i := 0; i < len(colors); i += 2 {
 		v := cutpts[i/2]
 		color, err := cm.At(v)
 		if err != nil {
-			return nil, err
+			color, err = cm.At(v - 1e-10*r)
+			if err != nil {
+				color, err = cm.At(v + 1e-10*r)
+				if err != nil {
+					return nil, fmt.Errorf("creating mapbox color scale: %w", err)
+				}
+			}
 		}
 		r, g, b, _ := color.RGBA()
 		r, g, b = r/0x101, g/0x101, b/0x101
