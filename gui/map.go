@@ -83,6 +83,10 @@ func (c *CityAQ) setMapHeight() {
 func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 	c.startLoading()
 
+	if c.legendDiv != js.Undefined() {
+		c.legendDiv.Set("innerHTML", "")
+	}
+
 	if c.dataLayer != js.Undefined() {
 		c.mapboxMap.Call("removeLayer", "data")
 		c.mapboxMap.Call("removeLayer", "city")
