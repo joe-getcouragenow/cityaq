@@ -11,7 +11,7 @@ import (
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 )
 
-func TestCityAQ_national(t *testing.T) {
+func TestCityAQ_egugrid(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
@@ -26,7 +26,7 @@ func TestCityAQ_national(t *testing.T) {
 		SMOKESrgSpecs: "testdata/srgspec_smoke.csv",
 	}
 	t.Run("cityCountry", func(t *testing.T) {
-		country, err := c.cityCountry("Accra Metropolitan")
+		country, err := c.countryOrGridBuffer("Accra Metropolitan")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -43,11 +43,11 @@ func TestCityAQ_national(t *testing.T) {
 		}
 	})
 
-	t.Run("electric_gen_national", func(t *testing.T) {
+	t.Run("electric_gen_egugrid", func(t *testing.T) {
 		req := &rpc.EmissionsMapRequest{
 			CityName:   "Accra Metropolitan",
 			Emission:   rpc.Emission_PM2_5,
-			SourceType: "electric_gen_national",
+			SourceType: "electric_gen_egugrid",
 		}
 
 		emis, err := c.griddedEmissions(context.Background(), req)

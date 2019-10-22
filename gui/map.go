@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"html"
+	"strings"
 	"sync"
 	"syscall/js"
 
@@ -90,6 +91,11 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 		c.dataLayer = js.Undefined()
 		c.cityLayer = js.Undefined()
 	}
+	if c.egugridLayer != js.Undefined() {
+		c.mapboxMap.Call("removeLayer", "egugrid")
+		c.mapboxMap.Call("removeSource", "egugrid")
+		c.egugridLayer = js.Undefined()
+	}
 
 	b, err := c.EmissionsGridBounds(ctx, &rpc.EmissionsGridBoundsRequest{
 		CityName:   sel.cityName,
@@ -148,6 +154,19 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 			"line-color": "#8dbbe0",
 		}),
 	})
+
+	if strings.HasSuffix(sel.sourceType, "_egugrid") {
+		c.egugridLayer = c.mapboxMap.Call("addLayer", map[string]interface{}{
+			"id":           "egugrid",
+			"source":       source,
+			"source-layer": sel.cityName + "_egugrid",
+			"type":         "line",
+			"paint": js.ValueOf(map[string]interface{}{
+				"line-width": 3,
+				"line-color": "#958de0",
+			}),
+		})
+	}
 
 	// Turn off the loading symbol when the map becomes idle.
 	var cb js.Func

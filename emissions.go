@@ -66,17 +66,18 @@ func emissionsMapName(r *rpc.EmissionsMapRequest) string {
 }
 
 // griddedEmissions returns gridded emissions for the request.
-// If req.SourceType has the suffix "_national", emissions will be allocated
-// to the country that the city is in, otherwise they will be allocated within
-// the city itself.
+// If req.SourceType has the suffix "_egugrid", emissions will be allocated
+// to the smaller of country that the city is in or the intersection of
+// the country with a 9.6 degree radius buffer around the city,
+// otherwise they will be allocated within the city itself.
 func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequest) (*sparse.SparseArray, error) {
 	g, err := c.geojsonGeometry(req.CityName)
 	if err != nil {
 		return nil, err
 	}
-	if nationalEmissions(req.SourceType) {
-		// Use country geometry instead of city.
-		country, err := c.cityCountry(req.CityName)
+	if egugridEmissions(req.SourceType) {
+		// Use EGU grid geometry instead of city.
+		country, err := c.countryOrGridBuffer(req.CityName)
 		if err != nil {
 			return nil, err
 		}

@@ -24,6 +24,7 @@ type CityAQ struct {
 	mapDiv               js.Value
 	mapboxMap            js.Value
 	cityLayer, dataLayer js.Value
+	egugridLayer         js.Value
 	mapColors            *glify.Shapes
 	grid                 struct {
 		geometry js.Value

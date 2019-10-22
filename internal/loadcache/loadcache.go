@@ -22,7 +22,7 @@ func main() {
 	check(err)
 	client := rpc.NewCityAQClient(conn)
 
-	sourceTypes := []string{"electric_gen_national", "population", "residential",
+	sourceTypes := []string{"electric_gen_egugrid", "population", "residential",
 		"commercial", "industrial", "builtup", "roadways", "railways", "waterways",
 		"bus_routes", "airports", "agricultural"}
 

@@ -150,7 +150,7 @@ func (s *MapTileServer) Layers(ctx context.Context, ms *MapSpecification) (mvt.L
 }
 
 func mapResolution(sourceType string) float64 {
-	if nationalEmissions(sourceType) {
+	if egugridEmissions(sourceType) {
 		return 0.1
 	}
 	return 0.002
@@ -185,7 +185,21 @@ func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{},
 	cityLayerData = cityLayerData.Append(feature)
 	cityLayer := mvt.NewLayer(ms.CityName, cityLayerData)
 
-	return mvt.Layers{dataLayer, cityLayer}, nil
+	lyrs := mvt.Layers{dataLayer, cityLayer}
+
+	if egugridEmissions(ms.SourceType) {
+		egugridGeom, err := s.c.countryOrGridBuffer(ms.CityName)
+		if err != nil {
+			return nil, err
+		}
+		egugridLayerData := geojson.NewFeatureCollection()
+		feature := geojson.NewFeature(geomToOrb(egugridGeom.Polygon))
+		feature.ID = uint64(0)
+		egugridLayerData = egugridLayerData.Append(feature)
+		lyrs = append(lyrs, mvt.NewLayer(ms.CityName+"_egugrid", egugridLayerData))
+	}
+
+	return lyrs, nil
 }
 
 func cloneLayers(layers mvt.Layers) mvt.Layers {

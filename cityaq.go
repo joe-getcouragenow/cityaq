@@ -203,9 +203,9 @@ func (c *CityAQ) emissionsGrid(cityName, sourceType string, dx float64) ([]geom.
 	if err != nil {
 		return nil, err
 	}
-	if nationalEmissions(sourceType) {
-		// Use country geometry instead of city.
-		country, err := c.cityCountry(cityName)
+	if egugridEmissions(sourceType) {
+		// Use EGU grid geometry instead of city.
+		country, err := c.countryOrGridBuffer(cityName)
 		if err != nil {
 			return nil, err
 		}
