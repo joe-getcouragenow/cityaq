@@ -10,6 +10,6 @@
 700000;0000roadways;roadways
 700000;0000railways;railways
 700000;0000waterways;waterways
-700000;0000busways;busways
+700000;0000bus_routes;bus_routes
 700000;0000airports;airports
 700000;0000agricultural;agricultural
