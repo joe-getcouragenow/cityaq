@@ -272,8 +272,10 @@ github.com/smartystreets/goconvey v0.0.0-20180222194500-ef6db91d284a/go.mod h1:X
 github.com/soheilhy/cmux v0.1.4/go.mod h1:IM3LyeVVIOuxMH7sFAkER9+bJ4dT7Ms6E4xg4kGIyLM=
 github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d/go.mod h1:UdhH50NIW0fCiwBSr0co2m7BnFLdv4fQTgdqdJTHFeE=
 github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e/go.mod h1:HuIsMU8RRBOtsCgI77wP899iHVBQpCmg4ErYMZB+2IA=
-github.com/spatialmodel/inmap v1.6.2-0.20191022083043-e8c9c1aca742 h1:13ov7v9Ocp4Op6QT686M1froELrUwUSrLr589+HkqxY=
-github.com/spatialmodel/inmap v1.6.2-0.20191022083043-e8c9c1aca742/go.mod h1:q7KaF3eHYj0BtjuQDgkb2g9+z/snB+O3TqWVfAQltRY=
+github.com/spatialmodel/inmap v1.6.2-0.20191022201323-76ac68b43b71 h1:v8oUs1GQYSFh2BaUnNhs0gMsjvrOehYWhgxrh9Su/5w=
+github.com/spatialmodel/inmap v1.6.2-0.20191022201323-76ac68b43b71/go.mod h1:q7KaF3eHYj0BtjuQDgkb2g9+z/snB+O3TqWVfAQltRY=
+github.com/spatialmodel/inmap v1.6.2-0.20191022204823-8c3fd77bfae3 h1:V9rPhljPze0q+mk2qAXVM2PHuA7sBW1JKLGLHw6NgUs=
+github.com/spatialmodel/inmap v1.6.2-0.20191022204823-8c3fd77bfae3/go.mod h1:q7KaF3eHYj0BtjuQDgkb2g9+z/snB+O3TqWVfAQltRY=
 github.com/spf13/afero v1.0.0/go.mod h1:j4pytiNVoe2o6bmDsKpLACNPDBIoEAkihy7loJ1B0CQ=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.0-20180531180338-1e58aa3361fd/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
