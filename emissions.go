@@ -145,7 +145,8 @@ func (c *CityAQ) loadSMOKESrgSpecs(sp *aep.SpatialProcessor) error {
 	if err != nil {
 		return fmt.Errorf("cityaq: opening SMOKESrgSpecs: %w", err)
 	}
-	srgSpecs, err := aep.ReadSrgSpecSMOKE(f, c.SpatialConfig.SrgShapefileDirectory, true)
+	srgSpecs, err := aep.ReadSrgSpecSMOKE(f, c.SpatialConfig.SrgShapefileDirectory,
+		true, c.SpatialConfig.SpatialCache, c.SpatialConfig.MaxCacheEntries)
 	if err != nil {
 		return fmt.Errorf("cityaq: reading SMOKESrgSpecs: %w", err)
 	}

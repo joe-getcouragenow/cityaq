@@ -276,6 +276,8 @@ github.com/spatialmodel/inmap v1.6.2-0.20191022201323-76ac68b43b71 h1:v8oUs1GQYS
 github.com/spatialmodel/inmap v1.6.2-0.20191022201323-76ac68b43b71/go.mod h1:q7KaF3eHYj0BtjuQDgkb2g9+z/snB+O3TqWVfAQltRY=
 github.com/spatialmodel/inmap v1.6.2-0.20191022204823-8c3fd77bfae3 h1:V9rPhljPze0q+mk2qAXVM2PHuA7sBW1JKLGLHw6NgUs=
 github.com/spatialmodel/inmap v1.6.2-0.20191022204823-8c3fd77bfae3/go.mod h1:q7KaF3eHYj0BtjuQDgkb2g9+z/snB+O3TqWVfAQltRY=
+github.com/spatialmodel/inmap v1.6.2-0.20191105172425-b7843ea5dd94 h1:lTtprajgjej0USJS3dUz+3CYbPVsu8Lx1k28/pwUkWk=
+github.com/spatialmodel/inmap v1.6.2-0.20191105172425-b7843ea5dd94/go.mod h1:578e+A6J5JHhsH1JR2v241RNxRRlLDnTFzpOABLdxI4=
 github.com/spf13/afero v1.0.0/go.mod h1:j4pytiNVoe2o6bmDsKpLACNPDBIoEAkihy7loJ1B0CQ=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.0-20180531180338-1e58aa3361fd/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=

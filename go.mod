@@ -23,7 +23,7 @@ require (
 	github.com/paulmach/orb v0.1.5
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
-	github.com/spatialmodel/inmap v1.6.2-0.20191022204823-8c3fd77bfae3
+	github.com/spatialmodel/inmap v1.6.2-0.20191105172425-b7843ea5dd94
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/net v0.0.0-20190620200207-3b0461eec859
 	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect

@@ -79,7 +79,7 @@ func (c *CityAQ) loadCountries() {
 func (c *CityAQ) countryOrGridBuffer(cityName string) (*country, error) {
 	const (
 		area      = 91.6756666667 // degrees^2
-		radius    = 9.5747410757  // sqrt(area) [degrees]
+		radius    = 5.40196918017 // sqrt(area/pi) [degrees]
 		nSegments = 20            // Number of segments for the buffer.
 	)
 	ctry, err := c.country(cityName)
