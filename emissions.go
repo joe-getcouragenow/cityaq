@@ -151,13 +151,7 @@ func (c *CityAQ) loadSMOKESrgSpecs(sp *aep.SpatialProcessor) error {
 		return fmt.Errorf("cityaq: reading SMOKESrgSpecs: %w", err)
 	}
 	f.Close()
-	for _, s := range srgSpecs.Status() {
-		srgSpec, err := srgSpecs.GetByName(aep.Global, s.Name)
-		if err != nil {
-			panic(err)
-		}
-		sp.SrgSpecs.Add(srgSpec)
-	}
+	sp.SrgSpecs.AddAll(srgSpecs)
 	return nil
 }
 
