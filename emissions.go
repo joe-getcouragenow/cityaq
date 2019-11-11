@@ -23,14 +23,15 @@ type emissions struct {
 	SR *proj.SR
 	aep.SourceData
 	aep.Emissions
+	cityName string
 }
 
 // Location returns the polygon representing the location of emissions.
 func (e *emissions) Location() *aep.Location {
-	return &aep.Location{Geom: e.Polygon, SR: e.SR}
+	return &aep.Location{Geom: e.Polygon, SR: e.SR, Name: e.cityName}
 }
 
-func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType string) (*emissions, time.Time, time.Time, error) {
+func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType, cityName string) (*emissions, time.Time, time.Time, error) {
 	begin := time.Date(2016, time.January, 1, 0, 0, 0, 0, time.UTC)
 	end := time.Date(2017, time.January, 1, 0, 0, 0, 0, time.UTC)
 
@@ -57,6 +58,7 @@ func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType string) 
 			Country: aep.Global,
 			SCC:     "0000" + sourceType,
 		},
+		cityName: cityName,
 	}
 	return emis, begin, end, nil
 }
@@ -83,7 +85,7 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 		}
 		g = country.Polygon
 	}
-	e, begin, end, err := newEmissions(g, req.Emission, req.SourceType)
+	e, begin, end, err := newEmissions(g, req.Emission, req.SourceType, req.CityName)
 	if err != nil {
 		return nil, err
 	}

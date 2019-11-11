@@ -282,6 +282,12 @@ github.com/spatialmodel/inmap v1.6.2-0.20191110051944-cacfa3ee4e80 h1:Ijlc1Nwcnh
 github.com/spatialmodel/inmap v1.6.2-0.20191110051944-cacfa3ee4e80/go.mod h1:578e+A6J5JHhsH1JR2v241RNxRRlLDnTFzpOABLdxI4=
 github.com/spatialmodel/inmap v1.6.2-0.20191110053927-bf24277a5620 h1:DxgMI0t+qvNT3bMVLhKH3JFuf9yBwoIKkQb6vnDDJIc=
 github.com/spatialmodel/inmap v1.6.2-0.20191110053927-bf24277a5620/go.mod h1:578e+A6J5JHhsH1JR2v241RNxRRlLDnTFzpOABLdxI4=
+github.com/spatialmodel/inmap v1.6.2-0.20191110201634-42375863779c h1:U/gblDXjN68ANCx2fz0FCmodOVbM4mqTlFMiwLF9zDI=
+github.com/spatialmodel/inmap v1.6.2-0.20191110201634-42375863779c/go.mod h1:578e+A6J5JHhsH1JR2v241RNxRRlLDnTFzpOABLdxI4=
+github.com/spatialmodel/inmap v1.6.2-0.20191111023829-444423989099 h1:/j8392CEoiLiZyZkAfvqQWbXrOEevps4Po3RdqlnASk=
+github.com/spatialmodel/inmap v1.6.2-0.20191111023829-444423989099/go.mod h1:578e+A6J5JHhsH1JR2v241RNxRRlLDnTFzpOABLdxI4=
+github.com/spatialmodel/inmap v1.6.2-0.20191111032115-0e457f076c08 h1:oJwJ2fh0YV/1C2LktkFltV8MbapyF9VYV2CaULy0uU8=
+github.com/spatialmodel/inmap v1.6.2-0.20191111032115-0e457f076c08/go.mod h1:578e+A6J5JHhsH1JR2v241RNxRRlLDnTFzpOABLdxI4=
 github.com/spf13/afero v1.0.0/go.mod h1:j4pytiNVoe2o6bmDsKpLACNPDBIoEAkihy7loJ1B0CQ=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.0-20180531180338-1e58aa3361fd/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
