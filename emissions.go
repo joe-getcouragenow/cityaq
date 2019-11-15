@@ -9,7 +9,6 @@ import (
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"github.com/ctessum/geom"
 	"github.com/ctessum/geom/proj"
-	"github.com/ctessum/sparse"
 	"github.com/ctessum/unit"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/encoding/mvt"
@@ -63,16 +62,16 @@ func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType, cityNam
 	return emis, begin, end, nil
 }
 
-func emissionsMapName(r *rpc.EmissionsMapRequest) string {
+func emissionsMapName(r *rpc.GriddedEmissionsRequest) string {
 	return fmt.Sprintf("%s_%d_%d_%s", r.CityName, rpc.ImpactType_Emissions, r.Emission, r.SourceType)
 }
 
-// griddedEmissions returns gridded emissions for the request.
+// GriddedEmissions returns gridded emissions for the request.
 // If req.SourceType has the suffix "_egugrid", emissions will be allocated
 // to the smaller of country that the city is in or the intersection of
-// the country with a 9.6 degree radius buffer around the city,
+// the country with a 5.4 degree radius buffer around the city,
 // otherwise they will be allocated within the city itself.
-func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequest) (*sparse.SparseArray, error) {
+func (c *CityAQ) GriddedEmissions(ctx context.Context, req *rpc.GriddedEmissionsRequest) (*rpc.GriddedEmissionsResponse, error) {
 	g, err := c.geojsonGeometry(req.CityName)
 	if err != nil {
 		return nil, err
@@ -134,7 +133,16 @@ func (c *CityAQ) griddedEmissions(ctx context.Context, req *rpc.EmissionsMapRequ
 	if !ok {
 		panic(fmt.Errorf("cityaq: missing gridded pollutant %v", req.Emission))
 	}
-	return polEmis, nil
+
+	o := &rpc.GriddedEmissionsResponse{
+		Polygons:  polygonsToRPC(grid),
+		Emissions: make([]float64, len(grid)),
+	}
+	for i, v := range polEmis.Elements {
+		o.Emissions[i] = v
+	}
+
+	return o, nil
 }
 
 // loadSMOKESrgSpecs adds supplemental SMOKE-formatted surrogate
@@ -157,30 +165,36 @@ func (c *CityAQ) loadSMOKESrgSpecs(sp *aep.SpatialProcessor) error {
 	return nil
 }
 
-func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.EmissionsMapRequest) (*mvt.Layer, error) {
-	grid, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType))
-	if err != nil {
-		return nil, err
-	}
-
-	emis, err := c.griddedEmissions(ctx, req)
+func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.GriddedEmissionsRequest) (*mvt.Layer, error) {
+	emis, err := c.GriddedEmissions(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
 	layerData := geojson.NewFeatureCollection()
-	for i, cell := range grid {
-		v := emis.Elements[i]
+	for i, cell := range emis.Polygons {
+		v := emis.Emissions[i]
 		if v == 0 {
 			continue
 		}
-		feature := geojson.NewFeature(geomToOrb(cell))
+		feature := geojson.NewFeature(rpcToOrb(cell))
 		feature.ID = uint64(i)
 		feature.Properties["v"] = v
 		layerData = layerData.Append(feature)
 	}
 	layer := mvt.NewLayer(emissionsMapName(req), layerData)
 	return layer, nil
+}
+
+func rpcToOrb(p *rpc.Polygon) orb.Polygon {
+	o := make(orb.Polygon, len(p.Paths))
+	for i, path := range p.Paths {
+		o[i] = make(orb.Ring, len(path.Points))
+		for j, point := range path.Points {
+			o[i][j] = orb.Point{point.X, point.Y}
+		}
+	}
+	return o
 }
 
 func geomToOrb(g geom.Polygonal) orb.Polygon {

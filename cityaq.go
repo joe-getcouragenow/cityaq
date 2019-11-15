@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"image/color"
 	"math"
 	"os"
 	"path/filepath"
@@ -14,7 +13,6 @@ import (
 	"github.com/ctessum/geom"
 	"github.com/ctessum/geom/encoding/geojson"
 	"github.com/ctessum/geom/index/rtree"
-	"github.com/ctessum/sparse"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 )
 
@@ -93,7 +91,7 @@ func polygonsToRPC(polys []geom.Polygonal) []*rpc.Polygon {
 			o[i].Paths[j] = new(rpc.Path)
 			o[i].Paths[j].Points = make([]*rpc.Point, len(path))
 			for k, pt := range path {
-				o[i].Paths[j].Points[k] = &rpc.Point{X: float32(pt.X), Y: float32(pt.Y)}
+				o[i].Paths[j].Points[k] = &rpc.Point{X: pt.X, Y: pt.Y}
 			}
 		}
 	}
@@ -184,15 +182,6 @@ func (c *CityAQ) geojsonName(path, language string) (string, error) {
 	return "", fmt.Errorf("couldn't find name in %v", data)
 }
 
-// EmissionsGrid returns the grid to be used for mapping gridded information about the requested city.
-func (c *CityAQ) EmissionsGrid(ctx context.Context, req *rpc.EmissionsGridRequest) (*rpc.EmissionsGridResponse, error) {
-	o, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType))
-	if err != nil {
-		return nil, err
-	}
-	return &rpc.EmissionsGridResponse{Polygons: polygonsToRPC(o)}, nil
-}
-
 // emissionsGrid returns the grid to be used for mapping gridded information about the requested city.
 // dx is grid cell edge length in degrees.
 func (c *CityAQ) emissionsGrid(cityName, sourceType string, dx float64) ([]geom.Polygonal, error) {
@@ -232,37 +221,6 @@ func (c *CityAQ) emissionsGrid(cityName, sourceType string, dx float64) ([]geom.
 	return o, nil
 }
 
-// EmissionsMap returns the requested mapped information about the requested city.
-func (c *CityAQ) EmissionsMap(ctx context.Context, req *rpc.EmissionsMapRequest) (*rpc.EmissionsMapResponse, error) {
-	emis, err := c.griddedEmissions(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	if len(emis.Shape) != 2 {
-		panic(fmt.Errorf("invalid shape %d", emis.Shape))
-	}
-	if emis.Shape[1] != 1 {
-		panic(fmt.Errorf("emis.Shape[1] must be 1 but is %d", emis.Shape))
-	}
-	rows := emis.Shape[0]
-
-	cm := newColormap(emis)
-
-	out := new(rpc.EmissionsMapResponse)
-	out.RGB = make([][]byte, rows)
-	for i := 0; i < rows; i++ {
-		v := emis.Get(i, 0)
-		c, err := cm.At(v)
-		if err != nil {
-			return nil, fmt.Errorf("cityaq: creating emissions map: %v", err)
-		}
-		col := color.NRGBAModel.Convert(c).(color.NRGBA)
-		out.RGB[i] = []byte{col.R, col.G, col.B}
-	}
-	out.Legend = legend(cm)
-	return out, nil
-}
-
 // EmissionsGridBounds returns the bounds of the grid to be used for
 // mapping gridded information about the requested city.
 func (c *CityAQ) EmissionsGridBounds(ctx context.Context, req *rpc.EmissionsGridBoundsRequest) (*rpc.EmissionsGridBoundsResponse, error) {
@@ -275,31 +233,41 @@ func (c *CityAQ) EmissionsGridBounds(ctx context.Context, req *rpc.EmissionsGrid
 		b.Extend(g.Bounds())
 	}
 	return &rpc.EmissionsGridBoundsResponse{
-		Min: &rpc.Point{X: float32(b.Min.X), Y: float32(b.Min.Y)},
-		Max: &rpc.Point{X: float32(b.Max.X), Y: float32(b.Max.Y)},
+		Min: &rpc.Point{X: b.Min.X, Y: b.Min.Y},
+		Max: &rpc.Point{X: b.Max.X, Y: b.Max.Y},
 	}, nil
 }
 
 // MapScale returns statistics about map data.
 func (c *CityAQ) MapScale(ctx context.Context, req *rpc.MapScaleRequest) (*rpc.MapScaleResponse, error) {
-	var data *sparse.SparseArray
-	var err error
+	var data []float64
 	switch req.ImpactType {
 	case rpc.ImpactType_Emissions:
-		data, err = c.griddedEmissions(ctx, &rpc.EmissionsMapRequest{
+		response, err := c.GriddedEmissions(ctx, &rpc.GriddedEmissionsRequest{
 			CityName:   req.CityName,
 			Emission:   req.Emission,
 			SourceType: req.SourceType,
 		})
+		if err != nil {
+			return nil, err
+		}
+		data = response.Emissions
+	case rpc.ImpactType_Concentrations:
+		response, err := c.GriddedConcentrations(ctx, &rpc.GriddedConcentrationsRequest{
+			CityName:   req.CityName,
+			Emission:   req.Emission,
+			SourceType: req.SourceType,
+		})
+		if err != nil {
+			return nil, err
+		}
+		data = response.Concentrations
 	default:
 		return nil, fmt.Errorf("invalid impact type %s", req.ImpactType.String())
 	}
-	if err != nil {
-		return nil, err
-	}
 
 	min, max := math.Inf(1), math.Inf(-1)
-	for _, e := range data.Elements {
+	for _, e := range data {
 		if e < min {
 			min = e
 		}
@@ -309,5 +277,5 @@ func (c *CityAQ) MapScale(ctx context.Context, req *rpc.MapScaleRequest) (*rpc.M
 	}
 	max += max * 0.0001
 	min -= min * 0.0001
-	return &rpc.MapScaleResponse{Min: float32(min), Max: float32(max)}, nil
+	return &rpc.MapScaleResponse{Min: min, Max: max}, nil
 }

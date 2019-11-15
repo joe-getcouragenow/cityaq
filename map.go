@@ -161,7 +161,7 @@ func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{},
 	var dataLayer *mvt.Layer
 	switch ms.ImpactType {
 	case rpc.ImpactType_Emissions:
-		req := &rpc.EmissionsMapRequest{
+		req := &rpc.GriddedEmissionsRequest{
 			CityName:   ms.CityName,
 			Emission:   ms.Emission,
 			SourceType: ms.SourceType,

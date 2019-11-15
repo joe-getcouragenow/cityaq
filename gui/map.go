@@ -194,15 +194,15 @@ func (c *CityAQ) legend(sel *selections) ([]interface{}, error) {
 		return nil, err
 	}
 	cm := moreland.ExtendedBlackBody()
-	cm.SetMin(float64(scale.Min))
-	cm.SetMax(float64(scale.Max))
+	cm.SetMin(scale.Min)
+	cm.SetMax(scale.Max)
 	go func() {
 		c.setMapLegend(cm)
 	}()
 
 	cutpts := make([]float64, 10)
-	r := float64(scale.Max) - float64(scale.Min)
-	floats.Span(cutpts, float64(scale.Min), float64(scale.Max))
+	r := scale.Max - scale.Min
+	floats.Span(cutpts, scale.Min, scale.Max)
 	colors := make([]interface{}, len(cutpts)*2)
 	for i := 0; i < len(colors); i += 2 {
 		v := cutpts[i/2]

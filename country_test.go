@@ -9,6 +9,7 @@ import (
 
 	"github.com/ctessum/geom"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
+	"gonum.org/v1/gonum/floats"
 )
 
 func TestCityAQ_egugrid(t *testing.T) {
@@ -44,20 +45,20 @@ func TestCityAQ_egugrid(t *testing.T) {
 	})
 
 	t.Run("electric_gen_egugrid", func(t *testing.T) {
-		req := &rpc.EmissionsMapRequest{
+		req := &rpc.GriddedEmissionsRequest{
 			CityName:   "Accra Metropolitan",
 			Emission:   rpc.Emission_PM2_5,
 			SourceType: "electric_gen_egugrid",
 		}
 
-		emis, err := c.griddedEmissions(context.Background(), req)
+		emis, err := c.GriddedEmissions(context.Background(), req)
 		if err != nil {
 			t.Fatal(err)
 		}
 		if emis == nil {
 			t.Fatal("nil emis")
 		}
-		sum := emis.Sum()
+		sum := floats.Sum(emis.Emissions)
 		want := 1000.0
 		if !similar(sum, want, 1e-10) {
 			t.Errorf("have %g, want %g", sum, want)

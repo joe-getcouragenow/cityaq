@@ -75,44 +75,24 @@ func (mr *MockCityAQClientMockRecorder) CityGeometry(ctx, in interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CityGeometry", reflect.TypeOf((*MockCityAQClient)(nil).CityGeometry), varargs...)
 }
 
-// EmissionsGrid mocks base method
-func (m *MockCityAQClient) EmissionsGrid(ctx context.Context, in *cityaqrpc.EmissionsGridRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.EmissionsGridResponse, error) {
+// GriddedEmissions mocks base method
+func (m *MockCityAQClient) GriddedEmissions(ctx context.Context, in *cityaqrpc.GriddedEmissionsRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.GriddedEmissionsResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "EmissionsGrid", varargs...)
-	ret0, _ := ret[0].(*cityaqrpc.EmissionsGridResponse)
+	ret := m.ctrl.Call(m, "GriddedEmissions", varargs...)
+	ret0, _ := ret[0].(*cityaqrpc.GriddedEmissionsResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// EmissionsGrid indicates an expected call of EmissionsGrid
-func (mr *MockCityAQClientMockRecorder) EmissionsGrid(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+// GriddedEmissions indicates an expected call of GriddedEmissions
+func (mr *MockCityAQClientMockRecorder) GriddedEmissions(ctx, in interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, in}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsGrid", reflect.TypeOf((*MockCityAQClient)(nil).EmissionsGrid), varargs...)
-}
-
-// EmissionsMap mocks base method
-func (m *MockCityAQClient) EmissionsMap(ctx context.Context, in *cityaqrpc.EmissionsMapRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.EmissionsMapResponse, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx, in}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "EmissionsMap", varargs...)
-	ret0, _ := ret[0].(*cityaqrpc.EmissionsMapResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// EmissionsMap indicates an expected call of EmissionsMap
-func (mr *MockCityAQClientMockRecorder) EmissionsMap(ctx, in interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx, in}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsMap", reflect.TypeOf((*MockCityAQClient)(nil).EmissionsMap), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GriddedEmissions", reflect.TypeOf((*MockCityAQClient)(nil).GriddedEmissions), varargs...)
 }
 
 // EmissionsGridBounds mocks base method
@@ -133,6 +113,26 @@ func (mr *MockCityAQClientMockRecorder) EmissionsGridBounds(ctx, in interface{},
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, in}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsGridBounds", reflect.TypeOf((*MockCityAQClient)(nil).EmissionsGridBounds), varargs...)
+}
+
+// GriddedConcentrations mocks base method
+func (m *MockCityAQClient) GriddedConcentrations(ctx context.Context, in *cityaqrpc.GriddedConcentrationsRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.GriddedConcentrationsResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GriddedConcentrations", varargs...)
+	ret0, _ := ret[0].(*cityaqrpc.GriddedConcentrationsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GriddedConcentrations indicates an expected call of GriddedConcentrations
+func (mr *MockCityAQClientMockRecorder) GriddedConcentrations(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GriddedConcentrations", reflect.TypeOf((*MockCityAQClient)(nil).GriddedConcentrations), varargs...)
 }
 
 // MapScale mocks base method
@@ -208,34 +208,19 @@ func (mr *MockCityAQServerMockRecorder) CityGeometry(arg0, arg1 interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CityGeometry", reflect.TypeOf((*MockCityAQServer)(nil).CityGeometry), arg0, arg1)
 }
 
-// EmissionsGrid mocks base method
-func (m *MockCityAQServer) EmissionsGrid(arg0 context.Context, arg1 *cityaqrpc.EmissionsGridRequest) (*cityaqrpc.EmissionsGridResponse, error) {
+// GriddedEmissions mocks base method
+func (m *MockCityAQServer) GriddedEmissions(arg0 context.Context, arg1 *cityaqrpc.GriddedEmissionsRequest) (*cityaqrpc.GriddedEmissionsResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "EmissionsGrid", arg0, arg1)
-	ret0, _ := ret[0].(*cityaqrpc.EmissionsGridResponse)
+	ret := m.ctrl.Call(m, "GriddedEmissions", arg0, arg1)
+	ret0, _ := ret[0].(*cityaqrpc.GriddedEmissionsResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// EmissionsGrid indicates an expected call of EmissionsGrid
-func (mr *MockCityAQServerMockRecorder) EmissionsGrid(arg0, arg1 interface{}) *gomock.Call {
+// GriddedEmissions indicates an expected call of GriddedEmissions
+func (mr *MockCityAQServerMockRecorder) GriddedEmissions(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsGrid", reflect.TypeOf((*MockCityAQServer)(nil).EmissionsGrid), arg0, arg1)
-}
-
-// EmissionsMap mocks base method
-func (m *MockCityAQServer) EmissionsMap(arg0 context.Context, arg1 *cityaqrpc.EmissionsMapRequest) (*cityaqrpc.EmissionsMapResponse, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "EmissionsMap", arg0, arg1)
-	ret0, _ := ret[0].(*cityaqrpc.EmissionsMapResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// EmissionsMap indicates an expected call of EmissionsMap
-func (mr *MockCityAQServerMockRecorder) EmissionsMap(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsMap", reflect.TypeOf((*MockCityAQServer)(nil).EmissionsMap), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GriddedEmissions", reflect.TypeOf((*MockCityAQServer)(nil).GriddedEmissions), arg0, arg1)
 }
 
 // EmissionsGridBounds mocks base method
@@ -251,6 +236,21 @@ func (m *MockCityAQServer) EmissionsGridBounds(arg0 context.Context, arg1 *citya
 func (mr *MockCityAQServerMockRecorder) EmissionsGridBounds(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EmissionsGridBounds", reflect.TypeOf((*MockCityAQServer)(nil).EmissionsGridBounds), arg0, arg1)
+}
+
+// GriddedConcentrations mocks base method
+func (m *MockCityAQServer) GriddedConcentrations(arg0 context.Context, arg1 *cityaqrpc.GriddedConcentrationsRequest) (*cityaqrpc.GriddedConcentrationsResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GriddedConcentrations", arg0, arg1)
+	ret0, _ := ret[0].(*cityaqrpc.GriddedConcentrationsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GriddedConcentrations indicates an expected call of GriddedConcentrations
+func (mr *MockCityAQServerMockRecorder) GriddedConcentrations(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GriddedConcentrations", reflect.TypeOf((*MockCityAQServer)(nil).GriddedConcentrations), arg0, arg1)
 }
 
 // MapScale mocks base method

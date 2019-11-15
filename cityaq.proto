@@ -5,9 +5,12 @@ package cityaqrpc;
 service CityAQ {
   rpc Cities(CitiesRequest) returns (CitiesResponse) {}
   rpc CityGeometry(CityGeometryRequest) returns (CityGeometryResponse) {}
-  rpc EmissionsGrid(EmissionsGridRequest) returns (EmissionsGridResponse) {}
-  rpc EmissionsMap(EmissionsMapRequest) returns (EmissionsMapResponse) {}
+
+  rpc GriddedEmissions(GriddedEmissionsRequest) returns (GriddedEmissionsResponse) {}
   rpc EmissionsGridBounds(EmissionsGridBoundsRequest) returns (EmissionsGridBoundsResponse) {}
+
+  rpc GriddedConcentrations(GriddedConcentrationsRequest) returns (GriddedConcentrationsResponse) {}
+
   rpc MapScale(MapScaleRequest) returns (MapScaleResponse) {}
 }
 
@@ -36,17 +39,30 @@ message Path {
 }
 
 message Point {
-  float X = 1;
-  float Y = 2;
+  double X = 1;
+  double Y = 2;
 }
 
-message EmissionsGridRequest {
+message GriddedEmissionsRequest {
   string CityName = 1;
   string SourceType = 2;
+  Emission Emission = 3;
 }
 
-message EmissionsGridResponse {
+message GriddedEmissionsResponse {
   repeated Polygon Polygons = 1;
+  repeated double Emissions = 2;
+}
+
+message GriddedConcentrationsRequest {
+  string CityName = 1;
+  string SourceType = 2;
+  Emission Emission = 3;
+}
+
+message GriddedConcentrationsResponse {
+  repeated Polygon Polygons = 1;
+  repeated double Concentrations = 2;
 }
 
 message EmissionsGridBoundsRequest {
@@ -57,12 +73,6 @@ message EmissionsGridBoundsRequest {
 message EmissionsGridBoundsResponse {
   Point Min = 1;
   Point Max = 2;
-}
-
-message EmissionsMapRequest {
-  string CityName = 1;
-  Emission Emission = 3;
-  string SourceType = 4;
 }
 
 enum Emission {
@@ -77,11 +87,7 @@ enum Emission {
 enum ImpactType {
   UNKNOWN_IMPACTTYPE = 0;
   Emissions = 1;
-}
-
-message EmissionsMapResponse {
-  repeated bytes RGB = 1;
-  string Legend = 2;
+  Concentrations = 2;
 }
 
 message MapScaleRequest {
@@ -92,7 +98,7 @@ message MapScaleRequest {
 }
 
 message MapScaleResponse {
-  float Min = 1;
-  float Max = 2;
-  float CutPt = 3;
+  double Min = 1;
+  double Max = 2;
+  double CutPt = 3;
 }
