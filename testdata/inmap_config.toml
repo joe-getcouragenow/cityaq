@@ -1,0 +1,37 @@
+
+EmissionUnits = "kg/year"
+
+InMAPData = "testdata/inmapData.ncf"
+
+static = false
+
+[OutputVariables]
+  PrimPM25 = "PrimaryPM25"
+  pNH4 = "pNH4"
+  pSO4 = "pSO4"
+  pNO3 = "pNO3"
+  SOA = "SOA"
+  pop = "TotalPop"
+  mort = "AllCause"
+
+[VarGrid]
+  GridProj = "+proj=longlat"
+
+  VariableGridDx = 1.0
+  VariableGridDy = 1.0
+
+  VariableGridXo = -2.5
+  VariableGridYo = 3.0
+
+  Xnests = [5]
+  Ynests = [4]
+
+  CensusFile = "testdata/popMort/testPopulation.shp"
+  CensusPopColumns = ["TotalPop"]
+
+  PopGridColumn = "TotalPop"
+  PopConcThreshold = 0.0000000001
+
+  MortalityRateFile = "testdata/popMort/testMortalityRate.shp"
+  [VarGrid.MortalityRateColumns]
+    AllCause = "TotalPop"

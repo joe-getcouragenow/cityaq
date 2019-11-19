@@ -135,7 +135,7 @@ func (c *CityAQ) GriddedEmissions(ctx context.Context, req *rpc.GriddedEmissions
 	}
 
 	o := &rpc.GriddedEmissionsResponse{
-		Polygons:  polygonsToRPC(grid),
+		Polygons:  polygonalsToRPC(grid),
 		Emissions: make([]float64, len(grid)),
 	}
 	for i, v := range polEmis.Elements {
@@ -204,6 +204,17 @@ func geomToOrb(g geom.Polygonal) orb.Polygon {
 		o[i] = make(orb.Ring, len(path))
 		for j, point := range path {
 			o[i][j] = orb.Point{point.X, point.Y}
+		}
+	}
+	return o
+}
+
+func rpcToGeom(p *rpc.Polygon) geom.Polygon {
+	o := make(geom.Polygon, len(p.Paths))
+	for i, path := range p.Paths {
+		o[i] = make(geom.Path, len(path.Points))
+		for j, point := range path.Points {
+			o[i][j] = geom.Point{point.X, point.Y}
 		}
 	}
 	return o

@@ -7,7 +7,8 @@ require (
 	github.com/cenkalti/backoff v2.0.0+incompatible
 	github.com/ctessum/geom v0.2.8-0.20191022082743-867504d0bd55
 	github.com/ctessum/go-leaflet v0.0.0-20190930105439-32c1547876af
-	github.com/ctessum/requestcache v1.0.0
+	github.com/ctessum/requestcache v1.0.1
+	github.com/ctessum/requestcache/v3 v3.0.0
 	github.com/ctessum/sparse v0.0.0-20181201011727-57d6234a2c9d
 	github.com/ctessum/unit v0.0.0-20160621200450-755774ac2fcb
 	github.com/elazarl/go-bindata-assetfs v1.0.0
@@ -30,6 +31,7 @@ require (
 	gonum.org/v1/gonum v0.0.0-20191009222026-5d5638e6749a
 	gonum.org/v1/plot v0.0.0-20190615073203-9aa86143727f
 	google.golang.org/grpc v1.23.1
+	k8s.io/client-go v10.0.0+incompatible
 )
 
 replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999

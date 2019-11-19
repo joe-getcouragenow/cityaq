@@ -13,6 +13,7 @@ env:
 
 before_install:
   - go get -v golang.org/x/lint/golint
+  - go get github.com/spatialmodel/inmap/cmd/inmap
 
 install:
 - go get github.com/agnivade/wasmbrowsertest

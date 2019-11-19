@@ -5,14 +5,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"net/url"
 	"os"
 	"path/filepath"
+	"runtime"
+	"strings"
 	"sync"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"github.com/ctessum/geom"
 	"github.com/ctessum/geom/encoding/geojson"
 	"github.com/ctessum/geom/index/rtree"
+	"github.com/ctessum/requestcache/v3"
+	"github.com/spatialmodel/inmap/cloud"
 	"github.com/spatialmodel/inmap/emissions/aep/aeputil"
 )
 
@@ -28,6 +33,14 @@ type CityAQ struct {
 	// SMOKE-formatted surrogate specifications.
 	SMOKESrgSpecs string
 
+	// Location where temporary results should be stored.
+	CacheLoc    string
+	inmapClient *cloud.Client
+
+	// InMAPConfigFile specifies the path to the file with InMAP
+	// configuration information.
+	InMAPConfigFile string
+
 	// cityPaths holds the locations of the files containing the
 	// boundaries of each city.
 	cityPaths         map[string]string
@@ -35,6 +48,10 @@ type CityAQ struct {
 
 	countries         *rtree.Rtree
 	loadCountriesOnce sync.Once
+	cloudSetupOnce    sync.Once
+
+	cacheSetupOnce sync.Once
+	cache          *requestcache.Cache
 }
 
 // Cities returns the files in the CityGeomDir directory field of the receiver.
@@ -70,6 +87,31 @@ func (c *CityAQ) loadCityPaths() {
 	})
 }
 
+func (c *CityAQ) setupCache() {
+	c.cacheSetupOnce.Do(func() {
+		workers := runtime.GOMAXPROCS(-1)
+		d := requestcache.Deduplicate()
+		m := requestcache.Memory(20)
+		if c.CacheLoc == "" {
+			c.cache = requestcache.NewCache(workers, d, m)
+		} else if strings.HasPrefix(c.CacheLoc, "gs://") {
+			loc, err := url.Parse(c.CacheLoc)
+			if err != nil {
+				panic(err)
+			}
+			cf, err := requestcache.GoogleCloudStorage(context.TODO(), loc.Host,
+				strings.TrimLeft(loc.Path, "/"))
+			if err != nil {
+				panic(err)
+			}
+			c.cache = requestcache.NewCache(workers, d, m, cf)
+		} else {
+			c.cache = requestcache.NewCache(workers, d, m,
+				requestcache.Disk(strings.TrimPrefix(c.CacheLoc, "file://")))
+		}
+	})
+}
+
 // CityGeometry returns the geometry of the requested city.
 func (c *CityAQ) CityGeometry(ctx context.Context, req *rpc.CityGeometryRequest) (*rpc.CityGeometryResponse, error) {
 	polys, err := c.geojsonGeometry(req.CityName)
@@ -77,17 +119,33 @@ func (c *CityAQ) CityGeometry(ctx context.Context, req *rpc.CityGeometryRequest)
 		return nil, err
 	}
 	o := &rpc.CityGeometryResponse{
-		Polygons: polygonsToRPC([]geom.Polygonal{polys}),
+		Polygons: polygonsToRPC([]geom.Polygon{polys}),
 	}
 	return o, err
 }
 
-func polygonsToRPC(polys []geom.Polygonal) []*rpc.Polygon {
+func polygonalsToRPC(polys []geom.Polygonal) []*rpc.Polygon {
 	o := make([]*rpc.Polygon, len(polys))
 	for i, poly := range polys {
 		o[i] = new(rpc.Polygon)
 		o[i].Paths = make([]*rpc.Path, len(poly.(geom.Polygon)))
 		for j, path := range poly.(geom.Polygon) {
+			o[i].Paths[j] = new(rpc.Path)
+			o[i].Paths[j].Points = make([]*rpc.Point, len(path))
+			for k, pt := range path {
+				o[i].Paths[j].Points[k] = &rpc.Point{X: pt.X, Y: pt.Y}
+			}
+		}
+	}
+	return o
+}
+
+func polygonsToRPC(polys []geom.Polygon) []*rpc.Polygon {
+	o := make([]*rpc.Polygon, len(polys))
+	for i, poly := range polys {
+		o[i] = new(rpc.Polygon)
+		o[i].Paths = make([]*rpc.Path, len(poly))
+		for j, path := range poly {
 			o[i].Paths[j] = new(rpc.Path)
 			o[i].Paths[j].Points = make([]*rpc.Point, len(path))
 			for k, pt := range path {

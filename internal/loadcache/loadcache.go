@@ -30,6 +30,10 @@ func main() {
 		"Guadalajara", "Autonomous City of Buenos Aires", "City of Johannesburg Metropolitan Municipality",
 		"Accra Metropolitan", "Chennai", "Addis Ababa", "Seattle", "New York", "Bengaluru", "Washington",
 	}
+	"Accra", " Buenos Aires ", "Guadalajara", " Johannesburg",
+	" Addis Ababa", "Kolkata", " Chennai ", "Qingdao ", "Fuzhou",
+	" Medellin", " Quito", " Lima", " Lagos ", "Durban ", "Ho Chi Minh City ",
+	"Quezon City"
 
 	allCities, err := client.Cities(ctx, &rpc.CitiesRequest{})
 	check(err)

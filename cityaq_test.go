@@ -310,7 +310,10 @@ func TestCityAQ_MapScale(t *testing.T) {
 		t.Fatal(err)
 	}
 	wantScale := &cityaqrpc.MapScaleResponse{Min: 0, Max: 1.5333514694859784}
-	if !reflect.DeepEqual(scale, wantScale) {
-		t.Errorf("scale %+v != %+v", scale, wantScale)
+	if !similar(scale.Min, wantScale.Min, 1.0e-10) {
+		t.Errorf("scale min %+v != %+v", scale.Min, wantScale.Min)
+	}
+	if !similar(scale.Max, wantScale.Max, 1.0e-10) {
+		t.Errorf("scale max %+v != %+v", scale.Max, wantScale.Max)
 	}
 }
