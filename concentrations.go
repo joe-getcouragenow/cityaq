@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"path/filepath"
 	"time"
@@ -131,6 +132,46 @@ func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) 
 	cfg.Set("job_name", j.Key())
 	cfg.Set("cmds", []string{"run", "steady"})
 
+	bnds, err := j.c.EmissionsGridBounds(ctx, &rpc.EmissionsGridBoundsRequest{
+		CityName:   j.CityName,
+		SourceType: j.SourceType,
+	})
+	if err != nil {
+		return err
+	}
+	center := geom.Point{
+		X: (bnds.Max.X + bnds.Min.X) / 2,
+		Y: (bnds.Max.Y + bnds.Min.Y) / 2,
+	}
+
+	// Set lower-left corner of grid so that the
+	// city is in its center, while still overlapping
+	// the underlying CTM grid.
+	vgc, err := inmaputil.VarGridConfig(cfg.Viper)
+	if err != nil {
+		return err
+	}
+	xo := vgc.VariableGridXo
+	yo := vgc.VariableGridYo
+	nx := vgc.Xnests[0]
+	ny := vgc.Ynests[0]
+	dx := vgc.VariableGridDx
+	dy := vgc.VariableGridDy
+	xo = math.Max(xo, roundUnit(center.X-float64(nx)*dx/2, dx))
+	yo = math.Max(yo, roundUnit(center.Y-float64(ny)*dy/2, dy))
+	cfg.Set("VarGrid.VariableGridXo", xo)
+	cfg.Set("VarGrid.VariableGridYo", yo)
+	if xo+dx*float64(nx) > 180 {
+		nx = int((180 - xo) / dx)
+	}
+	if yo+dy*float64(ny) > 89.5 {
+		ny = int((89.5 - yo) / dy)
+	}
+	vgc.Xnests[0] = nx
+	vgc.Ynests[0] = ny
+	cfg.Set("VarGrid.Xnests", vgc.Xnests)
+	cfg.Set("VarGrid.Ynests", vgc.Ynests)
+
 	in, err := cloud.JobSpec(
 		cfg.Root, cfg.Viper,
 		cfg.GetString("job_name"),
@@ -181,6 +222,12 @@ func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) 
 	}
 
 	return nil
+}
+
+// roundUnit rounds a float to the nearest inverval of the
+// given unit.
+func roundUnit(x, unit float64) float64 {
+	return math.Round(x/unit) * unit
 }
 
 // emisToShp calculates the emissions associated with this job and

@@ -41,7 +41,7 @@ func TestCityAQ_GriddedConcentrations(t *testing.T) {
 		t.Fatal(err)
 	}
 	concSum := floats.Sum(conc.Concentrations)
-	wantConcSum := 4.932853349300001e-05
+	wantConcSum := 3.9921666165e-05
 	if !similar(concSum, wantConcSum, 1.0e-10) {
 		t.Errorf("concentration sum: %g != %g", concSum, wantConcSum)
 	}
