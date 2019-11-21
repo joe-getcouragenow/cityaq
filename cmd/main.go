@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/ctessum/cityaq"
@@ -27,18 +28,23 @@ func init() {
 }
 
 func main() {
+	cache := "tmp"
+	os.Mkdir(cache, os.ModePerm)
 	c := &cityaq.CityAQ{
-		CityGeomDir: "../testdata/cities",
+		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:               "srgspec_osm.json",
+			SrgSpec:               "testdata/srgspec_osm.json",
 			SrgSpecType:           "OSM",
-			SrgShapefileDirectory: "../../../data/shapefiles",
+			SrgShapefileDirectory: "testdata",
 			SCCExactMatch:         true,
-			GridRef:               []string{"../testdata/gridref.txt"},
+			GridRef:               []string{"testdata/gridref.txt"},
 			OutputSR:              "+proj=longlat",
 			InputSR:               "+proj=longlat",
+			MaxCacheEntries:       100,
 		},
-		SMOKESrgSpecs: "srgspec_smoke.csv",
+		SMOKESrgSpecs:   "testdata/srgspec_smoke.csv",
+		CacheLoc:        "file://" + cache,
+		InMAPConfigFile: "testdata/inmap_config.toml",
 	}
 
 	srv := cityaq.NewGRPCServer(c)
@@ -61,5 +67,5 @@ func main() {
 	}
 
 	logger.Info("Serving on https://" + addr)
-	logger.Fatal(httpsSrv.ListenAndServeTLS("./insecure/cert.pem", "./insecure/key.pem"))
+	logger.Fatal(httpsSrv.ListenAndServeTLS("./cmd/insecure/cert.pem", "./cmd/insecure/key.pem"))
 }

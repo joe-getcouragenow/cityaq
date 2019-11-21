@@ -49,7 +49,7 @@ func (c *CityAQ) updateImpactTypeSelector() {
 	if c.impactTypeSelector == js.Undefined() {
 		c.impactTypeSelector = c.doc.Call("getElementById", "impactTypeSelector")
 	}
-	updateSelector(c.doc, c.impactTypeSelector, []interface{}{1}, []string{"Emissions"})
+	updateSelector(c.doc, c.impactTypeSelector, []interface{}{1, 2}, []string{"Emissions", "Concentrations"})
 }
 
 // updateEmissionSelector updates the options of emissions available.

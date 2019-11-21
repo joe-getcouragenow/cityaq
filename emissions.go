@@ -66,6 +66,10 @@ func emissionsMapName(r *rpc.GriddedEmissionsRequest) string {
 	return fmt.Sprintf("%s_%d_%d_%s", r.CityName, rpc.ImpactType_Emissions, r.Emission, r.SourceType)
 }
 
+func concentrationsMapName(r *rpc.GriddedConcentrationsRequest) string {
+	return fmt.Sprintf("%s_%d_%d_%s", r.CityName, rpc.ImpactType_Concentrations, r.Emission, r.SourceType)
+}
+
 // GriddedEmissions returns gridded emissions for the request.
 // If req.SourceType has the suffix "_egugrid", emissions will be allocated
 // to the smaller of country that the city is in or the intersection of
@@ -183,6 +187,27 @@ func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.GriddedEmissions
 		layerData = layerData.Append(feature)
 	}
 	layer := mvt.NewLayer(emissionsMapName(req), layerData)
+	return layer, nil
+}
+
+func (c *CityAQ) concentrationsMapData(ctx context.Context, req *rpc.GriddedConcentrationsRequest) (*mvt.Layer, error) {
+	conc, err := c.GriddedConcentrations(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	layerData := geojson.NewFeatureCollection()
+	for i, cell := range conc.Polygons {
+		v := conc.Concentrations[i]
+		if v == 0 {
+			continue
+		}
+		feature := geojson.NewFeature(rpcToOrb(cell))
+		feature.ID = uint64(i)
+		feature.Properties["v"] = v
+		layerData = layerData.Append(feature)
+	}
+	layer := mvt.NewLayer(concentrationsMapName(req), layerData)
 	return layer, nil
 }
 

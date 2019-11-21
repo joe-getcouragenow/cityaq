@@ -171,6 +171,17 @@ func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{},
 		if err != nil {
 			return nil, err
 		}
+	case rpc.ImpactType_Concentrations:
+		req := &rpc.GriddedConcentrationsRequest{
+			CityName:   ms.CityName,
+			Emission:   ms.Emission,
+			SourceType: ms.SourceType,
+		}
+		var err error
+		dataLayer, err = s.c.concentrationsMapData(ctx, req)
+		if err != nil {
+			return nil, err
+		}
 	default:
 		return nil, fmt.Errorf("invalid impact type %s", ms.ImpactType.String())
 	}
