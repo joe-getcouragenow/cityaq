@@ -10,6 +10,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
@@ -111,7 +112,7 @@ type concentrationJob struct {
 }
 
 func (j *concentrationJob) Key() string {
-	return fmt.Sprintf("concentration_%s_%s", j.CityName, j.SourceType)
+	return strings.ToLower(fmt.Sprintf("concentration_%s_%s", j.CityName, j.SourceType))
 }
 
 func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) error {
