@@ -23,8 +23,8 @@ static = false
   VariableGridXo = -2.5
   VariableGridYo = 3.0
 
-  Xnests = [4]
-  Ynests = [3]
+  Xnests = [4,2]
+  Ynests = [3,2]
 
   CensusFile = "testdata/popMort/testPopulation.shp"
   CensusPopColumns = ["TotalPop"]

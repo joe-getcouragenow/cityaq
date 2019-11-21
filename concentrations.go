@@ -170,8 +170,8 @@ func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) 
 	}
 	vgc.Xnests[0] = nx
 	vgc.Ynests[0] = ny
-	cfg.Set("VarGrid.Xnests", vgc.Xnests)
-	cfg.Set("VarGrid.Ynests", vgc.Ynests)
+	cfg.Set("VarGrid.Xnests", intSliceToArg(vgc.Xnests))
+	cfg.Set("VarGrid.Ynests", intSliceToArg(vgc.Ynests))
 
 	in, err := cloud.JobSpec(
 		cfg.Root, cfg.Viper,
@@ -223,6 +223,16 @@ func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) 
 	}
 
 	return nil
+}
+
+// intSliceToArg takes an integer slice and returns
+// an arugment suitable for use by Viper
+func intSliceToArg(i []int) string {
+	s := fmt.Sprintf("%#v", i)
+	s = strings.TrimPrefix(s, "[]int{")
+	s = strings.TrimSuffix(s, "}")
+	s = strings.Replace(s, " ", "", -1)
+	return "[" + s + "]"
 }
 
 // roundUnit rounds a float to the nearest inverval of the
