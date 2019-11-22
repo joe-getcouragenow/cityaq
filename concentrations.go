@@ -216,7 +216,7 @@ func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) 
 		} else if status.Status == cloudrpc.Status_Complete {
 			break
 		}
-		time.Sleep(30 * time.Second)
+		time.Sleep(10 * time.Minute)
 	}
 
 	output, err := j.c.inmapClient.Output(ctx, &cloudrpc.JobName{
