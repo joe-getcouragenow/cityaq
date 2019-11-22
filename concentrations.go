@@ -119,7 +119,15 @@ func init() {
 }
 
 func (j *concentrationJob) Key() string {
-	return alphanum.ReplaceAllString(strings.ToLower(fmt.Sprintf("concentration_%s_%s", j.CityName, j.SourceType)), "")
+	k := fmt.Sprintf("concentration_%s_%s", j.CityName, j.SourceType)
+	// remove invalid characters
+	k = alphanum.ReplaceAllString(strings.ToLower(k), "")
+	// shorten
+	k = strings.Replace(k, "autonomouscityof", "", -1)
+	k = strings.Replace(k, "cityof", "", -1)
+	k = strings.Replace(k, "metropolitan", "", -1)
+	k = strings.Replace(k, "municipality", "", -1)
+	return k
 }
 
 func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) error {

@@ -23,7 +23,7 @@ func main() {
 	client := rpc.NewCityAQClient(conn)*/
 
 	sourceTypes := []string{
-		"railways", "electric_gen_egugrid", "population", "residential",
+		"railways", "electric_gen_egugrid", "population_gpw", "residential",
 		"commercial", "industrial", "builtup",
 		"roadways_motorway", "roadways_trunk", "roadways_primary",
 		"roadways_secondary", "roadways_tertiary",
@@ -62,7 +62,7 @@ func main() {
 
 	c := make(chan query)
 	var wg sync.WaitGroup
-	const nprocs = 1
+	const nprocs = 100
 	wg.Add(nprocs)
 	for i := 0; i < nprocs; i++ {
 		go func() {
