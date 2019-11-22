@@ -10,6 +10,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -111,8 +112,14 @@ type concentrationJob struct {
 	SourceType string
 }
 
+var alphanum *regexp.Regexp
+
+func init() {
+	alphanum = regexp.MustCompile("[^a-z0-9]+")
+}
+
 func (j *concentrationJob) Key() string {
-	return strings.ToLower(fmt.Sprintf("concentration_%s_%s", j.CityName, j.SourceType))
+	return alphanum.ReplaceAllString(strings.ToLower(fmt.Sprintf("concentration_%s_%s", j.CityName, j.SourceType)), "")
 }
 
 func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) error {
