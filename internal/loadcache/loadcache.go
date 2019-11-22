@@ -17,33 +17,52 @@ import (
 
 func main() {
 	// Set up a client to connect to https://inmap.run.
-	ctx := context.Background()
+	/*ctx := context.Background()
 	conn, err := grpc.Dial("inmap.run:443", grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
 	check(err)
-	client := rpc.NewCityAQClient(conn)
+	client := rpc.NewCityAQClient(conn)*/
 
-	sourceTypes := []string{"electric_gen_egugrid", "population", "residential",
-		"commercial", "industrial", "builtup", "roadways", "railways", "waterways",
-		"bus_routes", "airports", "agricultural"}
+	sourceTypes := []string{
+		"railways", "electric_gen_egugrid", "population", "residential",
+		"commercial", "industrial", "builtup",
+		"roadways_motorway", "roadways_trunk", "roadways_primary",
+		"roadways_secondary", "roadways_tertiary",
+		"roadways", "waterways",
+		"bus_routes", "airports", "agricultural",
+	}
 
 	cities := []string{
-		"Guadalajara", "Autonomous City of Buenos Aires", "City of Johannesburg Metropolitan Municipality",
-		"Accra Metropolitan", "Chennai", "Addis Ababa", "Seattle", "New York", "Bengaluru", "Washington",
+		"Guadalajara",
+		"Autonomous City of Buenos Aires",
+		"City of Johannesburg Metropolitan Municipality",
+		"Accra Metropolitan",
+		"Chennai",
+		"Addis Ababa",
+		"Seattle",
+		"New York",
+		"Bengaluru",
+		"Washington",
+		"Fuzhou City",
+		"Kolkata",
+		"Qingdao  City",
+		" Medellin",
+		" Quito",
+		" Lima",
+		" Lagos ",
+		"Ho Chi Minh City ",
+		"Quezon City",
 	}
-	"Accra", " Buenos Aires ", "Guadalajara", " Johannesburg",
-	" Addis Ababa", "Kolkata", " Chennai ", "Qingdao ", "Fuzhou",
-	" Medellin", " Quito", " Lima", " Lagos ", "Durban ", "Ho Chi Minh City ",
-	"Quezon City"
+	// Missing: "Durban "
 
-	allCities, err := client.Cities(ctx, &rpc.CitiesRequest{})
+	/*allCities, err := client.Cities(ctx, &rpc.CitiesRequest{})
 	check(err)
 	for _, n := range allCities.Names {
 		cities = append(cities, n)
-	}
+	}*/
 
 	c := make(chan query)
 	var wg sync.WaitGroup
-	const nprocs = 2
+	const nprocs = 1
 	wg.Add(nprocs)
 	for i := 0; i < nprocs; i++ {
 		go func() {
@@ -84,7 +103,7 @@ func runQuery(c chan query, wg *sync.WaitGroup) {
 		bkf := backoff.NewConstantBackOff(30 * time.Second)
 		check(backoff.RetryNotify(
 			func() error {
-				_, err := client.EmissionsMap(ctx, &rpc.EmissionsMapRequest{
+				_, err := client.GriddedConcentrations(ctx, &rpc.GriddedConcentrationsRequest{
 					CityName:   q.name,
 					SourceType: q.sourceType,
 					Emission:   rpc.Emission_PM2_5,
