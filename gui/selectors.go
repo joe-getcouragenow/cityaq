@@ -73,8 +73,18 @@ func (c *CityAQ) updateSourceTypeSelector() {
 		c.sourceTypeSelector = c.doc.Call("getElementById", "sourceTypeSelector")
 	}
 	updateSelector(c.doc, c.sourceTypeSelector,
-		[]interface{}{"electric_gen_egugrid", "population", "residential", "commercial", "industrial", "builtup", "roadways", "railways", "waterways", "bus_routes", "airports", "agricultural"},
-		[]string{"electric_gen_egugrid", "population", "residential", "commercial", "industrial", "builtup", "roadways", "railways", "waterways", "bus_routes", "airports", "agricultural"})
+		[]interface{}{
+			"electric_gen_egugrid", "population_gpw", "residential",
+			"commercial", "industrial", "builtup", "roadways", "roadways_motorway",
+			"roadways_trunk", "roadways_primary", "roadways_secondary", "roadways_tertiary",
+			"railways", "waterways", "bus_routes", "airports", "agricultural",
+		},
+		[]string{
+			"electric_gen_egugrid", "population_gpw", "residential",
+			"commercial", "industrial", "builtup", "roadways", "roadways_motorway",
+			"roadways_trunk", "roadways_primary", "roadways_secondary", "roadways_tertiary",
+			"railways", "waterways", "bus_routes", "airports", "agricultural",
+		})
 }
 
 func (c *CityAQ) updateSelectors(ctx context.Context) {
