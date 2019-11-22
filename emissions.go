@@ -34,11 +34,12 @@ func newEmissions(poly geom.Polygon, pollutant rpc.Emission, sourceType, cityNam
 	begin := time.Date(2016, time.January, 1, 0, 0, 0, 0, time.UTC)
 	end := time.Date(2017, time.January, 1, 0, 0, 0, 0, time.UTC)
 
+	const kt = 1.0e6 // kilograms
 	duration := end.Sub(begin).Seconds()
-	rate := unit.New(1000/duration, unit.Dimensions{
+	rate := unit.New(kt/duration, unit.Dimensions{
 		unit.MassDim: 1,
 		unit.TimeDim: -1,
-	}) // 1 tonne/year in kg/s
+	}) // 1 kilotonne/year in kg/s
 
 	e := new(aep.Emissions)
 	e.Add(begin, end, pollutant.String(), "", rate)

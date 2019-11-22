@@ -59,8 +59,8 @@ func TestCityAQ_egugrid(t *testing.T) {
 			t.Fatal("nil emis")
 		}
 		sum := floats.Sum(emis.Emissions)
-		want := 1000.0
-		if !similar(sum, want, 1e-10) {
+		want := 1.0e6
+		if !similar(sum, want, 1e-8) {
 			t.Errorf("have %g, want %g", sum, want)
 		}
 	})

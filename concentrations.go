@@ -294,31 +294,32 @@ func (j *concentrationJob) emisToShp(ctx context.Context) (string, error) {
 }
 
 type inmapResult struct {
-	Grid          []geom.Polygon
-	Population    []float64
-	MortalityRate []float64
-	PrimaryPM25   []float64
-	SOA           []float64
-	PNH4          []float64
-	PNO3          []float64
-	PSO4          []float64
+	Grid       []geom.Polygon
+	Population []float64
+	//MortalityRate []float64
+	PrimaryPM25 []float64
+	SOA         []float64
+	PNH4        []float64
+	PNO3        []float64
+	PSO4        []float64
 }
 
 type wrapInmapResult struct {
-	Grid          []geom.Polygon
-	Population    []float64
-	MortalityRate []float64
-	PrimaryPM25   []float64
-	SOA           []float64
-	PNH4          []float64
-	PNO3          []float64
-	PSO4          []float64
+	Grid       []geom.Polygon
+	Population []float64
+	//MortalityRate []float64
+	PrimaryPM25 []float64
+	SOA         []float64
+	PNH4        []float64
+	PNO3        []float64
+	PSO4        []float64
 }
 
 func (r *inmapResult) MarshalBinary() ([]byte, error) {
 	w := wrapInmapResult{Grid: r.Grid, Population: r.Population,
-		MortalityRate: r.MortalityRate, PrimaryPM25: r.PrimaryPM25,
-		SOA: r.SOA, PNH4: r.PNH4, PNO3: r.PNO3, PSO4: r.PSO4}
+		//MortalityRate: r.MortalityRate,
+		PrimaryPM25: r.PrimaryPM25,
+		SOA:         r.SOA, PNH4: r.PNH4, PNO3: r.PNO3, PSO4: r.PSO4}
 	var b bytes.Buffer
 	enc := gob.NewEncoder(&b)
 	if err := enc.Encode(w); err != nil {
@@ -335,7 +336,7 @@ func (r *inmapResult) UnmarshalBinary(b []byte) error {
 	}
 	r.Grid = w.Grid
 	r.Population = w.Population
-	r.MortalityRate = w.MortalityRate
+	//r.MortalityRate = w.MortalityRate
 	r.PrimaryPM25 = w.PrimaryPM25
 	r.SOA = w.SOA
 	r.PNH4 = w.PNH4
@@ -379,7 +380,7 @@ func inmapOutputToResult(out *cloudrpc.JobOutput, result requestcache.Result) er
 	o := result.(*inmapResult)
 	o.Grid = make([]geom.Polygon, d.AttributeCount())
 	o.Population = make([]float64, d.AttributeCount())
-	o.MortalityRate = make([]float64, d.AttributeCount())
+	//o.MortalityRate = make([]float64, d.AttributeCount())
 	o.PrimaryPM25 = make([]float64, d.AttributeCount())
 	o.SOA = make([]float64, d.AttributeCount())
 	o.PNH4 = make([]float64, d.AttributeCount())
@@ -393,7 +394,7 @@ func inmapOutputToResult(out *cloudrpc.JobOutput, result requestcache.Result) er
 		}
 		o.Grid[i] = rec.Polygon
 		o.Population[i] = rec.Population
-		o.MortalityRate[i] = rec.MortalityRate
+		//o.MortalityRate[i] = rec.MortalityRate
 		o.PrimaryPM25[i] = rec.PrimaryPM25
 		o.SOA[i] = rec.SOA
 		o.PNH4[i] = rec.PNH4

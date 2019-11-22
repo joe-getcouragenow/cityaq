@@ -156,8 +156,8 @@ func TestCityAQ_griddedEmissions(t *testing.T) {
 				t.Fatal("nil emis")
 			}
 			sum := floats.Sum(emis.Emissions)
-			want := 1000.0
-			if !similar(sum, want, 1e-10) {
+			want := 1.0e6
+			if !similar(sum, want, 1e-8) {
 				t.Errorf("have %g, want %g", sum, want)
 			}
 		})
@@ -309,7 +309,7 @@ func TestCityAQ_MapScale(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantScale := &cityaqrpc.MapScaleResponse{Min: 0, Max: 1.5333514694859784}
+	wantScale := &cityaqrpc.MapScaleResponse{Min: 0, Max: 1533.3514694859794}
 	if !similar(scale.Min, wantScale.Min, 1.0e-10) {
 		t.Errorf("scale min %+v != %+v", scale.Min, wantScale.Min)
 	}
