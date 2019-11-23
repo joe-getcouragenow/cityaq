@@ -65,6 +65,9 @@ func (c *CityAQ) loadMap() {
 		"zoom":      0,
 	})
 
+	scale := mapboxgl.Get("ScaleControl").New()
+	c.mapboxMap.Call("addControl", scale)
+
 	// Add listener to resize map when window resizes.
 	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		c.setMapHeight()
@@ -197,7 +200,7 @@ func (c *CityAQ) legend(sel *selections) ([]interface{}, error) {
 	cm.SetMin(scale.Min)
 	cm.SetMax(scale.Max)
 	go func() {
-		c.setMapLegend(cm)
+		c.setMapLegend(cm, sel.impactType)
 	}()
 
 	cutpts := make([]float64, 10)
@@ -225,7 +228,7 @@ func (c *CityAQ) legend(sel *selections) ([]interface{}, error) {
 	return colors, nil
 }
 
-func (c *CityAQ) setMapLegend(cm palette.ColorMap) {
+func (c *CityAQ) setMapLegend(cm palette.ColorMap, it rpc.ImpactType) {
 	p, err := plot.New()
 	if err != nil {
 		panic(err)
@@ -237,7 +240,7 @@ func (c *CityAQ) setMapLegend(cm palette.ColorMap) {
 	p.HideY()
 	p.X.Padding = 0
 
-	img := vgimg.New(300, 40)
+	img := vgimg.NewWith(vgimg.UseWH(150, 30), vgimg.UseDPI(300))
 	dc := draw.New(img)
 	p.Draw(dc)
 	b := new(bytes.Buffer)
@@ -250,7 +253,14 @@ func (c *CityAQ) setMapLegend(cm palette.ColorMap) {
 	if c.legendDiv == js.Undefined() {
 		c.legendDiv = c.doc.Call("getElementById", "legendDiv")
 	}
-	c.legendDiv.Set("innerHTML", `<img id="legendimg" alt="Embedded Image" src="data:image/png;base64,`+legendStr+`" />`)
+	var title string
+	switch it {
+	case rpc.ImpactType_Emissions:
+		title = "<p class=\"text-center\">Emissions (kg / kilotonne)</p>"
+	case rpc.ImpactType_Concentrations:
+		title = "<p class=\"text-center\">PM<sub>2.5</sub> concentrations (μg m<sup>-3</sup> / kilotonne emissions)</p>"
+	}
+	c.legendDiv.Set("innerHTML", title+`<img id="legendimg" alt="Embedded Image" src="data:image/png;base64,`+legendStr+`" />`)
 	c.setLegendWidth()
 
 	// Add listener to resize legend when window resizes.
