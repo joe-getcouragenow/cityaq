@@ -3,15 +3,33 @@ syntax = "proto3";
 package cityaqrpc;
 
 service CityAQ {
+  // Cities returns the available cities.
   rpc Cities(CitiesRequest) returns (CitiesResponse) {}
+
+  // CityGeometry returns the boundary of the specified city.
   rpc CityGeometry(CityGeometryRequest) returns (CityGeometryResponse) {}
 
+  // GriddedEmissions returns the distribution within the city of
+  // 1 kilotonne of emissions.
   rpc GriddedEmissions(GriddedEmissionsRequest) returns (GriddedEmissionsResponse) {}
+
+  // EmissionsGridBounds returns the bounds of the grid used in GriddedEmissions.
   rpc EmissionsGridBounds(EmissionsGridBoundsRequest) returns (EmissionsGridBoundsResponse) {}
 
+  // GriddedConcentrations returns the concentrations resulting from the
+  // corresponding GriddedEmissions.
   rpc GriddedConcentrations(GriddedConcentrationsRequest) returns (GriddedConcentrationsResponse) {}
 
+  // MapScale returns the minimum and maximum values of the result
+  // of the given request.
   rpc MapScale(MapScaleRequest) returns (MapScaleResponse) {}
+
+  // GriddedPopulation returns the population counts---gridded to the
+  // concentration grid---associated with the given request.
+  rpc GriddedPopulation(GriddedPopulationRequest) returns (GriddedPopulationResponse) {}
+
+  // ImpactSummary returns a summary of the impacts from the given request.
+  rpc ImpactSummary(ImpactSummaryRequest) returns (ImpactSummaryResponse) {}
 }
 
 message CitiesRequest {
@@ -63,6 +81,45 @@ message GriddedConcentrationsRequest {
 message GriddedConcentrationsResponse {
   repeated Polygon Polygons = 1;
   repeated double Concentrations = 2;
+}
+
+message GriddedPopulationRequest {
+  string CityName = 1;
+  string SourceType = 2;
+  Emission Emission = 3;
+}
+
+message GriddedPopulationResponse {
+  repeated Polygon Polygons = 1;
+  repeated double Population = 2;
+}
+
+message ImpactSummaryRequest {
+  string CityName = 1;
+  string SourceType = 2;
+  Emission Emission = 3;
+}
+
+message ImpactSummaryResponse {
+  // Population is the total population.
+  double Population = 1;
+
+  // CityPopulation is the total population in the city.
+  double CityPopulation = 2;
+
+  // CityExposure is the population-weighted average
+  // concentration in the city.
+  double CityExposure = 3;
+
+  // TotalExposure is the overall population-weighted average
+  // concentration.
+  double TotalExposure = 4;
+
+  // CityIF is the intake fraction in the city.
+  double CityIF = 5;
+
+  // TotalIF is the total intake fraction.
+  double TotalIF = 6;
 }
 
 message EmissionsGridBoundsRequest {

@@ -155,6 +155,46 @@ func (mr *MockCityAQClientMockRecorder) MapScale(ctx, in interface{}, opts ...in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MapScale", reflect.TypeOf((*MockCityAQClient)(nil).MapScale), varargs...)
 }
 
+// GriddedPopulation mocks base method
+func (m *MockCityAQClient) GriddedPopulation(ctx context.Context, in *cityaqrpc.GriddedPopulationRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.GriddedPopulationResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GriddedPopulation", varargs...)
+	ret0, _ := ret[0].(*cityaqrpc.GriddedPopulationResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GriddedPopulation indicates an expected call of GriddedPopulation
+func (mr *MockCityAQClientMockRecorder) GriddedPopulation(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GriddedPopulation", reflect.TypeOf((*MockCityAQClient)(nil).GriddedPopulation), varargs...)
+}
+
+// ImpactSummary mocks base method
+func (m *MockCityAQClient) ImpactSummary(ctx context.Context, in *cityaqrpc.ImpactSummaryRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.ImpactSummaryResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ImpactSummary", varargs...)
+	ret0, _ := ret[0].(*cityaqrpc.ImpactSummaryResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ImpactSummary indicates an expected call of ImpactSummary
+func (mr *MockCityAQClientMockRecorder) ImpactSummary(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImpactSummary", reflect.TypeOf((*MockCityAQClient)(nil).ImpactSummary), varargs...)
+}
+
 // MockCityAQServer is a mock of CityAQServer interface
 type MockCityAQServer struct {
 	ctrl     *gomock.Controller
@@ -266,4 +306,34 @@ func (m *MockCityAQServer) MapScale(arg0 context.Context, arg1 *cityaqrpc.MapSca
 func (mr *MockCityAQServerMockRecorder) MapScale(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MapScale", reflect.TypeOf((*MockCityAQServer)(nil).MapScale), arg0, arg1)
+}
+
+// GriddedPopulation mocks base method
+func (m *MockCityAQServer) GriddedPopulation(arg0 context.Context, arg1 *cityaqrpc.GriddedPopulationRequest) (*cityaqrpc.GriddedPopulationResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GriddedPopulation", arg0, arg1)
+	ret0, _ := ret[0].(*cityaqrpc.GriddedPopulationResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GriddedPopulation indicates an expected call of GriddedPopulation
+func (mr *MockCityAQServerMockRecorder) GriddedPopulation(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GriddedPopulation", reflect.TypeOf((*MockCityAQServer)(nil).GriddedPopulation), arg0, arg1)
+}
+
+// ImpactSummary mocks base method
+func (m *MockCityAQServer) ImpactSummary(arg0 context.Context, arg1 *cityaqrpc.ImpactSummaryRequest) (*cityaqrpc.ImpactSummaryResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ImpactSummary", arg0, arg1)
+	ret0, _ := ret[0].(*cityaqrpc.ImpactSummaryResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ImpactSummary indicates an expected call of ImpactSummary
+func (mr *MockCityAQServerMockRecorder) ImpactSummary(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImpactSummary", reflect.TypeOf((*MockCityAQServer)(nil).ImpactSummary), arg0, arg1)
 }

@@ -21,6 +21,7 @@ type CityAQ struct {
 	emissionSelector     js.Value
 	sourceTypeSelector   js.Value
 	legendDiv            js.Value
+	summaryDiv           js.Value
 	mapDiv               js.Value
 	mapboxMap            js.Value
 	cityLayer, dataLayer js.Value

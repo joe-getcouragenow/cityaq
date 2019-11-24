@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 	"syscall/js"
+	"text/template"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
 	"github.com/gonum/floats"
@@ -18,6 +19,7 @@ import (
 	"gonum.org/v1/plot/palette"
 	"gonum.org/v1/plot/palette/moreland"
 	"gonum.org/v1/plot/plotter"
+	"gonum.org/v1/plot/vg"
 	"gonum.org/v1/plot/vg/draw"
 	"gonum.org/v1/plot/vg/vgimg"
 )
@@ -89,6 +91,12 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 	if c.legendDiv != js.Undefined() {
 		c.legendDiv.Set("innerHTML", "")
 	}
+	if c.summaryDiv != js.Undefined() {
+		c.summaryDiv.Set("innerHTML", "")
+	}
+	go func() {
+		c.summary(sel) // Update summary statistics.
+	}()
 
 	if c.dataLayer != js.Undefined() {
 		c.mapboxMap.Call("removeLayer", "data")
@@ -242,6 +250,7 @@ func (c *CityAQ) setMapLegend(cm palette.ColorMap, it rpc.ImpactType) {
 
 	img := vgimg.NewWith(vgimg.UseWH(150, 30), vgimg.UseDPI(300))
 	dc := draw.New(img)
+	dc = draw.Crop(dc, 0, 0, vg.Points(2), 0)
 	p.Draw(dc)
 	b := new(bytes.Buffer)
 	png := vgimg.PngCanvas{Canvas: img}
@@ -256,26 +265,86 @@ func (c *CityAQ) setMapLegend(cm palette.ColorMap, it rpc.ImpactType) {
 	var title string
 	switch it {
 	case rpc.ImpactType_Emissions:
-		title = "<p class=\"text-center\">Emissions (kg / kilotonne)</p>"
+		title = "<p class=\"small text-center\">Emissions (kg / kilotonne)</p>"
 	case rpc.ImpactType_Concentrations:
-		title = "<p class=\"text-center\">PM<sub>2.5</sub> concentrations (μg m<sup>-3</sup> / kilotonne emissions)</p>"
+		title = "<p class=\"small text-center\">PM<sub>2.5</sub> concentrations (μg m<sup>-3</sup> / kilotonne emissions)</p>"
 	}
-	c.legendDiv.Set("innerHTML", title+`<img id="legendimg" alt="Embedded Image" src="data:image/png;base64,`+legendStr+`" />`)
-	c.setLegendWidth()
-
-	// Add listener to resize legend when window resizes.
-	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		c.setLegendWidth()
-		return nil
-	})
-	js.Global().Get("window").Call("addEventListener", "resize", cb)
+	c.legendDiv.Set("innerHTML", title+`<img id="legendimg" class="img-fluid" alt="Legend" src="data:image/png;base64,`+legendStr+`" />`)
 }
 
-func (c *CityAQ) setLegendWidth() {
-	if c.legendDiv != js.Undefined() {
-		rect := c.legendDiv.Call("getBoundingClientRect")
-		c.doc.Call("getElementById", "legendimg").Set("width", rect.Get("width").Int())
+// template for statistics summary modal
+var statsModal *template.Template
+
+// initialize statistics summary template modal.
+func init() {
+	statsModal = template.Must(template.New("statsModal").Parse(`
+	<button type="button" class="btn btn-light" data-toggle="modal" data-target="#statsModal">
+	  View impact statistics
+	</button>
+
+	<div class="modal fade" id="statsModal" tabindex="-1" role="dialog" aria-labelledby="statsModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="statsModalLabel">Statistics</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Within City</th>
+								<th scope="col">Domain Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Population</td>
+								<td>{{.CityPopulation}}</td>
+								<td>{{.Population}}</td>
+							</tr>
+							<tr>
+								<td>Avg. exposure (μg m<sup>-3</sup>)</td>
+								<td>{{.CityExposure}}</td>
+								<td>{{.TotalExposure}}</td>
+							</tr>
+							<tr>
+								<td>iF (ppm)</td>
+								<td>{{.CityIF}}</td>
+								<td>{{.TotalIF}}</td>
+							</tr>
+						</tbody>
+					</table>
+	      </div>
+	    </div>
+	  </div>
+	</div>`))
+}
+
+func (c *CityAQ) summary(sel *selections) error {
+	if sel.impactType != rpc.ImpactType_Concentrations {
+		return nil
 	}
+	if c.summaryDiv == js.Undefined() {
+		c.summaryDiv = c.doc.Call("getElementById", "summaryDiv")
+	}
+	impacts, err := c.ImpactSummary(context.TODO(), &rpc.ImpactSummaryRequest{
+		CityName:   sel.cityName,
+		Emission:   sel.emission,
+		SourceType: sel.sourceType,
+	})
+	if err != nil {
+		return err
+	}
+	w := new(strings.Builder)
+	if err := statsModal.Execute(w, impacts); err != nil {
+		return err
+	}
+	c.summaryDiv.Set("innerHTML", w.String())
+	return nil
 }
 
 // Move the map window to a new location.

@@ -71,6 +71,37 @@ func (c *CityAQ) GriddedConcentrations(ctx context.Context, req *rpc.GriddedConc
 	return o, nil
 }
 
+// GriddedPopulation returns population counts on the same grid as
+// the gridded concentrations.
+func (c *CityAQ) GriddedPopulation(ctx context.Context, req *rpc.GriddedPopulationRequest) (*rpc.GriddedPopulationResponse, error) {
+	var err error
+	c.cloudSetupOnce.Do(func() {
+		err = c.cloudSetup()
+	})
+	if err != nil {
+		return nil, err
+	}
+	c.setupCache()
+
+	job := &concentrationJob{
+		c:          c,
+		CityName:   req.CityName,
+		SourceType: req.SourceType,
+	}
+
+	inmapReq := c.cache.NewRequest(ctx, job)
+	var result inmapResult
+	if err := inmapReq.Result(&result); err != nil {
+		return nil, err
+	}
+
+	o := &rpc.GriddedPopulationResponse{
+		Polygons:   polygonsToRPC(result.Grid),
+		Population: result.Population,
+	}
+	return o, nil
+}
+
 func (c *CityAQ) cloudSetup() error {
 	cfg := inmaputil.InitializeConfig()
 
