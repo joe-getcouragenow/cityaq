@@ -303,18 +303,18 @@ func init() {
 						<tbody>
 							<tr>
 								<td>Population</td>
-								<td>{{.CityPopulation}}</td>
-								<td>{{.Population}}</td>
+								<td>{{printf "%.2g" .CityPopulation}}</td>
+								<td>{{printf "%.2g" .Population}}</td>
 							</tr>
 							<tr>
-								<td>Avg. exposure (μg m<sup>-3</sup>)</td>
-								<td>{{.CityExposure}}</td>
-								<td>{{.TotalExposure}}</td>
+								<td><a href="#" data-toggle="tooltip" title="Population-weighted average concentration">Exposure</a> (μg m<sup>-3</sup>)</td>
+								<td>{{printf "%.2g" .CityExposure}}</td>
+								<td>{{printf "%.2g" .TotalExposure}}</td>
 							</tr>
 							<tr>
-								<td>iF (ppm)</td>
-								<td>{{.CityIF}}</td>
-								<td>{{.TotalIF}}</td>
+								<td><a href="#" data-toggle="tooltip" title="Intake fraction">iF</a> (ppm)</td>
+								<td>{{printf "%.2g" .CityIF}}</td>
+								<td>{{printf "%.2g" .TotalIF}}</td>
 							</tr>
 						</tbody>
 					</table>
