@@ -32,7 +32,7 @@ func main() {
 	}
 
 	cities := []string{
-		"Guadalajara",
+		/*"Guadalajara",
 		"Autonomous City of Buenos Aires",
 		"City of Johannesburg Metropolitan Municipality",
 		"Accra Metropolitan",
@@ -41,15 +41,15 @@ func main() {
 		"Seattle",
 		"New York",
 		"Bengaluru",
-		"Washington",
-		"Fuzhou City",
+		"Washington",*/
+		//"Fuzhou City",
 		"Kolkata",
-		"Qingdao  City",
-		" Medellin",
-		" Quito",
-		" Lima",
-		" Lagos ",
-		"Ho Chi Minh City ",
+		"Qingdao City",
+		"Medellín",
+		"Quito",
+		"Lima",
+		"Lagos",
+		"Ho Chi Minh City",
 		"Quezon City",
 	}
 	// Missing: "Durban "
@@ -62,7 +62,7 @@ func main() {
 
 	c := make(chan query)
 	var wg sync.WaitGroup
-	const nprocs = 100
+	const nprocs = 4
 	wg.Add(nprocs)
 	for i := 0; i < nprocs; i++ {
 		go func() {
@@ -103,7 +103,8 @@ func runQuery(c chan query, wg *sync.WaitGroup) {
 		bkf := backoff.NewConstantBackOff(30 * time.Second)
 		check(backoff.RetryNotify(
 			func() error {
-				_, err := client.GriddedConcentrations(ctx, &rpc.GriddedConcentrationsRequest{
+				_, err := client.ImpactSummary(ctx, &rpc.ImpactSummaryRequest{
+					//_, err := client.GriddedEmissions(ctx, &rpc.GriddedEmissionsRequest{
 					CityName:   q.name,
 					SourceType: q.sourceType,
 					Emission:   rpc.Emission_PM2_5,
