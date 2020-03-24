@@ -17,7 +17,7 @@ import (
 
 func main() {
 	sourceTypes := []string{
-		"railways", "electric_gen_egugrid", "population_gpw", "residential",
+		"railways", "electric_gen_egugrid", "population", "residential",
 		"commercial", "industrial", "builtup",
 		"roadways_motorway", "roadways_trunk", "roadways_primary",
 		"roadways_secondary", "roadways_tertiary",

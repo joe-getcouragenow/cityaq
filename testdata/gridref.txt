@@ -2,7 +2,7 @@
 #EXPORT_DATE=Mon Jan 05 14:10:11 EST 2015
 #EXPORT_VERSION_NAME=add afdust SCC
 700000;0000electric_gen_egugrid;electric_gen_egugrid
-700000;0000population_gpw;population_gpw
+700000;0000population;population
 700000;0000residential;residential
 700000;0000commercial;commercial
 700000;0000industrial;industrial

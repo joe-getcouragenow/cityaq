@@ -74,13 +74,13 @@ func (c *CityAQ) updateSourceTypeSelector() {
 	}
 	updateSelector(c.doc, c.sourceTypeSelector,
 		[]interface{}{
-			"electric_gen_egugrid", "population_gpw", "residential",
+			"electric_gen_egugrid", "population", "residential",
 			"commercial", "industrial", "builtup", "roadways", "roadways_motorway",
 			"roadways_trunk", "roadways_primary", "roadways_secondary", "roadways_tertiary",
 			"railways", "waterways", "bus_routes", "airports", "agricultural",
 		},
 		[]string{
-			"electric_gen_egugrid", "population_gpw", "residential",
+			"electric_gen_egugrid", "population", "residential",
 			"commercial", "industrial", "builtup", "roadways", "roadways_motorway",
 			"roadways_trunk", "roadways_primary", "roadways_secondary", "roadways_tertiary",
 			"railways", "waterways", "bus_routes", "airports", "agricultural",
