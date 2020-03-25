@@ -7,7 +7,7 @@ package mock_cityaqrpc
 import (
 	cityaqrpc "github.com/ctessum/cityaq/cityaqrpc"
 	gomock "github.com/golang/mock/gomock"
-	grpc_wasm "github.com/johanbrandhorst/grpc-wasm"
+	grpc "github.com/johanbrandhorst/grpc-wasm"
 	context "golang.org/x/net/context"
 	reflect "reflect"
 )
@@ -36,7 +36,7 @@ func (m *MockCityAQClient) EXPECT() *MockCityAQClientMockRecorder {
 }
 
 // Cities mocks base method
-func (m *MockCityAQClient) Cities(ctx context.Context, in *cityaqrpc.CitiesRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.CitiesResponse, error) {
+func (m *MockCityAQClient) Cities(ctx context.Context, in *cityaqrpc.CitiesRequest, opts ...grpc.CallOption) (*cityaqrpc.CitiesResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
@@ -56,7 +56,7 @@ func (mr *MockCityAQClientMockRecorder) Cities(ctx, in interface{}, opts ...inte
 }
 
 // CityGeometry mocks base method
-func (m *MockCityAQClient) CityGeometry(ctx context.Context, in *cityaqrpc.CityGeometryRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.CityGeometryResponse, error) {
+func (m *MockCityAQClient) CityGeometry(ctx context.Context, in *cityaqrpc.CityGeometryRequest, opts ...grpc.CallOption) (*cityaqrpc.CityGeometryResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
@@ -76,7 +76,7 @@ func (mr *MockCityAQClientMockRecorder) CityGeometry(ctx, in interface{}, opts .
 }
 
 // GriddedEmissions mocks base method
-func (m *MockCityAQClient) GriddedEmissions(ctx context.Context, in *cityaqrpc.GriddedEmissionsRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.GriddedEmissionsResponse, error) {
+func (m *MockCityAQClient) GriddedEmissions(ctx context.Context, in *cityaqrpc.GriddedEmissionsRequest, opts ...grpc.CallOption) (*cityaqrpc.GriddedEmissionsResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
@@ -96,7 +96,7 @@ func (mr *MockCityAQClientMockRecorder) GriddedEmissions(ctx, in interface{}, op
 }
 
 // EmissionsGridBounds mocks base method
-func (m *MockCityAQClient) EmissionsGridBounds(ctx context.Context, in *cityaqrpc.EmissionsGridBoundsRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.EmissionsGridBoundsResponse, error) {
+func (m *MockCityAQClient) EmissionsGridBounds(ctx context.Context, in *cityaqrpc.EmissionsGridBoundsRequest, opts ...grpc.CallOption) (*cityaqrpc.EmissionsGridBoundsResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
@@ -116,7 +116,7 @@ func (mr *MockCityAQClientMockRecorder) EmissionsGridBounds(ctx, in interface{},
 }
 
 // GriddedConcentrations mocks base method
-func (m *MockCityAQClient) GriddedConcentrations(ctx context.Context, in *cityaqrpc.GriddedConcentrationsRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.GriddedConcentrationsResponse, error) {
+func (m *MockCityAQClient) GriddedConcentrations(ctx context.Context, in *cityaqrpc.GriddedConcentrationsRequest, opts ...grpc.CallOption) (*cityaqrpc.GriddedConcentrationsResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
@@ -136,7 +136,7 @@ func (mr *MockCityAQClientMockRecorder) GriddedConcentrations(ctx, in interface{
 }
 
 // MapScale mocks base method
-func (m *MockCityAQClient) MapScale(ctx context.Context, in *cityaqrpc.MapScaleRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.MapScaleResponse, error) {
+func (m *MockCityAQClient) MapScale(ctx context.Context, in *cityaqrpc.MapScaleRequest, opts ...grpc.CallOption) (*cityaqrpc.MapScaleResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
@@ -156,7 +156,7 @@ func (mr *MockCityAQClientMockRecorder) MapScale(ctx, in interface{}, opts ...in
 }
 
 // GriddedPopulation mocks base method
-func (m *MockCityAQClient) GriddedPopulation(ctx context.Context, in *cityaqrpc.GriddedPopulationRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.GriddedPopulationResponse, error) {
+func (m *MockCityAQClient) GriddedPopulation(ctx context.Context, in *cityaqrpc.GriddedPopulationRequest, opts ...grpc.CallOption) (*cityaqrpc.GriddedPopulationResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
@@ -176,7 +176,7 @@ func (mr *MockCityAQClientMockRecorder) GriddedPopulation(ctx, in interface{}, o
 }
 
 // ImpactSummary mocks base method
-func (m *MockCityAQClient) ImpactSummary(ctx context.Context, in *cityaqrpc.ImpactSummaryRequest, opts ...grpc_wasm.CallOption) (*cityaqrpc.ImpactSummaryResponse, error) {
+func (m *MockCityAQClient) ImpactSummary(ctx context.Context, in *cityaqrpc.ImpactSummaryRequest, opts ...grpc.CallOption) (*cityaqrpc.ImpactSummaryResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {

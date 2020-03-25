@@ -13,8 +13,8 @@ require (
 	github.com/ctessum/unit v0.0.0-20160621200450-755774ac2fcb
 	github.com/elazarl/go-bindata-assetfs v1.0.0
 	github.com/golang/gddo v0.0.0-20190904175337-72a348e765d2 // indirect
-	github.com/golang/mock v1.3.1
-	github.com/golang/protobuf v1.3.2
+	github.com/golang/mock v1.4.3
+	github.com/golang/protobuf v1.3.5
 	github.com/gonum/floats v0.0.0-20181209220543-c233463c7e82
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/improbable-eng/grpc-web v0.11.0
@@ -30,7 +30,7 @@ require (
 	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect
 	gonum.org/v1/gonum v0.0.0-20191009222026-5d5638e6749a
 	gonum.org/v1/plot v0.0.0-20190615073203-9aa86143727f
-	google.golang.org/grpc v1.23.1
+	google.golang.org/grpc v1.28.0
 	k8s.io/client-go v10.0.0+incompatible
 )
 

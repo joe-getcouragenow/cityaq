@@ -57,7 +57,7 @@ func (x Emission) String() string {
 	return proto.EnumName(Emission_name, int32(x))
 }
 func (Emission) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{0}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{0}
 }
 
 type ImpactType int32
@@ -83,7 +83,7 @@ func (x ImpactType) String() string {
 	return proto.EnumName(ImpactType_name, int32(x))
 }
 func (ImpactType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{1}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{1}
 }
 
 type CitiesRequest struct {
@@ -96,7 +96,7 @@ func (m *CitiesRequest) Reset()         { *m = CitiesRequest{} }
 func (m *CitiesRequest) String() string { return proto.CompactTextString(m) }
 func (*CitiesRequest) ProtoMessage()    {}
 func (*CitiesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{0}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{0}
 }
 func (m *CitiesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CitiesRequest.Unmarshal(m, b)
@@ -128,7 +128,7 @@ func (m *CitiesResponse) Reset()         { *m = CitiesResponse{} }
 func (m *CitiesResponse) String() string { return proto.CompactTextString(m) }
 func (*CitiesResponse) ProtoMessage()    {}
 func (*CitiesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{1}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{1}
 }
 func (m *CitiesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CitiesResponse.Unmarshal(m, b)
@@ -166,7 +166,7 @@ func (m *CityGeometryRequest) Reset()         { *m = CityGeometryRequest{} }
 func (m *CityGeometryRequest) String() string { return proto.CompactTextString(m) }
 func (*CityGeometryRequest) ProtoMessage()    {}
 func (*CityGeometryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{2}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{2}
 }
 func (m *CityGeometryRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CityGeometryRequest.Unmarshal(m, b)
@@ -204,7 +204,7 @@ func (m *CityGeometryResponse) Reset()         { *m = CityGeometryResponse{} }
 func (m *CityGeometryResponse) String() string { return proto.CompactTextString(m) }
 func (*CityGeometryResponse) ProtoMessage()    {}
 func (*CityGeometryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{3}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{3}
 }
 func (m *CityGeometryResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CityGeometryResponse.Unmarshal(m, b)
@@ -242,7 +242,7 @@ func (m *Polygon) Reset()         { *m = Polygon{} }
 func (m *Polygon) String() string { return proto.CompactTextString(m) }
 func (*Polygon) ProtoMessage()    {}
 func (*Polygon) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{4}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{4}
 }
 func (m *Polygon) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Polygon.Unmarshal(m, b)
@@ -280,7 +280,7 @@ func (m *Path) Reset()         { *m = Path{} }
 func (m *Path) String() string { return proto.CompactTextString(m) }
 func (*Path) ProtoMessage()    {}
 func (*Path) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{5}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{5}
 }
 func (m *Path) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Path.Unmarshal(m, b)
@@ -319,7 +319,7 @@ func (m *Point) Reset()         { *m = Point{} }
 func (m *Point) String() string { return proto.CompactTextString(m) }
 func (*Point) ProtoMessage()    {}
 func (*Point) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{6}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{6}
 }
 func (m *Point) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Point.Unmarshal(m, b)
@@ -366,7 +366,7 @@ func (m *GriddedEmissionsRequest) Reset()         { *m = GriddedEmissionsRequest
 func (m *GriddedEmissionsRequest) String() string { return proto.CompactTextString(m) }
 func (*GriddedEmissionsRequest) ProtoMessage()    {}
 func (*GriddedEmissionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{7}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{7}
 }
 func (m *GriddedEmissionsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GriddedEmissionsRequest.Unmarshal(m, b)
@@ -419,7 +419,7 @@ func (m *GriddedEmissionsResponse) Reset()         { *m = GriddedEmissionsRespon
 func (m *GriddedEmissionsResponse) String() string { return proto.CompactTextString(m) }
 func (*GriddedEmissionsResponse) ProtoMessage()    {}
 func (*GriddedEmissionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{8}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{8}
 }
 func (m *GriddedEmissionsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GriddedEmissionsResponse.Unmarshal(m, b)
@@ -466,7 +466,7 @@ func (m *GriddedConcentrationsRequest) Reset()         { *m = GriddedConcentrati
 func (m *GriddedConcentrationsRequest) String() string { return proto.CompactTextString(m) }
 func (*GriddedConcentrationsRequest) ProtoMessage()    {}
 func (*GriddedConcentrationsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{9}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{9}
 }
 func (m *GriddedConcentrationsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GriddedConcentrationsRequest.Unmarshal(m, b)
@@ -519,7 +519,7 @@ func (m *GriddedConcentrationsResponse) Reset()         { *m = GriddedConcentrat
 func (m *GriddedConcentrationsResponse) String() string { return proto.CompactTextString(m) }
 func (*GriddedConcentrationsResponse) ProtoMessage()    {}
 func (*GriddedConcentrationsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{10}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{10}
 }
 func (m *GriddedConcentrationsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GriddedConcentrationsResponse.Unmarshal(m, b)
@@ -566,7 +566,7 @@ func (m *GriddedPopulationRequest) Reset()         { *m = GriddedPopulationReque
 func (m *GriddedPopulationRequest) String() string { return proto.CompactTextString(m) }
 func (*GriddedPopulationRequest) ProtoMessage()    {}
 func (*GriddedPopulationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{11}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{11}
 }
 func (m *GriddedPopulationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GriddedPopulationRequest.Unmarshal(m, b)
@@ -619,7 +619,7 @@ func (m *GriddedPopulationResponse) Reset()         { *m = GriddedPopulationResp
 func (m *GriddedPopulationResponse) String() string { return proto.CompactTextString(m) }
 func (*GriddedPopulationResponse) ProtoMessage()    {}
 func (*GriddedPopulationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{12}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{12}
 }
 func (m *GriddedPopulationResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GriddedPopulationResponse.Unmarshal(m, b)
@@ -666,7 +666,7 @@ func (m *ImpactSummaryRequest) Reset()         { *m = ImpactSummaryRequest{} }
 func (m *ImpactSummaryRequest) String() string { return proto.CompactTextString(m) }
 func (*ImpactSummaryRequest) ProtoMessage()    {}
 func (*ImpactSummaryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{13}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{13}
 }
 func (m *ImpactSummaryRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImpactSummaryRequest.Unmarshal(m, b)
@@ -731,7 +731,7 @@ func (m *ImpactSummaryResponse) Reset()         { *m = ImpactSummaryResponse{} }
 func (m *ImpactSummaryResponse) String() string { return proto.CompactTextString(m) }
 func (*ImpactSummaryResponse) ProtoMessage()    {}
 func (*ImpactSummaryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{14}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{14}
 }
 func (m *ImpactSummaryResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImpactSummaryResponse.Unmarshal(m, b)
@@ -805,7 +805,7 @@ func (m *EmissionsGridBoundsRequest) Reset()         { *m = EmissionsGridBoundsR
 func (m *EmissionsGridBoundsRequest) String() string { return proto.CompactTextString(m) }
 func (*EmissionsGridBoundsRequest) ProtoMessage()    {}
 func (*EmissionsGridBoundsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{15}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{15}
 }
 func (m *EmissionsGridBoundsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EmissionsGridBoundsRequest.Unmarshal(m, b)
@@ -851,7 +851,7 @@ func (m *EmissionsGridBoundsResponse) Reset()         { *m = EmissionsGridBounds
 func (m *EmissionsGridBoundsResponse) String() string { return proto.CompactTextString(m) }
 func (*EmissionsGridBoundsResponse) ProtoMessage()    {}
 func (*EmissionsGridBoundsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{16}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{16}
 }
 func (m *EmissionsGridBoundsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EmissionsGridBoundsResponse.Unmarshal(m, b)
@@ -899,7 +899,7 @@ func (m *MapScaleRequest) Reset()         { *m = MapScaleRequest{} }
 func (m *MapScaleRequest) String() string { return proto.CompactTextString(m) }
 func (*MapScaleRequest) ProtoMessage()    {}
 func (*MapScaleRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{17}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{17}
 }
 func (m *MapScaleRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MapScaleRequest.Unmarshal(m, b)
@@ -960,7 +960,7 @@ func (m *MapScaleResponse) Reset()         { *m = MapScaleResponse{} }
 func (m *MapScaleResponse) String() string { return proto.CompactTextString(m) }
 func (*MapScaleResponse) ProtoMessage()    {}
 func (*MapScaleResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cityaq_8d6fa9bdebd01b8d, []int{18}
+	return fileDescriptor_cityaq_144897246ce0569d, []int{18}
 }
 func (m *MapScaleResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MapScaleResponse.Unmarshal(m, b)
@@ -1352,9 +1352,9 @@ var _CityAQ_serviceDesc = grpc.ServiceDesc{
 	Metadata: "cityaq.proto",
 }
 
-func init() { proto.RegisterFile("cityaq.proto", fileDescriptor_cityaq_8d6fa9bdebd01b8d) }
+func init() { proto.RegisterFile("cityaq.proto", fileDescriptor_cityaq_144897246ce0569d) }
 
-var fileDescriptor_cityaq_8d6fa9bdebd01b8d = []byte{
+var fileDescriptor_cityaq_144897246ce0569d = []byte{
 	// 837 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0x5b, 0x4f, 0xe3, 0x56,
 	0x10, 0xe6, 0xe4, 0x46, 0x32, 0x25, 0xe0, 0x0e, 0x81, 0x1a, 0x43, 0x21, 0x3a, 0x5c, 0x1a, 0xf1,

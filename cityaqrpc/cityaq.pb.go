@@ -1049,7 +1049,9 @@ func init() {
 	proto.RegisterType((*MapScaleResponse)(nil), "cityaqrpc.MapScaleResponse")
 }
 
-func init() { proto.RegisterFile("cityaq.proto", fileDescriptor_7cccf5bb3409f35d) }
+func init() {
+	proto.RegisterFile("cityaq.proto", fileDescriptor_7cccf5bb3409f35d)
+}
 
 var fileDescriptor_7cccf5bb3409f35d = []byte{
 	// 837 bytes of a gzipped FileDescriptorProto
@@ -1110,11 +1112,11 @@ var fileDescriptor_7cccf5bb3409f35d = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // CityAQClient is the client API for CityAQ service.
 //
@@ -1143,10 +1145,10 @@ type CityAQClient interface {
 }
 
 type cityAQClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewCityAQClient(cc *grpc.ClientConn) CityAQClient {
+func NewCityAQClient(cc grpc.ClientConnInterface) CityAQClient {
 	return &cityAQClient{cc}
 }
 

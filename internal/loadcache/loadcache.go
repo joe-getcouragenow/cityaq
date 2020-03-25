@@ -17,10 +17,10 @@ import (
 
 func main() {
 	// Set up a client to connect to https://inmap.run.
-	/*ctx := context.Background()
+	ctx := context.Background()
 	conn, err := grpc.Dial("inmap.run:443", grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
 	check(err)
-	client := rpc.NewCityAQClient(conn)*/
+	client := rpc.NewCityAQClient(conn)
 
 	sourceTypes := []string{
 		"railways", "electric_gen_egugrid", "population", "residential",
@@ -31,7 +31,7 @@ func main() {
 		"bus_routes", "airports", "agricultural",
 	}
 
-	cities := []string{
+	/*	cities := []string{
 		/*"Guadalajara",
 		"Autonomous City of Buenos Aires",
 		"City of Johannesburg Metropolitan Municipality",
@@ -41,7 +41,7 @@ func main() {
 		"Seattle",
 		"New York",
 		"Bengaluru",
-		"Washington",*/
+		"Washington",
 		//"Fuzhou City",
 		"Kolkata",
 		"Qingdao City",
@@ -51,14 +51,15 @@ func main() {
 		"Lagos",
 		"Ho Chi Minh City",
 		"Quezon City",
-	}
+	}*/
 	// Missing: "Durban "
 
-	/*allCities, err := client.Cities(ctx, &rpc.CitiesRequest{})
+	allCities, err := client.Cities(ctx, &rpc.CitiesRequest{})
 	check(err)
+	var cities []string
 	for _, n := range allCities.Names {
 		cities = append(cities, n)
-	}*/
+	}
 
 	c := make(chan query)
 	var wg sync.WaitGroup
@@ -103,8 +104,8 @@ func runQuery(c chan query, wg *sync.WaitGroup) {
 		bkf := backoff.NewConstantBackOff(30 * time.Second)
 		check(backoff.RetryNotify(
 			func() error {
-				_, err := client.ImpactSummary(ctx, &rpc.ImpactSummaryRequest{
-					//_, err := client.GriddedEmissions(ctx, &rpc.GriddedEmissionsRequest{
+				//_, err := client.ImpactSummary(ctx, &rpc.ImpactSummaryRequest{
+				_, err := client.GriddedEmissions(ctx, &rpc.GriddedEmissionsRequest{
 					CityName:   q.name,
 					SourceType: q.sourceType,
 					Emission:   rpc.Emission_PM2_5,

@@ -1,5 +1,11 @@
 package cityaq
 
+// Manually download executables:
+// go get github.com/golang/mock/mockgen@latest
+// go get -u github.com/go-bindata/go-bindata/...
+// Download protoc from: https://github.com/protocolbuffers/protobuf/releases/tag/v3.11.4
+//    and put in $PATH
+
 // Install the code generation dependencies.
 //go:generate bash -c "rm ~/go/bin/protoc-gen-go"
 //go:generate go get -u github.com/golang/protobuf/protoc-gen-go
