@@ -201,8 +201,8 @@ func (c *CityAQ) geojsonGeometry(cityName string) (geom.Polygon, error) {
 }
 
 // geojsonName returns a city name (in the requested language)
-// from a GeoJSON file.
-func (c *CityAQ) geojsonName(path, language string) (string, error) {
+// from a GeoJSON file. (Language doesn't currently do anything)
+func (c *CityAQ) geojsonName(path, _ string) (string, error) {
 	type gj interface{}
 
 	f, err := os.Open(path)
@@ -228,11 +228,11 @@ func (c *CityAQ) geojsonName(path, language string) (string, error) {
 		if !ok {
 			continue
 		}
-		name, ok := propmap["name:"+language]
+		name, ok := propmap["c40_city_name"]
 		if !ok {
 			name, ok = propmap["name"]
 			if !ok {
-				return "", fmt.Errorf("file %s, missing name in language `%s`", path, language)
+				return "", fmt.Errorf("file %s, missing name", path)
 			}
 		}
 		return name.(string), nil

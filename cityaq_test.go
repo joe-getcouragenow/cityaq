@@ -32,7 +32,7 @@ func TestCityAQ_Cities(t *testing.T) {
 	want := &rpc.CitiesResponse{
 		Names: []string{
 			"Accra Metropolitan",
-			"Karachi",
+			"ڪراچي Karachi",
 		},
 	}
 	if !reflect.DeepEqual(want, cities) {
