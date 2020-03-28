@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 
@@ -89,7 +88,7 @@ func (c *CityAQ) loadCityPaths() {
 
 func (c *CityAQ) setupCache() {
 	c.cacheSetupOnce.Do(func() {
-		workers := runtime.GOMAXPROCS(-1)
+		workers := 1250 // runtime.GOMAXPROCS(-1)
 		d := requestcache.Deduplicate()
 		m := requestcache.Memory(20)
 		if c.CacheLoc == "" {
