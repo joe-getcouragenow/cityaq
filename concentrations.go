@@ -89,6 +89,7 @@ func (c *CityAQ) GriddedPopulation(ctx context.Context, req *rpc.GriddedPopulati
 		SourceType: req.SourceType,
 	}
 
+fmt.Println("1", job.Key() )
 	inmapReq := c.cache.NewRequest(ctx, job)
 	var result inmapResult
 	if err := inmapReq.Result(&result); err != nil {
@@ -162,6 +163,7 @@ func (j *concentrationJob) Key() string {
 }
 
 func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) error {
+fmt.Println("a", j.Key())
 	shpFile, err := j.emisToShp(ctx)
 	if err != nil {
 		return err
