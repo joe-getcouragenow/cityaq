@@ -208,8 +208,8 @@ func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) 
 	yo = math.Max(yo, roundUnit(center.Y-float64(ny)*dy/2, dy))
 	cfg.Set("VarGrid.VariableGridXo", xo)
 	cfg.Set("VarGrid.VariableGridYo", yo)
-	if xo+dx*float64(nx) > 180 {
-		nx = int((180 - xo) / dx)
+	if xo+dx*float64(nx) > 178 {
+		nx = int((178 - xo) / dx)
 	}
 	if yo+dy*float64(ny) > 89.5 {
 		ny = int((89.5 - yo) / dy)
