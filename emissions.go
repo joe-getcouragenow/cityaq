@@ -120,6 +120,7 @@ func (c *CityAQ) GriddedEmissions(ctx context.Context, req *rpc.GriddedEmissions
 	if err != nil {
 		return nil, err
 	}
+	sp.SrgCellRatio = 10
 
 	if err := c.loadSMOKESrgSpecs(sp); err != nil {
 		return nil, err
