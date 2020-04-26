@@ -153,7 +153,7 @@ func mapResolution(sourceType string) float64 {
 	if egugridEmissions(sourceType) {
 		return 0.1
 	}
-	return 0.002
+	return 0.005
 }
 
 func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{}, error) {

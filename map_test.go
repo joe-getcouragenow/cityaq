@@ -104,7 +104,7 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 		for _, f := range layers[0].Features {
 			vSum += f.Properties["v"].(float64)
 		}
-		wantVSum := 431193.57947392954
+		wantVSum := 453437.49810108123
 		if !similar(vSum, wantVSum, 1.0e-8) {
 			t.Errorf("value sum %g != %g", vSum, wantVSum)
 		}
@@ -154,7 +154,7 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 		for _, f := range layers[0].Features {
 			vSum += f.Properties["v"].(float64)
 		}
-		wantVSum := 431193.57947392954
+		wantVSum := 453437.49810108123
 		if !similar(vSum, wantVSum, 1.0e-8) {
 			t.Errorf("value sum %g != %g", vSum, wantVSum)
 		}

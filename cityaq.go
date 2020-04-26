@@ -267,6 +267,10 @@ func (c *CityAQ) emissionsGrid(cityName, sourceType string, dx float64) ([]geom.
 	b.Min.Y -= buffer
 	b.Max.X += buffer
 	b.Max.Y += buffer
+	b.Min.X = roundUnit(b.Min.X, dx)
+	b.Min.Y = roundUnit(b.Min.Y, dx)
+	b.Max.X = roundUnit(b.Max.X+dx/2, dx) // Round the max values up.
+	b.Max.Y = roundUnit(b.Max.Y+dx/2, dx) // Round the max values up.
 	for y := b.Min.Y; y < b.Max.Y+dx; y += dx {
 		for x := b.Min.X; x < b.Max.X+dx; x += dx {
 			o = append(o, geom.Polygon{

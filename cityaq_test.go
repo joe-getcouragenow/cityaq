@@ -99,8 +99,8 @@ func TestCityAQ_EmissionsGrid(t *testing.T) {
 	}
 	b := polygonBounds(emissions.Polygons)
 	want := &geom.Bounds{
-		Min: geom.Point{X: -0.29919640615328513, Y: 5.500213593846715},
-		Max: geom.Point{X: -0.10719640615328496, Y: 5.672213593846696},
+		Min: geom.Point{X: -0.3, Y: 5.5},
+		Max: geom.Point{X: -0.09999999999999981, Y: 5.679999999999996},
 	}
 	if !reflect.DeepEqual(want, b) {
 		t.Errorf("%v != %v", b, want)
@@ -119,8 +119,8 @@ func TestCityAQ_EmissionsGridBounds(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := &rpc.EmissionsGridBoundsResponse{
-		Min: &rpc.Point{X: -0.29919640615328513, Y: 5.500213593846715},
-		Max: &rpc.Point{X: -0.10719640615328496, Y: 5.672213593846696},
+		Min: &rpc.Point{X: -0.3, Y: 5.5},
+		Max: &rpc.Point{X: -0.09999999999999981, Y: 5.679999999999996},
 	}
 	if !reflect.DeepEqual(want, bounds) {
 		t.Errorf("%v != %v", bounds, want)
@@ -309,7 +309,7 @@ func TestCityAQ_MapScale(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantScale := &cityaqrpc.MapScaleResponse{Min: 0, Max: 1533.3514694859794}
+	wantScale := &cityaqrpc.MapScaleResponse{Min: 0, Max: 4594.353937014378}
 	if !similar(scale.Min, wantScale.Min, 1.0e-10) {
 		t.Errorf("scale min %+v != %+v", scale.Min, wantScale.Min)
 	}
