@@ -308,6 +308,7 @@ func (j *concentrationJob) emisToShp(ctx context.Context) (string, error) {
 	type emisRecord struct {
 		geom.Polygon
 		PM2_5, VOC, NH3, NOx, SOx float64
+		Height, Diam, Temp,Velocity float64
 	}
 	e, err := shp.NewEncoder(file, emisRecord{})
 	if err != nil {
@@ -315,14 +316,23 @@ func (j *concentrationJob) emisToShp(ctx context.Context) (string, error) {
 	}
 	for i, p := range emis.Polygons {
 		v := emis.Emissions[i]
-		err := e.Encode(&emisRecord{
+		er := &emisRecord{
 			Polygon: rpcToGeom(p),
 			PM2_5:   v,
 			VOC:     v,
 			NH3:     v,
 			NOx:     v,
 			SOx:     v,
-		})
+		}
+		if egugridEmissions(j.SourceType) {
+			// Average EGU stack parameters from 2014 NEI
+			// as processed by Tessum et al 2019 PNAS.
+			er.Height = 63.5
+			er.Diam = 4.1
+			er.Temp = 519.2
+			er.Velocity = 24.7
+		}
+		err := e.Encode(er)
 		if err != nil {
 			return "", err
 		}
