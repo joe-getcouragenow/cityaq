@@ -25,32 +25,17 @@ func main() {
 		"bus_routes", "airports", "agricultural",
 	}
 
-	cities := []string{
-		"Guadalajara",
-		"Autonomous City of Buenos Aires",
-		"City of Johannesburg Metropolitan Municipality",
-		//"Accra Metropolitan",
-		"Chennai",
-		"Addis Ababa",
-		"Seattle",
-		"New York",
-		"Bengaluru",
-		"Washington",
-		"Fuzhou City",
-		"Kolkata",
-		"Qingdao City",
-		"Medellín",
-		"Quito",
-		"Lima",
-		"Lagos",
-		"Ho Chi Minh City",
-		"Quezon City",
-	}
-
 	ctx := context.Background()
 	conn, err := grpc.Dial("inmap.run:443", grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
 	check(err)
 	client := rpc.NewCityAQClient(conn)
+
+	allCities, err := client.Cities(ctx, &rpc.CitiesRequest{})
+	check(err)
+	var cities []string
+	for _, n := range allCities.Names {
+		cities = append(cities, n)
+	}
 
 	o, err := os.Create("cityaq_stats.csv")
 	check(err)

@@ -63,7 +63,7 @@ func main() {
 
 	c := make(chan query)
 	var wg sync.WaitGroup
-	const nprocs = 4
+	const nprocs = 5
 	wg.Add(nprocs)
 	for i := 0; i < nprocs; i++ {
 		go func() {
@@ -104,8 +104,8 @@ func runQuery(c chan query, wg *sync.WaitGroup) {
 		bkf := backoff.NewConstantBackOff(30 * time.Second)
 		check(backoff.RetryNotify(
 			func() error {
-				//_, err := client.ImpactSummary(ctx, &rpc.ImpactSummaryRequest{
-				_, err := client.GriddedEmissions(ctx, &rpc.GriddedEmissionsRequest{
+				_, err := client.ImpactSummary(ctx, &rpc.ImpactSummaryRequest{
+					//_, err := client.GriddedEmissions(ctx, &rpc.GriddedEmissionsRequest{
 					CityName:   q.name,
 					SourceType: q.sourceType,
 					Emission:   rpc.Emission_PM2_5,
