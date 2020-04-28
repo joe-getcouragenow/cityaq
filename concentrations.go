@@ -179,17 +179,11 @@ func (j *concentrationJob) Run(ctx context.Context, result requestcache.Result) 
 	cfg.Set("job_name", j.Key())
 	cfg.Set("cmds", []string{"run", "steady"})
 
-	bnds, err := j.c.EmissionsGridBounds(ctx, &rpc.EmissionsGridBoundsRequest{
-		CityName:   j.CityName,
-		SourceType: j.SourceType,
-	})
+  cityGeom, err := j.c.CityGeometry(ctx, &rpc.CityGeometryRequest{CityName:j.CityName})
 	if err != nil {
 		return err
 	}
-	center := geom.Point{
-		X: (bnds.Max.X + bnds.Min.X) / 2,
-		Y: (bnds.Max.Y + bnds.Min.Y) / 2,
-	}
+	center := rpcToGeom(cityGeom.Polygons[0]).Centroid()
 
 	// Set lower-left corner of grid so that the
 	// city is in its center, while still overlapping

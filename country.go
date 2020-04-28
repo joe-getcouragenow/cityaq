@@ -82,6 +82,11 @@ func (c *CityAQ) countryOrGridBuffer(cityName string) (*country, error) {
 		radius    = 5.40196918017 // sqrt(area/pi) [degrees]
 		nSegments = 20            // Number of segments for the buffer.
 	)
+	// Make sure we don't go outside of the InMAP grid boundary.
+	gridBounds := &geom.Bounds{
+		Min: geom.Point{X: -178, Y: -88},
+		Max: geom.Point{X: 178, Y: 88},
+	}
 	ctry, err := c.country(cityName)
 	if err != nil {
 		return nil, err
@@ -95,7 +100,7 @@ func (c *CityAQ) countryOrGridBuffer(cityName string) (*country, error) {
 		return nil, err
 	}
 	return &country{
-		Polygon: cityGeom.Centroid().Buffer(radius, nSegments).Intersection(ctry).(geom.Polygon),
+		Polygon: cityGeom.Centroid().Buffer(radius, nSegments).Intersection(ctry).Intersection(gridBounds).(geom.Polygon),
 		Name:    "buffer",
 	}, nil
 }
