@@ -149,11 +149,15 @@ func (s *MapTileServer) Layers(ctx context.Context, ms *MapSpecification) (mvt.L
 	return cloneLayers(layers), nil
 }
 
-func mapResolution(sourceType string) float64 {
+func mapResolution(sourceType, cityName string) float64 {
 	if egugridEmissions(sourceType) {
 		return 0.1
 	}
-	return 0.005
+	// TODO: Revert so that all cities have the same resolution.
+	if cityName == "Guadalajara" || cityName == "Tokyo" {
+		return 0.005
+	}
+	return 0.002
 }
 
 func (s *MapTileServer) layers(ctx context.Context, r interface{}) (interface{}, error) {

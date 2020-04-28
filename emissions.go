@@ -94,7 +94,7 @@ func (c *CityAQ) GriddedEmissions(ctx context.Context, req *rpc.GriddedEmissions
 		return nil, err
 	}
 
-	grid, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType))
+	grid, err := c.emissionsGrid(req.CityName, req.SourceType, mapResolution(req.SourceType, req.CityName))
 	if err != nil {
 		return nil, err
 	}
