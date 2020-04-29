@@ -154,7 +154,7 @@ func mapResolution(sourceType, cityName string) float64 {
 		return 0.1
 	}
 	// TODO: Revert so that all cities have the same resolution.
-	if cityName == "Guadalajara" || cityName == "Tokyo" {
+	if cityName == "Guadalajara" || cityName == "Tokyo" || cityName == "Melbourne" {
 		return 0.005
 	}
 	return 0.002

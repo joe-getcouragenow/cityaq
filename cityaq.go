@@ -268,7 +268,7 @@ func (c *CityAQ) emissionsGrid(cityName, sourceType string, dx float64) ([]geom.
 	b.Max.X += buffer
 	b.Max.Y += buffer
 	// TODO: Revert so that all cities have the same resolution.
-	if cityName == "Tokyo" || cityName == "Guadalajara" {
+	if cityName == "Tokyo" || cityName == "Guadalajara" || cityName == "Melbourne" {
 		b.Min.X = roundUnit(b.Min.X, dx)
 		b.Min.Y = roundUnit(b.Min.Y, dx)
 		b.Max.X = roundUnit(b.Max.X+dx/2, dx) // Round the max values up.
