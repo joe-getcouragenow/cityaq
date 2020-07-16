@@ -16,15 +16,14 @@ func TestCityAQ_egugrid(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:               "testdata/srgspec_osm.json",
+			SrgSpecOSM:            "testdata/srgspec_osm.json",
+			SrgSpecSMOKE:          "testdata/srgspec_smoke.csv",
 			SrgShapefileDirectory: "testdata",
-			SrgSpecType:           "OSM",
 			SCCExactMatch:         true,
 			GridRef:               []string{"testdata/gridref.txt"},
 			OutputSR:              "+proj=longlat",
 			InputSR:               "+proj=longlat",
 		},
-		SMOKESrgSpecs: "testdata/srgspec_smoke.csv",
 	}
 	t.Run("cityCountry", func(t *testing.T) {
 		country, err := c.countryOrGridBuffer("Accra Metropolitan")

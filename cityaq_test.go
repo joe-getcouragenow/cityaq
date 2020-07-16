@@ -78,8 +78,7 @@ func TestCityAQ_EmissionsGrid(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:       "testdata/srgspec_osm.json",
-			SrgSpecType:   "OSM",
+			SrgSpecOSM:    "testdata/srgspec_osm.json",
 			SCCExactMatch: true,
 			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",
@@ -131,8 +130,7 @@ func TestCityAQ_griddedEmissions(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:       "testdata/srgspec_osm.json",
-			SrgSpecType:   "OSM",
+			SrgSpecOSM:    "testdata/srgspec_osm.json",
 			SCCExactMatch: true,
 			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",
@@ -175,8 +173,7 @@ func TestCityAQ_EmissionsMap(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:       "testdata/srgspec_osm.json",
-			SrgSpecType:   "OSM",
+			SrgSpecOSM:    "testdata/srgspec_osm.json",
 			SCCExactMatch: true,
 			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",
@@ -291,8 +288,7 @@ func TestCityAQ_MapScale(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:       "testdata/srgspec_osm.json",
-			SrgSpecType:   "OSM",
+			SrgSpecOSM:    "testdata/srgspec_osm.json",
 			SCCExactMatch: true,
 			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",

@@ -3,7 +3,6 @@ package cityaq
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
@@ -102,8 +101,8 @@ func (c *CityAQ) GriddedEmissions(ctx context.Context, req *rpc.GriddedEmissions
 	// Make a copy of the spatial configuration to allow the
 	// use of multiple grids.
 	spatialConfig := aeputil.SpatialConfig{
-		SrgSpec:               c.SpatialConfig.SrgSpec,
-		SrgSpecType:           c.SpatialConfig.SrgSpecType,
+		SrgSpecSMOKE:          c.SpatialConfig.SrgSpecSMOKE,
+		SrgSpecOSM:            c.SpatialConfig.SrgSpecOSM,
 		SrgShapefileDirectory: c.SpatialConfig.SrgShapefileDirectory,
 		SCCExactMatch:         c.SpatialConfig.SCCExactMatch,
 		GridRef:               c.SpatialConfig.GridRef,
@@ -121,10 +120,6 @@ func (c *CityAQ) GriddedEmissions(ctx context.Context, req *rpc.GriddedEmissions
 		return nil, err
 	}
 	sp.SrgCellRatio = 10
-
-	if err := c.loadSMOKESrgSpecs(sp); err != nil {
-		return nil, err
-	}
 
 	rSrg := sp.AddSurrogate(e)
 	r := sp.GridRecord(rSrg)
@@ -149,26 +144,6 @@ func (c *CityAQ) GriddedEmissions(ctx context.Context, req *rpc.GriddedEmissions
 	}
 
 	return o, nil
-}
-
-// loadSMOKESrgSpecs adds supplemental SMOKE-formatted surrogate
-// specifications to the given SpatialProcessor.
-func (c *CityAQ) loadSMOKESrgSpecs(sp *aep.SpatialProcessor) error {
-	if c.SMOKESrgSpecs == "" {
-		return nil
-	}
-	f, err := os.Open(c.SMOKESrgSpecs)
-	if err != nil {
-		return fmt.Errorf("cityaq: opening SMOKESrgSpecs: %w", err)
-	}
-	srgSpecs, err := aep.ReadSrgSpecSMOKE(f, c.SpatialConfig.SrgShapefileDirectory,
-		true, c.SpatialConfig.SpatialCache, c.SpatialConfig.MaxCacheEntries)
-	if err != nil {
-		return fmt.Errorf("cityaq: reading SMOKESrgSpecs: %w", err)
-	}
-	f.Close()
-	sp.SrgSpecs.AddAll(srgSpecs)
-	return nil
 }
 
 func (c *CityAQ) emissionsMapData(ctx context.Context, req *rpc.GriddedEmissionsRequest) (*mvt.Layer, error) {

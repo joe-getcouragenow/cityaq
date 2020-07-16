@@ -29,10 +29,6 @@ type CityAQ struct {
 
 	aeputil.SpatialConfig
 
-	// SMOKESrgSpecs specifies the location of a file with additional
-	// SMOKE-formatted surrogate specifications.
-	SMOKESrgSpecs string
-
 	// Location where temporary results should be stored.
 	CacheLoc    string
 	inmapClient *cloud.Client

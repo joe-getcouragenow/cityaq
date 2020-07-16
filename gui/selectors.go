@@ -29,7 +29,7 @@ func updateSelector(doc, selector js.Value, values []interface{}, text []string)
 
 // updateCitySelector updates the options of cities.
 func (c *CityAQ) updateCitySelector(ctx context.Context) {
-	if c.citySelector == js.Undefined() {
+	if c.citySelector.IsUndefined() {
 		c.citySelector = c.doc.Call("getElementById", "citySelector")
 	}
 	cities, err := c.Cities(ctx, &rpc.CitiesRequest{})
@@ -46,7 +46,7 @@ func (c *CityAQ) updateCitySelector(ctx context.Context) {
 
 // updateImpactTypeSelector updates the options of impacts.
 func (c *CityAQ) updateImpactTypeSelector() {
-	if c.impactTypeSelector == js.Undefined() {
+	if c.impactTypeSelector.IsUndefined() {
 		c.impactTypeSelector = c.doc.Call("getElementById", "impactTypeSelector")
 	}
 	updateSelector(c.doc, c.impactTypeSelector, []interface{}{1, 2}, []string{"Emissions", "Concentrations"})
@@ -54,7 +54,7 @@ func (c *CityAQ) updateImpactTypeSelector() {
 
 // updateEmissionSelector updates the options of emissions available.
 func (c *CityAQ) updateEmissionSelector() {
-	if c.emissionSelector == js.Undefined() {
+	if c.emissionSelector.IsUndefined() {
 		c.emissionSelector = c.doc.Call("getElementById", "emissionSelector")
 	}
 	values := make([]interface{}, len(rpc.Emission_value)-1)
@@ -69,7 +69,7 @@ func (c *CityAQ) updateEmissionSelector() {
 
 // updateSourceTypeSelector updates the options of source types available.
 func (c *CityAQ) updateSourceTypeSelector() {
-	if c.sourceTypeSelector == js.Undefined() {
+	if c.sourceTypeSelector.IsUndefined() {
 		c.sourceTypeSelector = c.doc.Call("getElementById", "sourceTypeSelector")
 	}
 	updateSelector(c.doc, c.sourceTypeSelector,

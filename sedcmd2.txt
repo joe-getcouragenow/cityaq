@@ -1,1 +1,1 @@
-s/package cityaqrpc/\/\/+build \js\n\npackage cityaqrpc/g
+s|package cityaqrpc|//+build \js\n\npackage cityaqrpc|

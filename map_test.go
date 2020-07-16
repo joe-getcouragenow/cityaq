@@ -48,8 +48,7 @@ func TestMapTileServer_ServeHTTP(t *testing.T) {
 	c := &CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:       "testdata/srgspec_osm.json",
-			SrgSpecType:   "OSM",
+			SrgSpecOSM:    "testdata/srgspec_osm.json",
 			SCCExactMatch: true,
 			GridRef:       []string{"testdata/gridref.txt"},
 			OutputSR:      "+proj=longlat",

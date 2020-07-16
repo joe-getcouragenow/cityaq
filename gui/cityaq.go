@@ -9,7 +9,6 @@ import (
 	"syscall/js"
 
 	rpc "github.com/ctessum/cityaq/cityaqrpc"
-	"github.com/ctessum/go-leaflet/plugin/glify"
 	grpcwasm "github.com/johanbrandhorst/grpc-wasm"
 )
 
@@ -26,7 +25,6 @@ type CityAQ struct {
 	mapboxMap            js.Value
 	cityLayer, dataLayer js.Value
 	egugridLayer         js.Value
-	mapColors            *glify.Shapes
 	grid                 struct {
 		geometry js.Value
 		gridCity string

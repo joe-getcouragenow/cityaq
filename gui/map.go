@@ -27,7 +27,7 @@ import (
 var mapboxgl js.Value
 
 func (c *CityAQ) loadMap() {
-	if c.mapDiv == js.Undefined() {
+	if c.mapDiv.IsUndefined() {
 		c.mapDiv = c.doc.Call("getElementById", "mapDiv")
 		c.mapDiv.Get("style").Set("background-color", "black")
 	}
@@ -88,17 +88,17 @@ func (c *CityAQ) setMapHeight() {
 func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 	c.startLoading()
 
-	if c.legendDiv != js.Undefined() {
+	if c.legendDiv.IsUndefined() {
 		c.legendDiv.Set("innerHTML", "")
 	}
-	if c.summaryDiv != js.Undefined() {
+	if c.summaryDiv.IsUndefined() {
 		c.summaryDiv.Set("innerHTML", "")
 	}
 	go func() {
 		c.summary(sel) // Update summary statistics.
 	}()
 
-	if c.dataLayer != js.Undefined() {
+	if c.dataLayer.IsUndefined() {
 		c.mapboxMap.Call("removeLayer", "data")
 		c.mapboxMap.Call("removeLayer", "city")
 		c.mapboxMap.Call("removeSource", "data")
@@ -106,7 +106,7 @@ func (c *CityAQ) updateMap(ctx context.Context, sel *selections) {
 		c.dataLayer = js.Undefined()
 		c.cityLayer = js.Undefined()
 	}
-	if c.egugridLayer != js.Undefined() {
+	if c.egugridLayer.IsUndefined() {
 		c.mapboxMap.Call("removeLayer", "egugrid")
 		c.mapboxMap.Call("removeSource", "egugrid")
 		c.egugridLayer = js.Undefined()
@@ -259,7 +259,7 @@ func (c *CityAQ) setMapLegend(cm palette.ColorMap, it rpc.ImpactType) {
 	}
 	legendStr := base64.StdEncoding.EncodeToString(b.Bytes())
 
-	if c.legendDiv == js.Undefined() {
+	if c.legendDiv.IsUndefined() {
 		c.legendDiv = c.doc.Call("getElementById", "legendDiv")
 	}
 	var title string
@@ -328,7 +328,7 @@ func (c *CityAQ) summary(sel *selections) error {
 	if sel.impactType != rpc.ImpactType_Concentrations {
 		return nil
 	}
-	if c.summaryDiv == js.Undefined() {
+	if c.summaryDiv.IsUndefined() {
 		c.summaryDiv = c.doc.Call("getElementById", "summaryDiv")
 	}
 	impacts, err := c.ImpactSummary(context.TODO(), &rpc.ImpactSummaryRequest{

@@ -8,13 +8,13 @@ package cityaq
 
 // Install the code generation dependencies.
 //go:generate bash -c "rm ~/go/bin/protoc-gen-go"
-//go:generate go get -u github.com/golang/protobuf/protoc-gen-go
+//go:generate go get -u github.com/golang/protobuf/protoc-gen-go@v1.4.2
 
 // Generate the gRPC client/server code. (Information at https://grpc.io/docs/quickstart/go.html)
 //go:generate protoc cityaq.proto --go_out=plugins=grpc:cityaqrpc
 //go:generate sed -i -f sedcmd1.txt cityaqrpc/cityaq.pb.go
 
-//go:generate go get -u github.com/johanbrandhorst/grpc-wasm/protoc-gen-wasm
+//go:generate go get -u github.com/johanbrandhorst/grpc-wasm/protoc-gen-wasm@v0.0.0-20180613181153-d79a93c3901e
 //go:generate bash -c "mv ~/go/bin/protoc-gen-wasm ~/go/bin/protoc-gen-go"
 
 // Generate the gRPC WASM client/server code. (Information at https://grpc.io/docs/quickstart/go.html)
