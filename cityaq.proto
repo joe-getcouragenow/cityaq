@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/ctessum/cityaq/cityaqrpc";
+option go_package = "cityaqrpc";
 
 package cityaqrpc;
 

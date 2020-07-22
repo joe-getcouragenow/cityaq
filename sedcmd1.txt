@@ -1,1 +1,0 @@
-s|package cityaqrpc|//+build \!js\n\npackage cityaqrpc|

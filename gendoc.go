@@ -12,14 +12,16 @@ package cityaq
 
 // Generate the gRPC client/server code. (Information at https://grpc.io/docs/quickstart/go.html)
 //go:generate protoc cityaq.proto --go_out=plugins=grpc:cityaqrpc
-//go:generate sed -i -f sedcmd1.txt cityaqrpc/cityaq.pb.go
+//go:generate go build ./internal/addtags
+//go:generate ./addtags -file=cityaqrpc/cityaq.pb.go -tags=!js
 
 //go:generate go get -u github.com/johanbrandhorst/grpc-wasm/protoc-gen-wasm@v0.0.0-20180613181153-d79a93c3901e
 //go:generate bash -c "mv ~/go/bin/protoc-gen-wasm ~/go/bin/protoc-gen-go"
 
 // Generate the gRPC WASM client/server code. (Information at https://grpc.io/docs/quickstart/go.html)
 //go:generate protoc cityaq.proto --go_out=plugins=grpc:cityaqrpc
-//go:generate sed -i -f sedcmd2.txt cityaqrpc/cityaq.wasm.pb.go
+//go:generate ./addtags -file=cityaqrpc/cityaq.wasm.pb.go -tags=js
+//go:generate rm addtags
 
 // go get github.com/golang/mock/gomock
 // go install github.com/golang/mock/mockgen
