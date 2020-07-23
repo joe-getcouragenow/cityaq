@@ -33,8 +33,8 @@ func main() {
 	c := &cityaq.CityAQ{
 		CityGeomDir: "testdata/cities",
 		SpatialConfig: aeputil.SpatialConfig{
-			SrgSpec:               "testdata/srgspec_osm.json",
-			SrgSpecType:           "OSM",
+			SrgSpecOSM:            "testdata/srgspec_osm.json",
+			SrgSpecSMOKE:          "testdata/srgspec_smoke.csv",
 			SrgShapefileDirectory: "testdata",
 			SCCExactMatch:         true,
 			GridRef:               []string{"testdata/gridref.txt"},
@@ -42,7 +42,6 @@ func main() {
 			InputSR:               "+proj=longlat",
 			MaxCacheEntries:       100,
 		},
-		SMOKESrgSpecs:   "testdata/srgspec_smoke.csv",
 		CacheLoc:        "file://" + cache,
 		InMAPConfigFile: "testdata/inmap_config.toml",
 	}
