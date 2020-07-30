@@ -2,3 +2,12 @@
 *.wasm.br
 
 wasm_exec.js
+
+# protoc binary and unzipped folder
+/lib-protoc/
+protoc*
+
+# downlaod binary
+download-protoc
+
+

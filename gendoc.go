@@ -7,7 +7,7 @@ package cityaq
 //    and put in $PATH
 
 // Install the code generation dependencies.
-//go:generate bash -c "rm ~/go/bin/protoc-gen-go"
+//go:generate bash -c "rm -f ~/go/bin/protoc-gen-go"
 //go:generate go get -u github.com/golang/protobuf/protoc-gen-go@v1.4.2
 
 // Generate the gRPC client/server code. (Information at https://grpc.io/docs/quickstart/go.html)

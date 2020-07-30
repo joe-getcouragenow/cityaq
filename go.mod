@@ -3,6 +3,7 @@ module github.com/ctessum/cityaq
 go 1.13
 
 require (
+	github.com/andelf/go-curl v0.0.0-20200630032108-fd49ff24ed97 // indirect
 	github.com/andybalholm/brotli v0.0.0-20190821151343-b60f0d972eeb
 	github.com/cenkalti/backoff v2.0.0+incompatible
 	github.com/ctessum/geom v0.2.10-0.20200417141930-c1ad83ff7e0d
@@ -13,7 +14,7 @@ require (
 	github.com/ctessum/unit v0.0.0-20160621200450-755774ac2fcb
 	github.com/elazarl/go-bindata-assetfs v1.0.0
 	github.com/golang/gddo v0.0.0-20190904175337-72a348e765d2 // indirect
-	github.com/golang/mock v1.4.3
+	github.com/golang/mock v1.4.4
 	github.com/golang/protobuf v1.4.2
 	github.com/gonum/floats v0.0.0-20181209220543-c233463c7e82
 	github.com/gorilla/websocket v1.4.1 // indirect
@@ -33,6 +34,7 @@ require (
 	google.golang.org/grpc v1.28.0
 	google.golang.org/protobuf v1.25.0
 	k8s.io/client-go v10.0.0+incompatible
+	rsc.io/quote/v3 v3.1.0 // indirect
 )
 
 replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999
